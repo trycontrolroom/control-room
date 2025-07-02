@@ -11,6 +11,7 @@ A futuristic dark-ops styled AI Agent Governance & Monitoring System that allows
 - **Role-Based Access Control** - Admin, Manager, Viewer, and Seller roles
 - **Spending Controls** - Monthly caps, alerts, and auto-pause functionality
 - **Custom Metrics** - Create and track custom performance indicators
+- **Legal & Support Pages** - Privacy Policy, Terms of Service, Contact form, and Intel Knowledge Center
 
 ### Authentication & Security
 - **NextAuth Integration** - Google OAuth and email/password authentication
@@ -142,8 +143,16 @@ control-room/
 │   ├── marketplace/            # Agent marketplace
 │   ├── pricing/                # Pricing page
 │   ├── login/                  # Authentication
+│   ├── signup/                 # User registration
 │   ├── checkout/               # Stripe checkout flow
+│   ├── privacy/                # Privacy Policy page
+│   ├── terms/                  # Terms of Service page
+│   ├── contact/                # Contact form and support
+│   ├── intel/                  # Intel Knowledge Center
 │   ├── api/                    # API routes
+│   │   ├── auth/               # Authentication endpoints
+│   │   ├── contact/            # Contact form submission
+│   │   └── ...                 # Other API endpoints
 │   ├── layout.tsx              # Root layout
 │   └── page.tsx                # Landing page
 ├── components/                  # Reusable React components
