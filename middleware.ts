@@ -6,10 +6,16 @@ export default withAuth(
     const token = req.nextauth.token
     const isAuth = !!token
     const isAuthPage = req.nextUrl.pathname.startsWith('/login') || req.nextUrl.pathname.startsWith('/signup')
-    const isPublicPage = req.nextUrl.pathname === '/' || req.nextUrl.pathname === '/pricing'
+    const isPublicPage = req.nextUrl.pathname === '/' || 
+                        req.nextUrl.pathname === '/pricing' || 
+                        req.nextUrl.pathname === '/privacy' || 
+                        req.nextUrl.pathname === '/terms' || 
+                        req.nextUrl.pathname === '/contact' || 
+                        req.nextUrl.pathname === '/intel'
+    const isMarketplaceBrowsePage = req.nextUrl.pathname === '/marketplace' && req.method === 'GET'
     const isAdminPage = req.nextUrl.pathname.startsWith('/admin')
     const isDashboardPage = req.nextUrl.pathname.startsWith('/dashboard')
-    const isMarketplacePage = req.nextUrl.pathname.startsWith('/marketplace')
+    const isMarketplaceActionPage = req.nextUrl.pathname.startsWith('/marketplace') && !isMarketplaceBrowsePage
 
     if (isAuthPage) {
       if (isAuth) {
@@ -18,7 +24,7 @@ export default withAuth(
       return null
     }
 
-    if (isPublicPage) {
+    if (isPublicPage || isMarketplaceBrowsePage) {
       return null
     }
 
@@ -34,7 +40,7 @@ export default withAuth(
       return NextResponse.redirect(new URL('/dashboard', req.url))
     }
 
-    if (isDashboardPage || isMarketplacePage) {
+    if (isDashboardPage || isMarketplaceActionPage) {
       return null
     }
 

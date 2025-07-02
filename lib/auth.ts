@@ -67,9 +67,20 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role
       }
       return session
+    },
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith(baseUrl)) {
+        return url
+      }
+      if (url.startsWith('/') && !url.startsWith('//')) {
+        return `${baseUrl}${url}`
+      }
+      return `${baseUrl}/dashboard`
     }
   },
   pages: {
     signIn: '/login',
-  }
+    error: '/login',
+  },
+  debug: process.env.NODE_ENV === 'development'
 }

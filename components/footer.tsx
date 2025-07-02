@@ -42,7 +42,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-white mb-4">Support</h3>
+            <h3 className="font-semibold text-white mb-4">Intel</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/privacy" className="text-gray-400 hover:text-blue-400 transition-colors">
@@ -60,8 +60,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/support" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  Support
+                <Link href="/intel" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  Intel
                 </Link>
               </li>
             </ul>
