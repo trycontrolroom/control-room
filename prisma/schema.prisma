@@ -74,6 +74,8 @@ model User {
   image         String?
   password      String?
   role          UserRole  @default(VIEWER)
+  lastLogin     DateTime?
+  isActive      Boolean   @default(true)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -86,6 +88,9 @@ model User {
   marketplaceAgents MarketplaceAgent[]
   purchases     Purchase[]
   reviews       Review[]
+  workspaceMembers WorkspaceMember[]
+  buyerAgreements BuyerAgreement[]
+  sellerAgreements SellerAgreement[]
 
   @@map("users")
 }
@@ -122,12 +127,14 @@ model Agent {
   lastSeen    DateTime    @default(now())
   config      Json?
   userId      String
+  workspaceId String
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  metrics Metric[]
-  policies Policy[]
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  metrics   Metric[]
+  policies  Policy[]
 }
 
 model Metric {
@@ -144,17 +151,19 @@ model Metric {
 }
 
 model CustomMetric {
-  id       String  @id @default(cuid())
-  userId   String
-  name     String
-  unit     String?
-  formula  String?
-  color    String?
-  grouping String?
-  order    Int     @default(0)
-  createdAt DateTime @default(now())
+  id          String  @id @default(cuid())
+  userId      String
+  workspaceId String
+  name        String
+  unit        String?
+  formula     String?
+  color       String?
+  grouping    String?
+  order       Int     @default(0)
+  createdAt   DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 }
 
 model Policy {
@@ -167,12 +176,14 @@ model Policy {
   actionType  PolicyActionType
   actionConfig Json?
   userId      String
+  workspaceId String?
   agentId     String?
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
 
-  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  agent Agent? @relation(fields: [agentId], references: [id], onDelete: SetNull)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  agent     Agent?    @relation(fields: [agentId], references: [id], onDelete: SetNull)
 }
 
 model MarketplaceAgent {
@@ -188,11 +199,14 @@ model MarketplaceAgent {
   installs    Int      @default(0)
   revenue     Float    @default(0)
   isApproved  Boolean  @default(false)
+  approvedAt  DateTime?
   sellerId    String
+  workspaceId String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   seller    User       @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  workspace Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   purchases Purchase[]
   reviews   Review[]
 }
@@ -223,4 +237,71 @@ model Review {
   marketplaceAgent MarketplaceAgent @relation(fields: [marketplaceAgentId], references: [id], onDelete: Cascade)
 
   @@unique([userId, marketplaceAgentId])
+}
+
+model Workspace {
+  id          String   @id @default(cuid())
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  members       WorkspaceMember[]
+  agents        Agent[]
+  policies      Policy[]
+  customMetrics CustomMetric[]
+  marketplaceAgents MarketplaceAgent[]
+  invitations   WorkspaceInvitation[]
+}
+
+model WorkspaceMember {
+  id          String    @id @default(cuid())
+  userId      String
+  workspaceId String
+  role        UserRole  @default(VIEWER)
+  joinedAt    DateTime  @default(now())
+  
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, workspaceId])
+}
+
+model WorkspaceInvitation {
+  id          String   @id @default(cuid())
+  email       String
+  workspaceId String
+  role        UserRole @default(VIEWER)
+  token       String   @unique
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model BuyerAgreement {
+  id        String   @id @default(cuid())
+  userId    String
+  ipAddress String
+  timestamp DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SellerAgreement {
+  id        String   @id @default(cuid())
+  userId    String
+  ipAddress String
+  timestamp DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SiteSettings {
+  id                String  @id @default("default")
+  maintenanceMode   Boolean @default(false)
+  newRegistrations  Boolean @default(true)
+  marketplaceEnabled Boolean @default(true)
+  announcement      String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }

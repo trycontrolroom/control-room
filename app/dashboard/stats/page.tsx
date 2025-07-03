@@ -7,8 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts'
-import { Calendar, TrendingUp, AlertTriangle, DollarSign, Activity } from 'lucide-react'
+import { Calendar, TrendingUp, AlertTriangle, DollarSign, Activity, Plus, Bell, FileText } from 'lucide-react'
 import { DashboardLayout } from '@/components/dashboard-layout'
+import { CustomMetricModal } from '@/components/custom-metric-modal'
 
 interface MetricData {
   timestamp: string
@@ -42,6 +43,9 @@ export default function StatsPage() {
   const [metricData, setMetricData] = useState<MetricData[]>([])
   const [agents, setAgents] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [showMetricModal, setShowMetricModal] = useState(false)
+  const [customMetrics, setCustomMetrics] = useState<any[]>([])
+  const [creatingMetric, setCreatingMetric] = useState(false)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -52,6 +56,7 @@ export default function StatsPage() {
     if (status === 'authenticated') {
       fetchAgents()
       fetchMetricData()
+      fetchCustomMetrics()
     }
   }, [status, router])
 
@@ -97,6 +102,61 @@ export default function StatsPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const fetchCustomMetrics = async () => {
+    try {
+      const response = await fetch('/api/custom-metrics')
+      if (response.ok) {
+        const data = await response.json()
+        setCustomMetrics(data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch custom metrics:', error)
+    }
+  }
+
+  const handleCreateCustomMetric = async (metricData: any) => {
+    setCreatingMetric(true)
+    try {
+      const response = await fetch('/api/custom-metrics', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(metricData)
+      })
+
+      if (response.ok) {
+        const newMetric = await response.json()
+        setCustomMetrics(prev => [...prev, newMetric])
+        
+        const newMetricType = {
+          value: `custom_${newMetric.id}`,
+          label: newMetric.name,
+          color: newMetric.color || '#3b82f6'
+        }
+        metricTypes.push(newMetricType)
+      } else {
+        console.error('Failed to create custom metric')
+      }
+    } catch (error) {
+      console.error('Error creating custom metric:', error)
+    } finally {
+      setCreatingMetric(false)
+    }
+  }
+
+  const navigateToRealTimeDashboard = () => {
+    router.push('/dashboard')
+  }
+
+  const openAlertConfiguration = () => {
+    router.push('/dashboard/settings')
+  }
+
+  const generatePerformanceReport = async () => {
+    alert('Performance report generation feature coming soon!')
   }
 
   const getCurrentMetric = () => {
@@ -351,21 +411,48 @@ export default function StatsPage() {
               <CardTitle className="text-white">Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Button className="w-full command-button justify-start">
+              <Button 
+                onClick={navigateToRealTimeDashboard}
+                className="w-full command-button justify-start"
+              >
                 <Activity className="w-4 h-4 mr-2" />
                 View Real-time Dashboard
               </Button>
-              <Button variant="outline" className="w-full justify-start border-gray-600 hover:bg-gray-700/50">
-                <Calendar className="w-4 h-4 mr-2" />
-                Schedule Performance Report
+              <Button 
+                onClick={() => setShowMetricModal(true)}
+                variant="outline" 
+                className="w-full justify-start border-blue-500/50 hover:bg-blue-500/10 text-blue-400"
+                disabled={session?.user?.role === 'VIEWER'}
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Custom Metric
               </Button>
-              <Button variant="outline" className="w-full justify-start border-gray-600 hover:bg-gray-700/50">
-                <AlertTriangle className="w-4 h-4 mr-2" />
+              <Button 
+                onClick={generatePerformanceReport}
+                variant="outline" 
+                className="w-full justify-start border-gray-600 hover:bg-gray-700/50"
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                Generate Report
+              </Button>
+              <Button 
+                onClick={openAlertConfiguration}
+                variant="outline" 
+                className="w-full justify-start border-gray-600 hover:bg-gray-700/50"
+              >
+                <Bell className="w-4 h-4 mr-2" />
                 Configure Alerts
               </Button>
             </CardContent>
           </Card>
         </div>
+
+        {/* Custom Metric Modal */}
+        <CustomMetricModal
+          isOpen={showMetricModal}
+          onClose={() => setShowMetricModal(false)}
+          onSubmit={handleCreateCustomMetric}
+        />
       </div>
     </DashboardLayout>
   )

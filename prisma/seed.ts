@@ -28,6 +28,20 @@ async function main() {
     },
   })
 
+  const workspace = await prisma.workspace.create({
+    data: {
+      name: `${demoUser.name || demoUser.email}'s Workspace`
+    }
+  })
+
+  await prisma.workspaceMember.create({
+    data: {
+      userId: demoUser.id,
+      workspaceId: workspace.id,
+      role: 'ADMIN'
+    }
+  })
+
   const agent1 = await prisma.agent.create({
     data: {
       name: 'Agent Alpha',
@@ -36,6 +50,7 @@ async function main() {
       uptime: 99.5,
       errorCount: 2,
       userId: demoUser.id,
+      workspaceId: workspace.id,
     },
   })
 
@@ -47,6 +62,7 @@ async function main() {
       uptime: 87.3,
       errorCount: 15,
       userId: demoUser.id,
+      workspaceId: workspace.id,
     },
   })
 

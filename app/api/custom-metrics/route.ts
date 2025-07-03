@@ -11,9 +11,34 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    let workspace = await prisma.workspace.findFirst({
+      where: {
+        members: {
+          some: {
+            userId: session.user.id
+          }
+        }
+      }
+    })
+
+    if (!workspace) {
+      workspace = await prisma.workspace.create({
+        data: {
+          name: `${session.user.name || session.user.email}'s Workspace`,
+          members: {
+            create: {
+              userId: session.user.id,
+              role: 'ADMIN'
+            }
+          }
+        }
+      })
+    }
+
     const customMetrics = await prisma.customMetric.findMany({
       where: {
-        userId: session.user.id
+        userId: session.user.id,
+        workspaceId: workspace.id
       },
       orderBy: { order: 'asc' }
     })
@@ -33,18 +58,80 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    if (session.user.role === 'VIEWER') {
+      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 })
+    }
+
+    let workspace = await prisma.workspace.findFirst({
+      where: {
+        members: {
+          some: {
+            userId: session.user.id
+          }
+        }
+      }
+    })
+
+    if (!workspace) {
+      workspace = await prisma.workspace.create({
+        data: {
+          name: `${session.user.name || session.user.email}'s Workspace`,
+          members: {
+            create: {
+              userId: session.user.id,
+              role: 'ADMIN'
+            }
+          }
+        }
+      })
+    }
+
     const body = await request.json()
-    const { name, unit, formula, color, grouping, order } = body
+    const { name, unit, formula, color, grouping } = body
+
+    if (!name || !unit) {
+      return NextResponse.json({ 
+        error: 'Name and unit are required' 
+      }, { status: 400 })
+    }
+
+    const existingMetric = await prisma.customMetric.findFirst({
+      where: {
+        name,
+        userId: session.user.id,
+        workspaceId: workspace.id
+      }
+    })
+
+    if (existingMetric) {
+      return NextResponse.json({ 
+        error: 'A custom metric with this name already exists' 
+      }, { status: 400 })
+    }
+
+    const maxOrder = await prisma.customMetric.findFirst({
+      where: {
+        userId: session.user.id,
+        workspaceId: workspace.id
+      },
+      orderBy: {
+        order: 'desc'
+      },
+      select: {
+        order: true
+      }
+    })
 
     const customMetric = await prisma.customMetric.create({
       data: {
         name,
         unit,
-        formula,
-        color,
-        grouping,
-        order: order || 0,
-        userId: session.user.id
+        formula: formula || null,
+        color: color || '#3b82f6',
+        grouping: grouping || null,
+        order: (maxOrder?.order || 0) + 1,
+        userId: session.user.id,
+        workspaceId: workspace.id
       }
     })
 

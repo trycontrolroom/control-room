@@ -22,7 +22,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
-import { Plus, Play, Pause, Trash2, Save, Zap } from 'lucide-react'
+import { Plus, Play, Pause, Trash2, Save, Zap, Info, HelpCircle, Users, Clock, Target } from 'lucide-react'
 import { DashboardLayout } from '@/components/dashboard-layout'
 
 interface Policy {
@@ -34,6 +34,40 @@ interface Policy {
   conditions: any[]
   actions: any[]
   lastTriggered?: string
+  targetAgents?: string[]
+}
+
+interface Agent {
+  id: string
+  name: string
+  status: string
+}
+
+interface TooltipProps {
+  content: string
+  children: React.ReactNode
+}
+
+function Tooltip({ content, children }: TooltipProps) {
+  const [isVisible, setIsVisible] = useState(false)
+
+  return (
+    <div className="relative inline-block">
+      <div
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+        className="cursor-help"
+      >
+        {children}
+      </div>
+      {isVisible && (
+        <div className="absolute z-50 px-3 py-2 text-sm text-white bg-gray-800 border border-gray-600 rounded-lg shadow-lg -top-2 left-full ml-2 w-64">
+          <div className="absolute top-3 -left-1 w-2 h-2 bg-gray-800 border-l border-b border-gray-600 transform rotate-45"></div>
+          {content}
+        </div>
+      )}
+    </div>
+  )
 }
 
 const initialNodes: Node[] = [
@@ -73,6 +107,8 @@ export default function PoliciesPage() {
   const [selectedPolicy, setSelectedPolicy] = useState<Policy | null>(null)
   const [isCreating, setIsCreating] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [agents, setAgents] = useState<Agent[]>([])
+  const [loadingAgents, setLoadingAgents] = useState(false)
 
   const [newPolicy, setNewPolicy] = useState({
     name: '',
@@ -80,7 +116,11 @@ export default function PoliciesPage() {
     triggerType: 'error_count',
     triggerValue: '',
     timeWindow: '1h',
-    actionType: 'pause_agent'
+    customTimeValue: '',
+    customTimeUnit: 'minutes',
+    actionType: 'pause_agent',
+    targetAgents: [] as string[],
+    priority: 'medium'
   })
 
   useEffect(() => {
@@ -91,6 +131,7 @@ export default function PoliciesPage() {
 
     if (status === 'authenticated') {
       fetchPolicies()
+      fetchAgents()
     }
   }, [status, router])
 
@@ -108,6 +149,21 @@ export default function PoliciesPage() {
     }
   }
 
+  const fetchAgents = async () => {
+    try {
+      setLoadingAgents(true)
+      const response = await fetch('/api/agents')
+      if (response.ok) {
+        const data = await response.json()
+        setAgents(data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch agents:', error)
+    } finally {
+      setLoadingAgents(false)
+    }
+  }
+
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
@@ -115,6 +171,16 @@ export default function PoliciesPage() {
 
   const handleCreatePolicy = async () => {
     try {
+      let timeWindow = newPolicy.timeWindow
+      if (timeWindow === 'custom') {
+        if (newPolicy.customTimeValue && newPolicy.customTimeUnit) {
+          timeWindow = `${newPolicy.customTimeValue}${newPolicy.customTimeUnit.charAt(0)}`
+        } else {
+          alert('Please specify custom time value and unit')
+          return
+        }
+      }
+
       const response = await fetch('/api/policies', {
         method: 'POST',
         headers: {
@@ -126,9 +192,11 @@ export default function PoliciesPage() {
           trigger: {
             type: newPolicy.triggerType,
             value: parseFloat(newPolicy.triggerValue),
-            timeWindow: newPolicy.timeWindow
+            timeWindow: timeWindow
           },
           actions: [{ type: newPolicy.actionType }],
+          targetAgents: newPolicy.targetAgents,
+          priority: newPolicy.priority,
           flowData: { nodes, edges }
         }),
       })
@@ -142,7 +210,11 @@ export default function PoliciesPage() {
           triggerType: 'error_count',
           triggerValue: '',
           timeWindow: '1h',
-          actionType: 'pause_agent'
+          customTimeValue: '',
+          customTimeUnit: 'minutes',
+          actionType: 'pause_agent',
+          targetAgents: [],
+          priority: 'medium'
         })
       }
     } catch (error) {
@@ -314,86 +386,342 @@ export default function PoliciesPage() {
                 {isCreating ? (
                   <div className="space-y-6">
                     {/* Policy Form */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Basic Information */}
                       <div className="space-y-2">
-                        <Label htmlFor="name" className="text-gray-300">Policy Name</Label>
+                        <div className="flex items-center space-x-2">
+                          <Label htmlFor="name" className="text-gray-300 font-medium">Policy Name</Label>
+                          <Tooltip content="Give your policy a descriptive name that clearly indicates its purpose. This will help you identify it in the policy list.">
+                            <HelpCircle className="w-4 h-4 text-gray-400" />
+                          </Tooltip>
+                        </div>
                         <Input
                           id="name"
                           value={newPolicy.name}
                           onChange={(e) => setNewPolicy(prev => ({ ...prev, name: e.target.value }))}
                           placeholder="High Error Rate Policy"
-                          className="bg-gray-800/50 border-gray-600 text-white"
+                          className="bg-gray-800/50 border-gray-600 text-white focus:border-blue-500 transition-colors"
                         />
                       </div>
+
                       <div className="space-y-2">
-                        <Label htmlFor="description" className="text-gray-300">Description</Label>
+                        <div className="flex items-center space-x-2">
+                          <Label htmlFor="description" className="text-gray-300 font-medium">Description</Label>
+                          <Tooltip content="Provide a detailed description of what this policy does and when it should trigger. This helps with maintenance and troubleshooting.">
+                            <HelpCircle className="w-4 h-4 text-gray-400" />
+                          </Tooltip>
+                        </div>
                         <Input
                           id="description"
                           value={newPolicy.description}
                           onChange={(e) => setNewPolicy(prev => ({ ...prev, description: e.target.value }))}
                           placeholder="Pause agent when errors exceed threshold"
-                          className="bg-gray-800/50 border-gray-600 text-white"
+                          className="bg-gray-800/50 border-gray-600 text-white focus:border-blue-500 transition-colors"
                         />
                       </div>
+
+                      {/* Target Agents */}
+                      <div className="space-y-2 md:col-span-2">
+                        <div className="flex items-center space-x-2">
+                          <Label className="text-gray-300 font-medium flex items-center">
+                            <Users className="w-4 h-4 mr-2 text-blue-400" />
+                            Target Agents
+                          </Label>
+                          <Tooltip content="Select which agents this policy should monitor. Leave empty to apply to all agents. You can select multiple agents by clicking on them.">
+                            <HelpCircle className="w-4 h-4 text-gray-400" />
+                          </Tooltip>
+                        </div>
+                        <div className="bg-gray-800/50 border border-gray-600 rounded-lg p-3 min-h-[100px]">
+                          {loadingAgents ? (
+                            <div className="flex items-center justify-center py-4">
+                              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-400"></div>
+                              <span className="ml-2 text-gray-400">Loading agents...</span>
+                            </div>
+                          ) : agents.length === 0 ? (
+                            <div className="text-center py-4">
+                              <p className="text-gray-400">No agents available</p>
+                              <p className="text-xs text-gray-500 mt-1">Create some agents first to use them in policies</p>
+                            </div>
+                          ) : (
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between mb-3">
+                                <span className="text-sm text-gray-400">
+                                  {newPolicy.targetAgents.length === 0 ? 'All agents' : `${newPolicy.targetAgents.length} selected`}
+                                </span>
+                                {newPolicy.targetAgents.length > 0 && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => setNewPolicy(prev => ({ ...prev, targetAgents: [] }))}
+                                    className="text-xs border-gray-600 hover:bg-gray-700/50"
+                                  >
+                                    Clear All
+                                  </Button>
+                                )}
+                              </div>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                                {agents.map((agent) => (
+                                  <div
+                                    key={agent.id}
+                                    className={`p-2 rounded border cursor-pointer transition-all ${
+                                      newPolicy.targetAgents.includes(agent.id)
+                                        ? 'border-blue-500 bg-blue-500/10 text-blue-400'
+                                        : 'border-gray-600 hover:border-gray-500 text-gray-300'
+                                    }`}
+                                    onClick={() => {
+                                      setNewPolicy(prev => ({
+                                        ...prev,
+                                        targetAgents: prev.targetAgents.includes(agent.id)
+                                          ? prev.targetAgents.filter(id => id !== agent.id)
+                                          : [...prev.targetAgents, agent.id]
+                                      }))
+                                    }}
+                                  >
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-sm font-medium">{agent.name}</span>
+                                      <Badge 
+                                        className={`text-xs ${
+                                          agent.status === 'active' 
+                                            ? 'bg-green-500/20 text-green-400' 
+                                            : 'bg-gray-500/20 text-gray-400'
+                                        }`}
+                                      >
+                                        {agent.status}
+                                      </Badge>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Trigger Configuration */}
                       <div className="space-y-2">
-                        <Label className="text-gray-300">Trigger Type</Label>
+                        <div className="flex items-center space-x-2">
+                          <Label className="text-gray-300 font-medium flex items-center">
+                            <Target className="w-4 h-4 mr-2 text-red-400" />
+                            Trigger Type
+                          </Label>
+                          <Tooltip content="Choose what metric or condition should trigger this policy. Different trigger types monitor different aspects of your agents.">
+                            <HelpCircle className="w-4 h-4 text-gray-400" />
+                          </Tooltip>
+                        </div>
                         <Select 
                           value={newPolicy.triggerType} 
                           onValueChange={(value) => setNewPolicy(prev => ({ ...prev, triggerType: value }))}
                         >
-                          <SelectTrigger className="bg-gray-800/50 border-gray-600">
+                          <SelectTrigger className="bg-gray-800/50 border-gray-600 focus:border-blue-500">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="error_count">Error Count</SelectItem>
-                            <SelectItem value="uptime">Uptime Threshold</SelectItem>
-                            <SelectItem value="cost">Cost Threshold</SelectItem>
-                            <SelectItem value="latency">Latency Threshold</SelectItem>
+                          <SelectContent className="bg-gray-800 border-gray-600">
+                            <SelectItem value="error_count" className="text-white hover:bg-gray-700">
+                              <div className="flex items-center">
+                                <div className="w-2 h-2 bg-red-400 rounded-full mr-2"></div>
+                                Error Count
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="uptime" className="text-white hover:bg-gray-700">
+                              <div className="flex items-center">
+                                <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                Uptime Threshold
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="cost" className="text-white hover:bg-gray-700">
+                              <div className="flex items-center">
+                                <div className="w-2 h-2 bg-yellow-400 rounded-full mr-2"></div>
+                                Cost Threshold
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="latency" className="text-white hover:bg-gray-700">
+                              <div className="flex items-center">
+                                <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
+                                Latency Threshold
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="memory" className="text-white hover:bg-gray-700">
+                              <div className="flex items-center">
+                                <div className="w-2 h-2 bg-purple-400 rounded-full mr-2"></div>
+                                Memory Usage
+                              </div>
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
+
                       <div className="space-y-2">
-                        <Label htmlFor="triggerValue" className="text-gray-300">Trigger Value</Label>
+                        <div className="flex items-center space-x-2">
+                          <Label htmlFor="triggerValue" className="text-gray-300 font-medium">Trigger Value</Label>
+                          <Tooltip content={`Set the threshold value for the ${newPolicy.triggerType.replace('_', ' ')} trigger. When this value is exceeded, the policy will activate.`}>
+                            <HelpCircle className="w-4 h-4 text-gray-400" />
+                          </Tooltip>
+                        </div>
                         <Input
                           id="triggerValue"
                           type="number"
                           value={newPolicy.triggerValue}
                           onChange={(e) => setNewPolicy(prev => ({ ...prev, triggerValue: e.target.value }))}
-                          placeholder="10"
-                          className="bg-gray-800/50 border-gray-600 text-white"
+                          placeholder={newPolicy.triggerType === 'cost' ? '100.00' : '10'}
+                          className="bg-gray-800/50 border-gray-600 text-white focus:border-blue-500 transition-colors"
                         />
                       </div>
+
+                      {/* Time Window Configuration */}
                       <div className="space-y-2">
-                        <Label className="text-gray-300">Time Window</Label>
+                        <div className="flex items-center space-x-2">
+                          <Label className="text-gray-300 font-medium flex items-center">
+                            <Clock className="w-4 h-4 mr-2 text-blue-400" />
+                            Time Window
+                          </Label>
+                          <Tooltip content="Define the time period over which the trigger condition is evaluated. 'Indefinite' means the condition is checked continuously without a time limit.">
+                            <HelpCircle className="w-4 h-4 text-gray-400" />
+                          </Tooltip>
+                        </div>
                         <Select 
                           value={newPolicy.timeWindow} 
                           onValueChange={(value) => setNewPolicy(prev => ({ ...prev, timeWindow: value }))}
                         >
-                          <SelectTrigger className="bg-gray-800/50 border-gray-600">
+                          <SelectTrigger className="bg-gray-800/50 border-gray-600 focus:border-blue-500">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="5m">5 minutes</SelectItem>
-                            <SelectItem value="15m">15 minutes</SelectItem>
-                            <SelectItem value="1h">1 hour</SelectItem>
-                            <SelectItem value="24h">24 hours</SelectItem>
+                          <SelectContent className="bg-gray-800 border-gray-600">
+                            <SelectItem value="1m" className="text-white hover:bg-gray-700">1 minute</SelectItem>
+                            <SelectItem value="5m" className="text-white hover:bg-gray-700">5 minutes</SelectItem>
+                            <SelectItem value="15m" className="text-white hover:bg-gray-700">15 minutes</SelectItem>
+                            <SelectItem value="30m" className="text-white hover:bg-gray-700">30 minutes</SelectItem>
+                            <SelectItem value="1h" className="text-white hover:bg-gray-700">1 hour</SelectItem>
+                            <SelectItem value="6h" className="text-white hover:bg-gray-700">6 hours</SelectItem>
+                            <SelectItem value="24h" className="text-white hover:bg-gray-700">24 hours</SelectItem>
+                            <SelectItem value="indefinite" className="text-white hover:bg-gray-700">
+                              <div className="flex items-center">
+                                <div className="w-2 h-2 bg-orange-400 rounded-full mr-2"></div>
+                                Indefinite
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="custom" className="text-white hover:bg-gray-700">
+                              <div className="flex items-center">
+                                <div className="w-2 h-2 bg-purple-400 rounded-full mr-2"></div>
+                                Custom
+                              </div>
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
+
+                      {/* Custom Time Window */}
+                      {newPolicy.timeWindow === 'custom' && (
+                        <div className="space-y-2">
+                          <Label className="text-gray-300 font-medium">Custom Time Window</Label>
+                          <div className="flex space-x-2">
+                            <Input
+                              type="number"
+                              value={newPolicy.customTimeValue}
+                              onChange={(e) => setNewPolicy(prev => ({ ...prev, customTimeValue: e.target.value }))}
+                              placeholder="30"
+                              className="bg-gray-800/50 border-gray-600 text-white focus:border-blue-500 flex-1"
+                            />
+                            <Select 
+                              value={newPolicy.customTimeUnit} 
+                              onValueChange={(value) => setNewPolicy(prev => ({ ...prev, customTimeUnit: value }))}
+                            >
+                              <SelectTrigger className="bg-gray-800/50 border-gray-600 w-32">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent className="bg-gray-800 border-gray-600">
+                                <SelectItem value="seconds" className="text-white hover:bg-gray-700">Seconds</SelectItem>
+                                <SelectItem value="minutes" className="text-white hover:bg-gray-700">Minutes</SelectItem>
+                                <SelectItem value="hours" className="text-white hover:bg-gray-700">Hours</SelectItem>
+                                <SelectItem value="days" className="text-white hover:bg-gray-700">Days</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Action and Priority */}
                       <div className="space-y-2">
-                        <Label className="text-gray-300">Action</Label>
+                        <div className="flex items-center space-x-2">
+                          <Label className="text-gray-300 font-medium">Action</Label>
+                          <Tooltip content="Choose what action should be taken when the policy triggers. Different actions have different impacts on your agents and operations.">
+                            <HelpCircle className="w-4 h-4 text-gray-400" />
+                          </Tooltip>
+                        </div>
                         <Select 
                           value={newPolicy.actionType} 
                           onValueChange={(value) => setNewPolicy(prev => ({ ...prev, actionType: value }))}
                         >
-                          <SelectTrigger className="bg-gray-800/50 border-gray-600">
+                          <SelectTrigger className="bg-gray-800/50 border-gray-600 focus:border-blue-500">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="pause_agent">Pause Agent</SelectItem>
-                            <SelectItem value="send_alert">Send Alert</SelectItem>
-                            <SelectItem value="restart_agent">Restart Agent</SelectItem>
-                            <SelectItem value="scale_down">Scale Down</SelectItem>
+                          <SelectContent className="bg-gray-800 border-gray-600">
+                            <SelectItem value="pause_agent" className="text-white hover:bg-gray-700">
+                              <div className="flex items-center">
+                                <Pause className="w-4 h-4 mr-2 text-yellow-400" />
+                                Pause Agent
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="send_alert" className="text-white hover:bg-gray-700">
+                              <div className="flex items-center">
+                                <Info className="w-4 h-4 mr-2 text-blue-400" />
+                                Send Alert
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="restart_agent" className="text-white hover:bg-gray-700">
+                              <div className="flex items-center">
+                                <Play className="w-4 h-4 mr-2 text-green-400" />
+                                Restart Agent
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="scale_down" className="text-white hover:bg-gray-700">
+                              <div className="flex items-center">
+                                <Trash2 className="w-4 h-4 mr-2 text-red-400" />
+                                Scale Down
+                              </div>
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <Label className="text-gray-300 font-medium">Priority</Label>
+                          <Tooltip content="Set the priority level for this policy. Higher priority policies are processed first when multiple policies trigger simultaneously.">
+                            <HelpCircle className="w-4 h-4 text-gray-400" />
+                          </Tooltip>
+                        </div>
+                        <Select 
+                          value={newPolicy.priority} 
+                          onValueChange={(value) => setNewPolicy(prev => ({ ...prev, priority: value }))}
+                        >
+                          <SelectTrigger className="bg-gray-800/50 border-gray-600 focus:border-blue-500">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-gray-800 border-gray-600">
+                            <SelectItem value="low" className="text-white hover:bg-gray-700">
+                              <div className="flex items-center">
+                                <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                Low Priority
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="medium" className="text-white hover:bg-gray-700">
+                              <div className="flex items-center">
+                                <div className="w-2 h-2 bg-yellow-400 rounded-full mr-2"></div>
+                                Medium Priority
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="high" className="text-white hover:bg-gray-700">
+                              <div className="flex items-center">
+                                <div className="w-2 h-2 bg-red-400 rounded-full mr-2"></div>
+                                High Priority
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="critical" className="text-white hover:bg-gray-700">
+                              <div className="flex items-center">
+                                <div className="w-2 h-2 bg-purple-400 rounded-full mr-2"></div>
+                                Critical Priority
+                              </div>
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -419,19 +747,75 @@ export default function PoliciesPage() {
                       </ReactFlow>
                     </div>
 
+                    {/* Policy Summary */}
+                    <div className="bg-gray-800/30 border border-gray-600 rounded-lg p-4">
+                      <h4 className="text-white font-medium mb-3 flex items-center">
+                        <Info className="w-4 h-4 mr-2 text-blue-400" />
+                        Policy Summary
+                      </h4>
+                      <div className="text-sm text-gray-300 space-y-1">
+                        <p>
+                          <span className="text-gray-400">Name:</span> {newPolicy.name || 'Untitled Policy'}
+                        </p>
+                        <p>
+                          <span className="text-gray-400">Targets:</span> {
+                            newPolicy.targetAgents.length === 0 
+                              ? 'All agents' 
+                              : `${newPolicy.targetAgents.length} selected agent${newPolicy.targetAgents.length > 1 ? 's' : ''}`
+                          }
+                        </p>
+                        <p>
+                          <span className="text-gray-400">Trigger:</span> {
+                            newPolicy.triggerValue 
+                              ? `When ${newPolicy.triggerType.replace('_', ' ')} exceeds ${newPolicy.triggerValue}`
+                              : 'No trigger value set'
+                          }
+                        </p>
+                        <p>
+                          <span className="text-gray-400">Time Window:</span> {
+                            newPolicy.timeWindow === 'custom' 
+                              ? `${newPolicy.customTimeValue} ${newPolicy.customTimeUnit}`
+                              : newPolicy.timeWindow === 'indefinite'
+                              ? 'Indefinite (continuous monitoring)'
+                              : newPolicy.timeWindow
+                          }
+                        </p>
+                        <p>
+                          <span className="text-gray-400">Action:</span> {newPolicy.actionType.replace('_', ' ')}
+                        </p>
+                        <p>
+                          <span className="text-gray-400">Priority:</span> {newPolicy.priority}
+                        </p>
+                      </div>
+                    </div>
+
                     {/* Actions */}
                     <div className="flex space-x-4">
                       <Button 
                         onClick={handleCreatePolicy}
-                        className="command-button"
-                        disabled={!newPolicy.name || !newPolicy.triggerValue}
+                        className="command-button flex-1 sm:flex-none"
+                        disabled={!newPolicy.name || !newPolicy.triggerValue || (newPolicy.timeWindow === 'custom' && (!newPolicy.customTimeValue || !newPolicy.customTimeUnit))}
                       >
                         <Save className="w-4 h-4 mr-2" />
                         Create Policy
                       </Button>
                       <Button 
                         variant="outline"
-                        onClick={() => setIsCreating(false)}
+                        onClick={() => {
+                          setIsCreating(false)
+                          setNewPolicy({
+                            name: '',
+                            description: '',
+                            triggerType: 'error_count',
+                            triggerValue: '',
+                            timeWindow: '1h',
+                            customTimeValue: '',
+                            customTimeUnit: 'minutes',
+                            actionType: 'pause_agent',
+                            targetAgents: [],
+                            priority: 'medium'
+                          })
+                        }}
                         className="border-gray-600 hover:bg-gray-700/50"
                       >
                         Cancel
