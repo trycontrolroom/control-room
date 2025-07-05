@@ -1,0 +1,367 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  VIEWER
+  MANAGER
+  ADMIN
+  SELLER
+}
+
+enum AgentStatus {
+  ACTIVE
+  PAUSED
+  ERROR
+  STOPPED
+}
+
+enum PolicyTriggerType {
+  ERROR_RATE
+  UPTIME
+  COST
+  LATENCY
+  CUSTOM_METRIC
+}
+
+enum PolicyActionType {
+  PAUSE_AGENT
+  SEND_ALERT
+  SCALE_DOWN
+  RESTART
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          UserRole  @default(VIEWER)
+  lastLogin     DateTime?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  agents        Agent[]
+  customMetrics CustomMetric[]
+  policies      Policy[]
+  subscription  Subscription?
+  marketplaceAgents MarketplaceAgent[]
+  purchases     Purchase[]
+  reviews       Review[]
+  workspaceMembers WorkspaceMember[]
+  buyerAgreements BuyerAgreement[]
+  sellerAgreements SellerAgreement[]
+  preferences UserPreferences?
+  auditLogs AuditLog[]
+
+  @@map("users")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Subscription {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  plan      String   // FREE, PRO, ENTERPRISE
+  status    String   // active, canceled, past_due
+  stripeCustomerId String?
+  stripeSubscriptionId String?
+  currentPeriodEnd DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Agent {
+  id          String      @id @default(cuid())
+  name        String
+  description String?
+  status      AgentStatus @default(ACTIVE)
+  uptime      Float       @default(0)
+  errorCount  Int         @default(0)
+  lastSeen    DateTime    @default(now())
+  config      Json?
+  userId      String
+  workspaceId String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  metrics   Metric[]
+  policies  Policy[]
+}
+
+model Metric {
+  id        String   @id @default(cuid())
+  agentId   String
+  name      String   // latency, error_rate, uptime, memory, cpu, cost
+  value     Float
+  unit      String?
+  timestamp DateTime @default(now())
+
+  agent Agent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([agentId, timestamp])
+}
+
+model CustomMetric {
+  id          String  @id @default(cuid())
+  userId      String
+  workspaceId String
+  name        String
+  unit        String?
+  formula     String?
+  color       String?
+  grouping    String?
+  order       Int     @default(0)
+  createdAt   DateTime @default(now())
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model Policy {
+  id          String            @id @default(cuid())
+  name        String
+  description String?
+  isActive    Boolean           @default(true)
+  triggerType PolicyTriggerType
+  triggerValue Float
+  actionType  PolicyActionType
+  actionConfig Json?
+  userId      String
+  workspaceId String?
+  agentId     String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  agent     Agent?    @relation(fields: [agentId], references: [id], onDelete: SetNull)
+}
+
+model MarketplaceAgent {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       Float    @default(0) // 0 for free agents
+  category    String
+  image       String?
+  capabilities Json
+  instructions String   @db.Text
+  rating      Float    @default(0)
+  installs    Int      @default(0)
+  revenue     Float    @default(0)
+  isApproved  Boolean  @default(false)
+  approvedAt  DateTime?
+  sellerId    String
+  workspaceId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  seller    User       @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  workspace Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  purchases Purchase[]
+  reviews   Review[]
+}
+
+model Purchase {
+  id               String   @id @default(cuid())
+  userId           String
+  workspaceId      String
+  marketplaceAgentId String
+  amount           Float
+  stripePaymentId  String?
+  createdAt        DateTime @default(now())
+
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace       Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  marketplaceAgent MarketplaceAgent @relation(fields: [marketplaceAgentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, marketplaceAgentId])
+}
+
+model Review {
+  id               String   @id @default(cuid())
+  userId           String
+  marketplaceAgentId String
+  rating           Int      // 1-5
+  comment          String?
+  createdAt        DateTime @default(now())
+
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  marketplaceAgent MarketplaceAgent @relation(fields: [marketplaceAgentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, marketplaceAgentId])
+}
+
+model Workspace {
+  id          String   @id @default(cuid())
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  members       WorkspaceMember[]
+  agents        Agent[]
+  policies      Policy[]
+  customMetrics CustomMetric[]
+  marketplaceAgents MarketplaceAgent[]
+  invitations   WorkspaceInvitation[]
+  auditLogs     AuditLog[]
+  workspaceMetrics WorkspaceMetric[]
+  purchases     Purchase[]
+  userPreferences UserPreferences[]
+}
+
+model WorkspaceMember {
+  id          String    @id @default(cuid())
+  userId      String
+  workspaceId String
+  role        UserRole  @default(VIEWER)
+  joinedAt    DateTime  @default(now())
+  
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, workspaceId])
+}
+
+model WorkspaceInvitation {
+  id          String   @id @default(cuid())
+  email       String
+  workspaceId String
+  role        UserRole @default(VIEWER)
+  token       String   @unique
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model BuyerAgreement {
+  id        String   @id @default(cuid())
+  userId    String
+  ipAddress String
+  timestamp DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SellerAgreement {
+  id        String   @id @default(cuid())
+  userId    String
+  ipAddress String
+  timestamp DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserPreferences {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  workspaceId String
+  theme     String   @default("dark")
+  language  String   @default("en")
+  timezone  String   @default("UTC")
+  notifications Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id           String   @id @default(cuid())
+  userId       String
+  workspaceId  String?
+  action       String
+  resourceType String
+  resourceId   String?
+  details      String?
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime @default(now())
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, createdAt])
+  @@index([userId, createdAt])
+}
+
+model WorkspaceMetric {
+  id          String   @id @default(cuid())
+  workspaceId String
+  name        String
+  unit        String?
+  formula     String?
+  color       String?
+  grouping    String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, name])
+}
+
+model SiteSettings {
+  id                String  @id @default("default")
+  maintenanceMode   Boolean @default(false)
+  newRegistrations  Boolean @default(true)
+  marketplaceEnabled Boolean @default(true)
+  announcement      String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
