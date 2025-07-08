@@ -50,7 +50,23 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    return NextResponse.json({ workspace })
+    const response = NextResponse.json({ workspace })
+
+    response.cookies.set('workspace-id', workspace.id, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 30 // 30 days
+    })
+
+    response.cookies.set('workspace-role', 'ADMIN', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 30 // 30 days
+    })
+
+    return response
   } catch (error) {
     console.error('Error creating workspace:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
