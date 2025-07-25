@@ -23,19 +23,26 @@ export function Navigation() {
           </Link>
 
           {/* center nav links */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/pricing" className="text-gray-300 hover:text-blue-400 transition-colors">
-              Pricing
-            </Link>
+          <div className="hidden md:flex items-center space-x-8 justify-center">
             <Link href="/marketplace" className="text-gray-300 hover:text-blue-400 transition-colors">
               Marketplace
             </Link>
-            {session?.user?.role === 'ADMIN' && (
+            <Link href="/pricing" className="text-gray-300 hover:text-blue-400 transition-colors">
+              Pricing
+            </Link>
+            <Link href="/affiliate" className="text-gray-300 hover:text-blue-400 transition-colors">
+              Affiliate
+            </Link>
+          </div>
+
+          {/* admin link separate */}
+          {session?.user?.role === 'ADMIN' && (
+            <div className="hidden md:flex">
               <Link href="/admin" className="text-gray-300 hover:text-blue-400 transition-colors">
                 Admin
               </Link>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* right‐hand auth controls */}
           <div className="flex items-center">

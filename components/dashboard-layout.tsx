@@ -185,18 +185,28 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         </div>
         {/* Nav links */}
         <nav className="flex-1 p-4 space-y-2">
+          {/* Main section */}
+          <Link
+            href="/dashboard"
+            className={cn(
+              'flex items-center p-2 rounded',
+              pathname === '/dashboard' ? 'bg-blue-500 text-white' : 'hover:bg-gray-700'
+            )}
+          >
+            <Activity className="w-5 h-5 mr-2" />
+            Manage
+          </Link>
+          
+          {/* Divider */}
+          <div className="border-t border-gray-700 my-4"></div>
+          
+          {/* Core features section */}
           {[
-            { name: 'Manage', href: '/dashboard', icon: Activity },
             { name: 'Create', href: '/dashboard/create', icon: Plus },
             { name: 'Stats', href: '/dashboard/stats', icon: BarChart3 },
             { name: 'Policies', href: '/dashboard/policies', icon: FileText },
-            ...(isAdmin ? [{ name: 'Admin Panel', href: '/admin', icon: Users }] : []),
-            ...(isAffiliate ? [{ name: 'Affiliate Dashboard', href: '/dashboard/affiliate', icon: DollarSign }] : []),
-            { name: 'Marketplace', href: '/marketplace', icon: ShoppingCart },
-            { name: 'Profile', href: '/dashboard/profile', icon: User },
-            { name: 'Settings', href: '/dashboard/settings', icon: Settings },
           ].map(item => {
-            const active = pathname === item.href || (item.href === '/admin' && pathname.startsWith('/admin'))
+            const active = pathname === item.href
             return (
               <Link
                 key={item.href}
@@ -211,11 +221,29 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               </Link>
             )
           })}
+          
+          {/* Divider */}
+          <div className="border-t border-gray-700 my-4"></div>
+          
+          {/* Admin section */}
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className={cn(
+                'flex items-center p-2 rounded',
+                pathname.startsWith('/admin') ? 'bg-blue-500 text-white' : 'hover:bg-gray-700'
+              )}
+            >
+              <Users className="w-5 h-5 mr-2" />
+              Admin Panel
+            </Link>
+          )}
+          
           {isDeveloper && (
             <Link
               href="/developer"
               className={cn(
-                'flex items-center p-2 rounded mt-2',
+                'flex items-center p-2 rounded',
                 pathname.startsWith('/developer') ? 'bg-green-500 text-white' : 'hover:bg-gray-700'
               )}
             >
@@ -223,7 +251,33 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </Link>
           )}
         </nav>
-        {/* Profile */}
+        
+        {/* Marketplace and Affiliate Dashboard above profile */}
+        <div className="px-4 pb-4 space-y-2">
+          {isAffiliate && (
+            <Link
+              href="/dashboard/affiliate"
+              className={cn(
+                'flex items-center p-2 rounded',
+                pathname === '/dashboard/affiliate' ? 'bg-blue-500 text-white' : 'hover:bg-gray-700'
+              )}
+            >
+              <DollarSign className="w-5 h-5 mr-2" />
+              Affiliate Dashboard
+            </Link>
+          )}
+          <Link
+            href="/marketplace"
+            className={cn(
+              'flex items-center p-2 rounded',
+              pathname === '/marketplace' ? 'bg-blue-500 text-white' : 'hover:bg-gray-700'
+            )}
+          >
+            <ShoppingCart className="w-5 h-5 mr-2" />
+            Marketplace
+          </Link>
+        </div>
+        {/* Profile and Settings */}
         <div className="p-4 border-t border-gray-700">
           <div className="flex items-center mb-3">
             <User className="w-8 h-8 rounded-full bg-gray-700 p-1 mr-2 text-white" />
@@ -234,18 +288,25 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               </p>
             </div>
           </div>
-          <Button variant="outline" size="sm" onClick={() => signOut()}>
-            <LogOut className="w-4 h-4 mr-1"/> Sign out
-          </Button>
+          <Link
+            href="/dashboard/settings"
+            className={cn(
+              'flex items-center p-2 rounded w-full',
+              pathname === '/dashboard/settings' ? 'bg-blue-500 text-white' : 'hover:bg-gray-700'
+            )}
+          >
+            <Settings className="w-4 h-4 mr-2" />
+            Settings
+          </Link>
         </div>
       </aside>
       {/* Main */}
       <main className="flex-1 bg-gray-800 flex flex-col">
-        {/* Top bar */}
-        <div className="bg-gray-900 border-b border-gray-700 p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              {sidebarCollapsed && (
+        {/* Top bar - only show when sidebar is collapsed */}
+        {sidebarCollapsed && (
+          <div className="bg-gray-900 border-b border-gray-700 p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
                 <Button
                   variant="outline"
                   size="sm"
@@ -254,13 +315,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 >
                   <Menu className="w-4 h-4" />
                 </Button>
-              )}
-              <h1 className="text-xl font-semibold text-white">
-                {currentWorkspace?.name || 'Control Room'}
-              </h1>
+              </div>
             </div>
           </div>
-        </div>
+        )}
         
         {/* Page content */}
         <div className="flex-1 overflow-auto p-6">

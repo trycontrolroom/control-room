@@ -66,26 +66,33 @@ export default function CreatePage() {
   const canModify = session?.user?.workspaceRole === 'ADMIN' || session?.user?.workspaceRole === 'MANAGER'
 
   useEffect(() => {
+    if (status === 'loading') {
+      return // Wait for session to load
+    }
+    
     if (status === 'unauthenticated') {
       router.push('/login')
       return
     }
-    if (!canModify) {
+    
+    if (session && !canModify) {
       router.push('/dashboard')
       return
     }
     
-    if (editAgentId) {
-      loadExistingAgent(editAgentId)
-    } else {
-      setMessages([{
-        id: '1',
-        role: 'assistant',
-        content: 'Welcome to the AI Agent Builder! Describe the agent you want to build, and I\'ll help you create it step by step.',
-        timestamp: new Date()
-      }])
+    if (session && canModify) {
+      if (editAgentId) {
+        loadExistingAgent(editAgentId)
+      } else {
+        setMessages([{
+          id: '1',
+          role: 'assistant',
+          content: 'Welcome to the AI Agent Builder! Describe the agent you want to build, and I\'ll help you create it step by step.',
+          timestamp: new Date()
+        }])
+      }
     }
-  }, [status, canModify, editAgentId, router])
+  }, [status, session, canModify, editAgentId, router])
 
   async function loadExistingAgent(agentId: string) {
     try {
