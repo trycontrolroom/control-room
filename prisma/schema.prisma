@@ -66,6 +66,13 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum SubscriptionPlan {
+  TRIAL
+  BEGINNER
+  UNLIMITED
+  ENTERPRISE
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -78,6 +85,13 @@ model User {
   isActive      Boolean   @default(true)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
+  // Subscription fields
+  subscriptionPlan  SubscriptionPlan @default(TRIAL)
+  subscriptionId    String?
+  trialEndsAt       DateTime?
+  phoneNumber       String?
+  phoneVerified     Boolean  @default(false)
 
   accounts      Account[]
   sessions      Session[]
@@ -93,6 +107,9 @@ model User {
   sellerAgreements SellerAgreement[]
   preferences UserPreferences?
   auditLogs AuditLog[]
+  aiChatSessions AIChatSession[]
+  subscriptionUsage SubscriptionUsage?
+  affiliate Affiliate?
 
   @@map("users")
 }
@@ -133,10 +150,12 @@ model Agent {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   metrics   Metric[]
   policies  Policy[]
+  files     AgentFile[]
+  tasks     AgentTask[]
 }
 
 model Metric {
@@ -263,6 +282,7 @@ model Workspace {
   workspaceMetrics WorkspaceMetric[]
   purchases     Purchase[]
   userPreferences UserPreferences[]
+  aiChatSessions AIChatSession[]
 }
 
 model WorkspaceMember {
@@ -328,9 +348,7 @@ model AuditLog {
   userId       String
   workspaceId  String?
   action       String
-  resourceType String
-  resourceId   String?
-  details      String?
+  details      Json?
   ipAddress    String?
   userAgent    String?
   createdAt    DateTime @default(now())
@@ -358,6 +376,94 @@ model WorkspaceMetric {
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 
   @@unique([workspaceId, name])
+}
+
+model AgentFile {
+  id        String   @id @default(cuid())
+  agentId   String
+  path      String
+  content   String   @db.Text
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  agent     Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([agentId])
+  @@unique([agentId, path])
+}
+
+model AgentTask {
+  id          String   @id @default(cuid())
+  agentId     String
+  name        String
+  description String?
+  status      String   @default("PENDING") // PENDING, RUNNING, PAUSED, FAILED, COMPLETED
+  schedule    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  agent       Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([agentId])
+}
+
+model AIChatSession {
+  id          String   @id @default(cuid())
+  userId      String
+  workspaceId String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  messages    AIChatMessage[]
+
+  @@index([userId, workspaceId])
+}
+
+model AIChatMessage {
+  id        String   @id @default(cuid())
+  sessionId String
+  role      String   // user, assistant, system
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  session   AIChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+}
+
+model SubscriptionUsage {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  agentsCount           Int      @default(0)
+  policiesCount         Int      @default(0)
+  metricsCount          Int      @default(0)
+  helperExecutionsToday Int      @default(0)
+  lastResetDate         DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  createdAt             DateTime @default(now())
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Affiliate {
+  id          String  @id @default(cuid())
+  userId      String  @unique
+  code        String  @unique
+  clicks      Int     @default(0)
+  conversions Int     @default(0)
+  earnings    Float   @default(0)
+  payoutInfo  Json?
+  isApproved  Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([code])
 }
 
 model SiteSettings {

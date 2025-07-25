@@ -21,9 +21,12 @@ import {
   Plus,
   Check,
   X,
-  ArrowRight
+  ArrowRight,
+  DollarSign,
+  Menu
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { AIHelper } from '@/components/ai-helper'
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -51,6 +54,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const isAdmin = currentWorkspace?.role === 'ADMIN'
   const isDeveloper = session?.user?.email === 'admin@control-room.ai'
+  const [isAffiliate, setIsAffiliate] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   useEffect(() => {
     if (!session?.user?.id) return
@@ -66,6 +71,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         setLoading(false)
         setTriedLoading(true)
       })
+  }, [session?.user?.id])
+
+  useEffect(() => {
+    if (!session?.user?.id) return
+    fetch('/api/affiliate/status')
+      .then(r => r.json())
+      .then(data => {
+        setIsAffiliate(data.isApproved || false)
+      })
+      .catch(() => setIsAffiliate(false))
   }, [session?.user?.id])
 
   useEffect(() => {
@@ -123,7 +138,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="min-h-screen flex">
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-900 text-gray-300 flex flex-col">
+      <aside className={`${sidebarCollapsed ? 'w-0' : 'w-64'} bg-gray-900 text-gray-300 flex flex-col transition-all duration-300 overflow-hidden`}>
         <div className="p-4 border-b border-gray-700">
           <Link href="/" className="flex items-center space-x-2">
             <Shield className="w-8 h-8 text-blue-400" />
@@ -171,13 +186,17 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         {/* Nav links */}
         <nav className="flex-1 p-4 space-y-2">
           {[
-            { name: 'Dashboard', href: '/dashboard', icon: Activity },
-            { name: 'Analytics', href: '/dashboard/stats', icon: BarChart3 },
+            { name: 'Manage', href: '/dashboard', icon: Activity },
+            { name: 'Create', href: '/dashboard/create', icon: Plus },
+            { name: 'Stats', href: '/dashboard/stats', icon: BarChart3 },
             { name: 'Policies', href: '/dashboard/policies', icon: FileText },
-            { name: 'Settings', href: '/dashboard/settings', icon: Settings },
+            ...(isAdmin ? [{ name: 'Admin Panel', href: '/admin', icon: Users }] : []),
+            ...(isAffiliate ? [{ name: 'Affiliate Dashboard', href: '/dashboard/affiliate', icon: DollarSign }] : []),
             { name: 'Marketplace', href: '/marketplace', icon: ShoppingCart },
+            { name: 'Profile', href: '/dashboard/profile', icon: User },
+            { name: 'Settings', href: '/dashboard/settings', icon: Settings },
           ].map(item => {
-            const active = pathname === item.href
+            const active = pathname === item.href || (item.href === '/admin' && pathname.startsWith('/admin'))
             return (
               <Link
                 key={item.href}
@@ -192,20 +211,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               </Link>
             )
           })}
-          {isAdmin && (
-            <>
-              <hr className="my-4 border-gray-700"/>
-              <Link
-                href="/admin"
-                className={cn(
-                  'flex items-center p-2 rounded',
-                  pathname.startsWith('/admin') ? 'bg-purple-500 text-white' : 'hover:bg-gray-700'
-                )}
-              >
-                <Users className="w-5 h-5 mr-2" /> Admin Panel
-              </Link>
-            </>
-          )}
           {isDeveloper && (
             <Link
               href="/developer"
@@ -235,15 +240,39 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         </div>
       </aside>
       {/* Main */}
-      <main className="flex-1 bg-gray-800 p-6">
-        {React.isValidElement(children)
-          ? React.cloneElement(children as React.ReactElement, {
-              currentWorkspace,
-              workspaces,
-              isAdmin,
-              session,
-            })
-          : children}
+      <main className="flex-1 bg-gray-800 flex flex-col">
+        {/* Top bar */}
+        <div className="bg-gray-900 border-b border-gray-700 p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              {sidebarCollapsed && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSidebarCollapsed(false)}
+                  className="border-gray-600 hover:bg-gray-700"
+                >
+                  <Menu className="w-4 h-4" />
+                </Button>
+              )}
+              <h1 className="text-xl font-semibold text-white">
+                {currentWorkspace?.name || 'Control Room'}
+              </h1>
+            </div>
+          </div>
+        </div>
+        
+        {/* Page content */}
+        <div className="flex-1 overflow-auto p-6">
+          {React.isValidElement(children)
+            ? React.cloneElement(children as React.ReactElement, {
+                currentWorkspace,
+                workspaces,
+                isAdmin,
+                session,
+              })
+            : children}
+        </div>
       </main>
       {/* Create Workspace Modal */}
       {showCreateModal && (
@@ -285,6 +314,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </div>
       )}
+      
+      {/* AI Helper */}
+      <AIHelper onSidebarToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
     </div>
   )
 }

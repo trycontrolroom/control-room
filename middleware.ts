@@ -1,6 +1,7 @@
 // middleware.ts
 import { withAuth } from "next-auth/middleware"
 import { NextResponse } from "next/server"
+import { trackReferral } from "@/lib/referral-tracking"
 
 function checkAPIPermissions(pathname: string, method: string, workspaceRole: string | null, globalRole: string | null) {
   // allow creating & switching workspaces always
@@ -42,13 +43,22 @@ export default withAuth(
     const method = req.method
 
     const isAuthPage        = path.startsWith("/login") || path.startsWith("/signup")
-    const isPublicPage      = ["/", "/pricing", "/privacy", "/terms", "/contact", "/intel"].includes(path)
+    const isPublicPage      = ["/", "/pricing", "/privacy", "/terms", "/contact", "/intel", "/affiliate"].includes(path)
     const isMarketplaceRead = path === "/marketplace" && method === "GET"
     const isDashboardPage   = path.startsWith("/dashboard")
     const isCreatePage      = path === "/dashboard/create-workspace"
     const isAdminPage       = path.startsWith("/admin")
     const isDeveloperPage   = path.startsWith("/developer")
     const isApi             = path.startsWith("/api/")
+
+    let response = NextResponse.next()
+    if ((path === "/signup" || path === "/") && url.searchParams.get('ref')) {
+      try {
+        response = await trackReferral(req, response)
+      } catch (error) {
+        console.error('Referral tracking error:', error)
+      }
+    }
 
     // Unauthenticated → redirect to login
     if (!token && !isAuthPage && !isPublicPage && !isMarketplaceRead) {
@@ -91,7 +101,7 @@ export default withAuth(
     }
 
     // everything else is allowed
-    return null
+    return response
   },
   {
     callbacks: {
