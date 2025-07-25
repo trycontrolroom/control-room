@@ -22,8 +22,8 @@ export function Navigation() {
             </span>
           </Link>
 
-          {/* center nav links */}
-          <div className="hidden md:flex items-center space-x-8 justify-center">
+          {/* center nav links - absolutely centered to page */}
+          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center space-x-8">
             <Link href="/marketplace" className="text-gray-300 hover:text-blue-400 transition-colors">
               Marketplace
             </Link>

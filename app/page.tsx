@@ -14,11 +14,12 @@ export default function LandingPage() {
       {/* 1. Hero Section */}
       <section className="relative px-6 pt-32 pb-20 text-center">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-blue-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-blue-600 bg-clip-text text-transparent">
             Your AI Agent Control Room
           </h1>
           <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto">
-            Control, monitor, and secure every move your AI agents make from one central dashboard.
+            Control, monitor, and secure every move your AI agents make<br />
+            from one central dashboard.
           </p>
           
           {/* Agent Cards Preview */}
@@ -67,10 +68,59 @@ export default function LandingPage() {
           <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
             One prompt does it all.
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-16">
             From creation to governance to monitoring - manage your entire AI agent lifecycle with natural language commands. 
             No complex configurations, no technical barriers, just intelligent automation.
           </p>
+          
+          {/* Three-step process moved here */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="text-center">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center border border-blue-500/30">
+                <Zap className="w-8 h-8 text-blue-400" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-4 text-white">Create/Connect</h3>
+              <p className="text-gray-300 text-lg">
+                Deploy existing agents or use our AI-powered builder to create new ones with natural language prompts
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center border border-purple-500/30">
+                <Shield className="w-8 h-8 text-purple-400" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-4 text-white">Set Policies</h3>
+              <p className="text-gray-300 text-lg">
+                Create automated rules and triggers to govern agent behavior and ensure compliance
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center border border-green-500/30">
+                <BarChart3 className="w-8 h-8 text-green-400" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-4 text-white">Monitor & Optimize</h3>
+              <p className="text-gray-300 text-lg">
+                Track performance metrics, analyze trends, and optimize agent operations in real-time
+              </p>
+            </div>
+          </div>
+          
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-16">
+            <Link href="/pricing">
+              <Button size="lg" className="command-button text-lg px-8 py-4">
+                Start Free Trial
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
+            <Link href="#showcase">
+              <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-blue-500/50 hover:bg-blue-500/10">
+                <Play className="mr-2 w-5 h-5" />
+                View Demo
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -141,61 +191,20 @@ export default function LandingPage() {
                 </CardDescription>
               </CardHeader>
             </Card>
+
+            <Card className="glass-panel border-orange-500/20 hover:border-orange-400/40 transition-all duration-300">
+              <CardHeader>
+                <FileText className="w-12 h-12 text-orange-400 mb-4" />
+                <CardTitle className="text-xl">Intel Docs</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Comprehensive knowledge center with tutorials, best practices, and strategic insights for AI operations
+                </CardDescription>
+              </CardHeader>
+            </Card>
           </div>
         </div>
       </section>
 
-      {/* 4. How It Works */}
-      <section className="px-6 py-20 bg-gradient-to-b from-transparent to-blue-950/10">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="text-center">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center border border-blue-500/30">
-                <Zap className="w-8 h-8 text-blue-400" />
-              </div>
-              <h3 className="text-2xl font-semibold mb-4 text-white">Connect Agents</h3>
-              <p className="text-gray-300 text-lg">
-                Deploy and register your AI agents with our secure monitoring system
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center border border-purple-500/30">
-                <Shield className="w-8 h-8 text-purple-400" />
-              </div>
-              <h3 className="text-2xl font-semibold mb-4 text-white">Set Policies</h3>
-              <p className="text-gray-300 text-lg">
-                Create automated rules and triggers to govern agent behavior
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center border border-green-500/30">
-                <BarChart3 className="w-8 h-8 text-green-400" />
-              </div>
-              <h3 className="text-2xl font-semibold mb-4 text-white">Monitor & Optimize</h3>
-              <p className="text-gray-300 text-lg">
-                Track performance metrics and optimize agent operations in real-time
-              </p>
-            </div>
-          </div>
-          
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-16">
-            <Link href="/pricing">
-              <Button size="lg" className="command-button text-lg px-8 py-4">
-                Start Free Trial
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </Link>
-            <Link href="/dashboard">
-              <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-blue-500/50 hover:bg-blue-500/10">
-                Launch Dashboard
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* 5. Showcase - Animated Walkthrough */}
       <section id="showcase" className="px-6 py-20">
