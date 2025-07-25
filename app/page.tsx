@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowRight, Shield, BarChart3, Zap, Users, Globe, Lock } from 'lucide-react'
+import { ArrowRight, Shield, BarChart3, Zap, Users, Globe, Lock, Bot, Eye, FileText, Play, DollarSign, BookOpen, Rocket } from 'lucide-react'
 import Link from 'next/link'
 import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
@@ -11,158 +11,111 @@ export default function LandingPage() {
     <div className="min-h-screen command-center-bg">
       <Navigation />
       
-      {/* Hero Section */}
+      {/* 1. Hero Section */}
       <section className="relative px-6 pt-32 pb-20 text-center">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-blue-600 bg-clip-text text-transparent">
             Your AI Agent Control Room
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-            Control, monitor, and secure every move your AI agents make from one central dashboard.
+          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto">
+            The enterprise platform for governing, monitoring, and scaling AI agents across your organization. Deploy with confidence, govern automatically, and scale without limits.
           </p>
           
-          {/* Demo Preview */}
-          <div className="glass-panel rounded-lg p-8 mb-12 max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="agent-card rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-semibold">Agent Alpha</h3>
-                  <span className="status-active text-sm">ACTIVE</span>
-                </div>
-                <div className="text-sm text-gray-400">
-                  <div>Uptime: 99.5%</div>
-                  <div>Errors: 2</div>
-                </div>
-              </div>
-              <div className="agent-card rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-semibold">Agent Bravo</h3>
-                  <span className="status-paused text-sm">PAUSED</span>
-                </div>
-                <div className="text-sm text-gray-400">
-                  <div>Uptime: 87.3%</div>
-                  <div>Errors: 15</div>
-                </div>
-              </div>
-              <div className="agent-card rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-semibold">Agent Charlie</h3>
-                  <span className="status-active text-sm">ACTIVE</span>
-                </div>
-                <div className="text-sm text-gray-400">
-                  <div>Uptime: 98.1%</div>
-                  <div>Errors: 0</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 3-Step Process */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-600/20 flex items-center justify-center">
-                <Zap className="w-8 h-8 text-blue-400" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Connect Agents</h3>
-              <p className="text-gray-400">Deploy and register your AI agents with our secure monitoring system</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-600/20 flex items-center justify-center">
-                <Shield className="w-8 h-8 text-purple-400" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Set Policies</h3>
-              <p className="text-gray-400">Create automated rules and triggers to govern agent behavior</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-600/20 flex items-center justify-center">
-                <BarChart3 className="w-8 h-8 text-green-400" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Monitor & Optimize</h3>
-              <p className="text-gray-400">Track performance metrics and optimize agent operations in real-time</p>
-            </div>
-          </div>
-
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <Link href="/pricing">
-              <Button size="lg" className="command-button text-lg px-8 py-3">
-                View Pricing
+              <Button size="lg" className="command-button text-lg px-8 py-4">
+                Start Free Trial
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
-            <Link href="/dashboard">
-              <Button size="lg" variant="outline" className="text-lg px-8 py-3 border-blue-500/50 hover:bg-blue-500/10">
-                Launch Dashboard
+            <Link href="#showcase">
+              <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-blue-500/50 hover:bg-blue-500/10">
+                <Play className="mr-2 w-5 h-5" />
+                Watch Demo
               </Button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* 2. Core Promise */}
+      <section className="px-6 py-16 bg-gradient-to-b from-transparent to-purple-950/10">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            One prompt does it all.
+          </h2>
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            From creation to governance to monitoring - manage your entire AI agent lifecycle with natural language commands. 
+            No complex configurations, no technical barriers, just intelligent automation.
+          </p>
+        </div>
+      </section>
+
+      {/* 3. Feature Grid */}
       <section className="px-6 py-20">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-            Military-Grade AI Agent Control
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            Enterprise-Grade AI Agent Management
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="glass-panel border-blue-500/20">
+            <Card className="glass-panel border-purple-500/20 hover:border-purple-400/40 transition-all duration-300">
               <CardHeader>
-                <BarChart3 className="w-10 h-10 text-blue-400 mb-2" />
-                <CardTitle>Real-Time Monitoring</CardTitle>
-                <CardDescription>
-                  Track agent performance, uptime, and errors with 5-second updates
+                <Shield className="w-12 h-12 text-purple-400 mb-4" />
+                <CardTitle className="text-xl">Policy Enforcement</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Visual drag-and-drop policy builder with real-time enforcement and automated governance rules
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="glass-panel border-purple-500/20">
+            <Card className="glass-panel border-green-500/20 hover:border-green-400/40 transition-all duration-300">
               <CardHeader>
-                <Shield className="w-10 h-10 text-purple-400 mb-2" />
-                <CardTitle>Policy Automation</CardTitle>
-                <CardDescription>
-                  Create visual policies with drag-and-drop triggers and actions
+                <BarChart3 className="w-12 h-12 text-green-400 mb-4" />
+                <CardTitle className="text-xl">Custom Metrics</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Define, track, and visualize custom KPIs with AI-powered metric creation and real-time dashboards
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="glass-panel border-green-500/20">
+            <Card className="glass-panel border-blue-500/20 hover:border-blue-400/40 transition-all duration-300">
               <CardHeader>
-                <Globe className="w-10 h-10 text-green-400 mb-2" />
-                <CardTitle>Agent Marketplace</CardTitle>
-                <CardDescription>
-                  Buy and sell AI agents with integrated Stripe payments
+                <Users className="w-12 h-12 text-blue-400 mb-4" />
+                <CardTitle className="text-xl">Agent Manager</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Complete lifecycle management from creation to deployment with integrated code editor and task automation
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="glass-panel border-yellow-500/20">
+            <Card className="glass-panel border-cyan-500/20 hover:border-cyan-400/40 transition-all duration-300">
               <CardHeader>
-                <Users className="w-10 h-10 text-yellow-400 mb-2" />
-                <CardTitle>Role-Based Access</CardTitle>
-                <CardDescription>
-                  Admin, Manager, Viewer, and Seller roles with granular permissions
+                <Eye className="w-12 h-12 text-cyan-400 mb-4" />
+                <CardTitle className="text-xl">Live Monitoring</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Real-time performance tracking with 5-second updates, uptime monitoring, and intelligent alerting
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="glass-panel border-red-500/20">
+            <Card className="glass-panel border-yellow-500/20 hover:border-yellow-400/40 transition-all duration-300">
               <CardHeader>
-                <Zap className="w-10 h-10 text-red-400 mb-2" />
-                <CardTitle>Spending Controls</CardTitle>
-                <CardDescription>
-                  Set monthly caps and auto-pause agents when limits are reached
+                <Bot className="w-12 h-12 text-yellow-400 mb-4" />
+                <CardTitle className="text-xl">AI Helper</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Natural language assistant for creating policies, metrics, and tasks with intelligent automation
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="glass-panel border-indigo-500/20">
+            <Card className="glass-panel border-orange-500/20 hover:border-orange-400/40 transition-all duration-300">
               <CardHeader>
-                <Lock className="w-10 h-10 text-indigo-400 mb-2" />
-                <CardTitle>Enterprise Security</CardTitle>
-                <CardDescription>
-                  OAuth integration, encrypted data, and audit trails
+                <FileText className="w-12 h-12 text-orange-400 mb-4" />
+                <CardTitle className="text-xl">Intel Docs</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Comprehensive knowledge center with tutorials, best practices, and strategic insights for AI operations
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -170,57 +123,142 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Security & Protection Section */}
+      {/* 4. How It Works */}
       <section className="px-6 py-20 bg-gradient-to-b from-transparent to-blue-950/10">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              Security & Protection
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+            How It Works
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="text-center">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center border border-blue-500/30">
+                <span className="text-2xl font-bold text-blue-400">1</span>
+              </div>
+              <h3 className="text-2xl font-semibold mb-4 text-white">Connect or Create</h3>
+              <p className="text-gray-300 text-lg">
+                Deploy existing agents or use our AI-powered builder to create new ones with natural language prompts. 
+                No coding required.
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center border border-purple-500/30">
+                <span className="text-2xl font-bold text-purple-400">2</span>
+              </div>
+              <h3 className="text-2xl font-semibold mb-4 text-white">Govern Automatically</h3>
+              <p className="text-gray-300 text-lg">
+                Set intelligent policies and rules that automatically enforce compliance, manage costs, and ensure optimal performance.
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center border border-green-500/30">
+                <span className="text-2xl font-bold text-green-400">3</span>
+              </div>
+              <h3 className="text-2xl font-semibold mb-4 text-white">Track & Scale</h3>
+              <p className="text-gray-300 text-lg">
+                Monitor real-time metrics, analyze performance trends, and scale your AI operations with confidence and control.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Showcase - Animated Walkthrough */}
+      <section id="showcase" className="px-6 py-20">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              See Control Room in Action
             </h2>
             <p className="text-xl text-gray-300 max-w-4xl mx-auto">
-              Control Room delivers enterprise-grade encryption, comprehensive audit trails, OAuth support, 
-              and role-based access controls to keep your AI agents secure and compliant.
+              Watch how enterprise teams deploy, govern, and scale AI agents with unprecedented control and visibility.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <Card className="glass-panel border-cyan-500/20 text-center">
-              <CardContent className="pt-6">
-                <Lock className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-                <h3 className="font-semibold text-white mb-2">End-to-End Encryption</h3>
-                <p className="text-gray-400 text-sm">Military-grade AES-256 encryption for all data in transit and at rest</p>
-              </CardContent>
-            </Card>
+          {/* Demo Preview - Enhanced */}
+          <div className="glass-panel rounded-xl p-8 mb-12 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Left: Agent Dashboard */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white mb-4">Live Agent Dashboard</h3>
+                <div className="space-y-3">
+                  <div className="agent-card rounded-lg p-4 pulse-glow">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold">Customer Support Agent</h4>
+                      <span className="status-active text-sm">ACTIVE</span>
+                    </div>
+                    <div className="text-sm text-gray-400 grid grid-cols-2 gap-2">
+                      <div>Uptime: 99.8%</div>
+                      <div>Requests: 1,247</div>
+                      <div>Avg Response: 1.2s</div>
+                      <div>Cost: $12.40</div>
+                    </div>
+                  </div>
+                  
+                  <div className="agent-card rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold">Data Analysis Agent</h4>
+                      <span className="status-active text-sm">ACTIVE</span>
+                    </div>
+                    <div className="text-sm text-gray-400 grid grid-cols-2 gap-2">
+                      <div>Uptime: 97.5%</div>
+                      <div>Jobs: 89</div>
+                      <div>Avg Time: 45s</div>
+                      <div>Cost: $8.90</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Right: Policy & Metrics */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white mb-4">Smart Governance</h3>
+                <div className="space-y-3">
+                  <div className="p-3 bg-purple-500/20 rounded-lg border border-purple-500/30">
+                    <div className="text-sm text-purple-300 font-medium">Policy: Cost Control</div>
+                    <div className="text-xs text-gray-400 mt-1">Auto-pause if daily spend &gt; $50</div>
+                  </div>
+                  
+                  <div className="p-3 bg-green-500/20 rounded-lg border border-green-500/30">
+                    <div className="text-sm text-green-300 font-medium">Metric: Success Rate</div>
+                    <div className="text-xs text-gray-400 mt-1">98.7% (Target: 95%)</div>
+                  </div>
+                  
+                  <div className="p-3 bg-blue-500/20 rounded-lg border border-blue-500/30">
+                    <div className="text-sm text-blue-300 font-medium">Alert: Performance</div>
+                    <div className="text-xs text-gray-400 mt-1">Response time trending up</div>
+                  </div>
+                </div>
+              </div>
+            </div>
             
-            <Card className="glass-panel border-cyan-500/20 text-center">
-              <CardContent className="pt-6">
-                <Shield className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-                <h3 className="font-semibold text-white mb-2">Audit Trails</h3>
-                <p className="text-gray-400 text-sm">Complete activity logging with immutable audit trails for compliance</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="glass-panel border-cyan-500/20 text-center">
-              <CardContent className="pt-6">
-                <Users className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-                <h3 className="font-semibold text-white mb-2">OAuth Integration</h3>
-                <p className="text-gray-400 text-sm">Seamless integration with Google, Microsoft, and enterprise SSO providers</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="glass-panel border-cyan-500/20 text-center">
-              <CardContent className="pt-6">
-                <Zap className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-                <h3 className="font-semibold text-white mb-2">Role-Based Access</h3>
-                <p className="text-gray-400 text-sm">Granular permissions with Admin, Manager, Viewer, and Seller roles</p>
-              </CardContent>
-            </Card>
+            <div className="mt-8 text-center">
+              <div className="inline-flex items-center space-x-2 text-sm text-gray-400">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span>Live data updating every 5 seconds</span>
+              </div>
+            </div>
           </div>
-          
-          <div className="text-center">
-            <Link href="/intel">
-              <Button size="lg" className="command-button text-lg px-8 py-3">
-                Learn More About Security
+        </div>
+      </section>
+
+      {/* 6. Affiliate Banner */}
+      <section className="px-6 py-16 bg-gradient-to-r from-yellow-900/20 to-orange-900/20">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="glass-panel rounded-xl p-8 border-yellow-500/30">
+            <DollarSign className="w-16 h-16 text-yellow-400 mx-auto mb-6" />
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+              Earn 50% Lifetime Commission
+            </h2>
+            <p className="text-xl text-gray-300 mb-8">
+              Join our affiliate program and earn recurring revenue for every customer you refer. 
+              Industry-leading commission rates with full marketing support.
+            </p>
+            <Link href="/affiliate">
+              <Button size="lg" className="command-button text-lg px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400">
+                Join Affiliate Program
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
@@ -228,164 +266,95 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Visual Policy Builder Section */}
+      {/* 7. Intel Knowledge Center */}
       <section className="px-6 py-20">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Visual Policy Builder
-              </h2>
-              <p className="text-xl text-gray-300 mb-6">
-                Create sophisticated automation rules with our intuitive drag-and-drop policy builder. 
-                Set behavior rules, triggers, and actions for your AI agents without writing code.
-              </p>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                  <span className="text-gray-300">Drag-and-drop interface for complex logic</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                  <span className="text-gray-300">Real-time policy validation and testing</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                  <span className="text-gray-300">Pre-built templates for common scenarios</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="glass-panel rounded-lg p-6">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-purple-500/20 rounded-lg border border-purple-500/30">
-                  <span className="text-purple-300 font-medium">IF Agent Error Rate &gt; 10%</span>
-                  <ArrowRight className="w-4 h-4 text-purple-400" />
-                </div>
-                <div className="flex items-center justify-between p-3 bg-yellow-500/20 rounded-lg border border-yellow-500/30">
-                  <span className="text-yellow-300 font-medium">THEN Pause Agent</span>
-                  <ArrowRight className="w-4 h-4 text-yellow-400" />
-                </div>
-                <div className="flex items-center justify-between p-3 bg-blue-500/20 rounded-lg border border-blue-500/30">
-                  <span className="text-blue-300 font-medium">AND Send Alert to Team</span>
-                  <ArrowRight className="w-4 h-4 text-blue-400" />
-                </div>
-              </div>
-            </div>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+              Intel Knowledge Center
+            </h2>
+            <p className="text-xl text-gray-300 mb-8 max-w-4xl mx-auto">
+              Master your AI agent operations with comprehensive tutorials, documentation, strategic insights, 
+              and peer support from our growing community of AI practitioners.
+            </p>
           </div>
-        </div>
-      </section>
-
-      {/* Custom Metrics Section */}
-      <section className="px-6 py-20 bg-gradient-to-b from-transparent to-green-950/10">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="glass-panel rounded-lg p-6">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
-                  <span className="text-gray-300">Token Usage</span>
-                  <span className="text-green-400 font-mono">1.2M</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
-                  <span className="text-gray-300">Error Rate</span>
-                  <span className="text-red-400 font-mono">0.3%</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
-                  <span className="text-gray-300">Uptime</span>
-                  <span className="text-blue-400 font-mono">99.8%</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
-                  <span className="text-gray-300">Response Time</span>
-                  <span className="text-yellow-400 font-mono">245ms</span>
-                </div>
-                <div className="h-24 bg-gradient-to-r from-green-500/20 to-blue-500/20 rounded-lg flex items-end justify-around p-2">
-                  <div className="w-4 bg-green-400 rounded-t" style={{height: '60%'}}></div>
-                  <div className="w-4 bg-green-400 rounded-t" style={{height: '80%'}}></div>
-                  <div className="w-4 bg-green-400 rounded-t" style={{height: '70%'}}></div>
-                  <div className="w-4 bg-green-400 rounded-t" style={{height: '90%'}}></div>
-                  <div className="w-4 bg-green-400 rounded-t" style={{height: '85%'}}></div>
-                </div>
-              </div>
-            </div>
-            
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
-                Custom Metrics
-              </h2>
-              <p className="text-xl text-gray-300 mb-6">
-                Define, monitor, and visualize metrics specific to your use case. Track token usage, 
-                errors, uptime, response times, and any custom KPIs that matter to your business.
-              </p>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <span className="text-gray-300">Custom metric definitions with formulas</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <span className="text-gray-300">Real-time visualization and alerts</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <span className="text-gray-300">Historical data analysis and trends</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Intel Knowledge Center Section */}
-      <section className="px-6 py-20">
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
-            Intel Knowledge Center
-          </h2>
-          <p className="text-xl text-gray-300 mb-12 max-w-4xl mx-auto">
-            Master your AI agent operations with comprehensive tutorials, documentation, strategic insights, 
-            and peer support from our growing community of AI practitioners.
-          </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <Card className="glass-panel border-orange-500/20 text-center">
-              <CardContent className="pt-6">
-                <Globe className="w-12 h-12 text-orange-400 mx-auto mb-4" />
-                <h3 className="font-semibold text-white mb-2">Tutorials</h3>
-                <p className="text-gray-400 text-sm">Step-by-step guides for every feature and use case</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            <Card className="glass-panel border-orange-500/20 text-center hover:border-orange-400/40 transition-all duration-300">
+              <CardContent className="pt-8 pb-8">
+                <BookOpen className="w-16 h-16 text-orange-400 mx-auto mb-6" />
+                <h3 className="text-xl font-semibold text-white mb-3">Comprehensive Tutorials</h3>
+                <p className="text-gray-300">Step-by-step guides for every feature, from basic setup to advanced automation strategies</p>
               </CardContent>
             </Card>
             
-            <Card className="glass-panel border-orange-500/20 text-center">
-              <CardContent className="pt-6">
-                <BarChart3 className="w-12 h-12 text-orange-400 mx-auto mb-4" />
-                <h3 className="font-semibold text-white mb-2">Documentation</h3>
-                <p className="text-gray-400 text-sm">Complete API reference and integration guides</p>
+            <Card className="glass-panel border-red-500/20 text-center hover:border-red-400/40 transition-all duration-300">
+              <CardContent className="pt-8 pb-8">
+                <Shield className="w-16 h-16 text-red-400 mx-auto mb-6" />
+                <h3 className="text-xl font-semibold text-white mb-3">Security Best Practices</h3>
+                <p className="text-gray-300">Industry-proven strategies for AI agent governance, compliance, and risk management</p>
               </CardContent>
             </Card>
             
-            <Card className="glass-panel border-orange-500/20 text-center">
-              <CardContent className="pt-6">
-                <Zap className="w-12 h-12 text-orange-400 mx-auto mb-4" />
-                <h3 className="font-semibold text-white mb-2">Updates</h3>
-                <p className="text-gray-400 text-sm">Latest platform updates and feature announcements</p>
+            <Card className="glass-panel border-purple-500/20 text-center hover:border-purple-400/40 transition-all duration-300">
+              <CardContent className="pt-8 pb-8">
+                <Users className="w-16 h-16 text-purple-400 mx-auto mb-6" />
+                <h3 className="text-xl font-semibold text-white mb-3">Expert Community</h3>
+                <p className="text-gray-300">Connect with AI practitioners, share insights, and get support from our growing community</p>
               </CardContent>
             </Card>
             
-            <Card className="glass-panel border-orange-500/20 text-center">
-              <CardContent className="pt-6">
-                <Users className="w-12 h-12 text-orange-400 mx-auto mb-4" />
-                <h3 className="font-semibold text-white mb-2">Community</h3>
-                <p className="text-gray-400 text-sm">Connect with experts and share best practices</p>
+            <Card className="glass-panel border-green-500/20 text-center hover:border-green-400/40 transition-all duration-300">
+              <CardContent className="pt-8 pb-8">
+                <BarChart3 className="w-16 h-16 text-green-400 mx-auto mb-6" />
+                <h3 className="text-xl font-semibold text-white mb-3">Strategic Analytics</h3>
+                <p className="text-gray-300">Deep insights into AI agent performance, cost optimization, and scaling strategies</p>
               </CardContent>
             </Card>
           </div>
           
-          <Link href="/intel">
-            <Button size="lg" className="command-button text-lg px-8 py-3">
-              Explore Intel Center
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
-          </Link>
+          <div className="text-center mt-12">
+            <Link href="/intel">
+              <Button size="lg" className="command-button text-lg px-8 py-4">
+                Explore Knowledge Center
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. Final CTA */}
+      <section className="px-6 py-20 bg-gradient-to-b from-transparent to-blue-950/20">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="glass-panel rounded-xl p-12 border-blue-500/30">
+            <Rocket className="w-20 h-20 text-blue-400 mx-auto mb-8" />
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 bg-clip-text text-transparent">
+              The future of agent management starts now.
+            </h2>
+            <p className="text-xl text-gray-300 mb-10 max-w-3xl mx-auto">
+              Join thousands of organizations already using Control Room to deploy, govern, and scale AI agents with confidence. 
+              Start your free trial today and experience the next generation of AI operations.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/pricing">
+                <Button size="lg" className="command-button text-xl px-10 py-5">
+                  Start Free Trial
+                  <ArrowRight className="ml-2 w-6 h-6" />
+                </Button>
+              </Link>
+              <Link href="/dashboard">
+                <Button size="lg" variant="outline" className="text-xl px-10 py-5 border-blue-500/50 hover:bg-blue-500/10">
+                  Launch Dashboard
+                </Button>
+              </Link>
+            </div>
+            
+            <div className="mt-8 text-sm text-gray-400">
+              No credit card required • 14-day free trial • Cancel anytime
+            </div>
+          </div>
         </div>
       </section>
 

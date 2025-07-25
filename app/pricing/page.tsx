@@ -8,68 +8,75 @@ import { Footer } from '@/components/footer'
 
 const plans = [
   {
-    name: 'Free',
-    price: '$0',
+    name: 'Beginner',
+    price: '$39',
     period: '/month',
-    description: 'Perfect for getting started',
+    description: 'Perfect for small teams getting started',
+    trial: '7-day free trial',
     features: [
-      'Basic dashboard',
-      '1 agent monitoring',
-      'Viewer access only',
-      'Basic metrics',
-      'Community support'
+      'Up to 3 agents',
+      'Up to 2 active policies',
+      'Up to 5 custom metrics',
+      'Real-time metrics enabled',
+      'Agent code editor (read/write)',
+      'RBAC + multi-workspace',
+      'Affiliate dashboard access',
+      'Email support'
     ],
     limitations: [
-      'No custom metrics',
-      'No policy builder',
-      'No notifications',
-      'No marketplace access'
+      'Limited AI Helper (5 executions/day)',
+      'Basic support only'
     ],
-    cta: 'Start Free',
-    ctaVariant: 'outline' as const,
-    popular: false
+    cta: 'Start 7-Day Trial',
+    ctaVariant: 'default' as const,
+    popular: true,
+    stripePrice: 'price_beginner_monthly'
   },
   {
-    name: 'Pro',
-    price: '$99',
+    name: 'Unlimited',
+    price: '$149',
     period: '/month',
-    description: 'For growing teams and advanced monitoring',
+    description: 'For growing teams with advanced needs',
+    trial: '7-day free trial',
     features: [
-      'Advanced dashboard',
-      'Up to 10 agents',
-      'Custom metrics builder',
-      'Visual policy builder',
-      'Real-time notifications',
-      'Marketplace access',
-      'Email & Slack alerts',
+      'Unlimited agents',
+      'Unlimited policies',
+      'Unlimited custom metrics',
+      'Unlimited AI Helper usage',
+      'Full code editor access',
+      'Full real-time metrics',
+      'Affiliate dashboard',
+      'Priority processing',
       'Priority support'
     ],
     limitations: [],
-    cta: 'Upgrade to Pro',
+    cta: 'Start 7-Day Trial',
     ctaVariant: 'default' as const,
-    popular: true
+    popular: false,
+    stripePrice: 'price_unlimited_monthly'
   },
   {
     name: 'Enterprise',
-    price: '$499',
-    period: '/month',
-    description: 'For large organizations with complex needs',
+    price: 'Custom',
+    period: '',
+    description: 'For large organizations with complex requirements',
+    trial: 'Custom trial available',
     features: [
-      'Unlimited agents',
-      'Advanced analytics',
+      'Everything in Unlimited',
+      'Dedicated support & SLA',
+      'Advanced audit exports',
+      'SSO readiness',
+      'Invoiced billing',
       'Custom integrations',
-      'Dedicated support',
-      'Concierge setup',
-      'SLA guarantees',
-      'Custom policies',
       'White-label options',
-      'Advanced security',
-      'Audit logs'
+      'Concierge setup',
+      'Advanced security'
     ],
     limitations: [],
     cta: 'Contact Sales',
     ctaVariant: 'outline' as const,
-    popular: false
+    popular: false,
+    stripePrice: null
   }
 ]
 
@@ -87,8 +94,11 @@ export default function PricingPage() {
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Scale your AI agent operations with plans designed for every mission size. 
-              From reconnaissance to full-scale deployment.
+              All plans include a 7-day free trial with phone verification.
             </p>
+            <div className="mt-6 inline-flex items-center px-4 py-2 bg-blue-500/20 border border-blue-500/30 rounded-full">
+              <span className="text-blue-300 font-semibold">🎉 7-Day Free Trial • No Credit Card Required</span>
+            </div>
           </div>
 
           {/* Pricing Cards */}
@@ -118,6 +128,13 @@ export default function PricingPage() {
                     <span className="text-4xl font-bold text-white">{plan.price}</span>
                     <span className="text-gray-400">{plan.period}</span>
                   </div>
+                  {plan.trial && (
+                    <div className="mb-3">
+                      <span className="inline-block px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full text-green-300 text-sm font-medium">
+                        {plan.trial}
+                      </span>
+                    </div>
+                  )}
                   <CardDescription className="text-gray-300">
                     {plan.description}
                   </CardDescription>
@@ -153,7 +170,7 @@ export default function PricingPage() {
                         </Button>
                       </Link>
                     ) : (
-                      <Link href={plan.name === 'Free' ? '/login' : '/checkout?plan=' + plan.name.toLowerCase()}>
+                      <Link href={`/signup?plan=${plan.stripePrice}&trial=true`}>
                         <Button 
                           variant={plan.ctaVariant}
                           className={`w-full ${plan.popular ? 'command-button' : ''}`}
@@ -180,47 +197,65 @@ export default function PricingPage() {
                 <thead>
                   <tr className="border-b border-gray-700">
                     <th className="text-left py-4 px-6 text-gray-300">Feature</th>
-                    <th className="text-center py-4 px-6 text-gray-300">Free</th>
-                    <th className="text-center py-4 px-6 text-gray-300">Pro</th>
+                    <th className="text-center py-4 px-6 text-gray-300">Beginner</th>
+                    <th className="text-center py-4 px-6 text-gray-300">Unlimited</th>
                     <th className="text-center py-4 px-6 text-gray-300">Enterprise</th>
                   </tr>
                 </thead>
                 <tbody className="text-gray-300">
                   <tr className="border-b border-gray-800">
                     <td className="py-4 px-6">Agents</td>
-                    <td className="text-center py-4 px-6">1</td>
-                    <td className="text-center py-4 px-6">10</td>
+                    <td className="text-center py-4 px-6">3</td>
+                    <td className="text-center py-4 px-6">Unlimited</td>
+                    <td className="text-center py-4 px-6">Unlimited</td>
+                  </tr>
+                  <tr className="border-b border-gray-800">
+                    <td className="py-4 px-6">Active Policies</td>
+                    <td className="text-center py-4 px-6">2</td>
+                    <td className="text-center py-4 px-6">Unlimited</td>
                     <td className="text-center py-4 px-6">Unlimited</td>
                   </tr>
                   <tr className="border-b border-gray-800">
                     <td className="py-4 px-6">Custom Metrics</td>
-                    <td className="text-center py-4 px-6"><X className="w-5 h-5 text-red-400 mx-auto" /></td>
+                    <td className="text-center py-4 px-6">5</td>
+                    <td className="text-center py-4 px-6">Unlimited</td>
+                    <td className="text-center py-4 px-6">Unlimited</td>
+                  </tr>
+                  <tr className="border-b border-gray-800">
+                    <td className="py-4 px-6">AI Helper Usage</td>
+                    <td className="text-center py-4 px-6">5/day</td>
+                    <td className="text-center py-4 px-6">Unlimited</td>
+                    <td className="text-center py-4 px-6">Unlimited</td>
+                  </tr>
+                  <tr className="border-b border-gray-800">
+                    <td className="py-4 px-6">Code Editor</td>
+                    <td className="text-center py-4 px-6"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
                     <td className="text-center py-4 px-6"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
                     <td className="text-center py-4 px-6"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
                   </tr>
                   <tr className="border-b border-gray-800">
-                    <td className="py-4 px-6">Policy Builder</td>
-                    <td className="text-center py-4 px-6"><X className="w-5 h-5 text-red-400 mx-auto" /></td>
+                    <td className="py-4 px-6">Real-time Metrics</td>
                     <td className="text-center py-4 px-6"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
-                    <td className="text-center py-4 px-6"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
-                  </tr>
-                  <tr className="border-b border-gray-800">
-                    <td className="py-4 px-6">Real-time Notifications</td>
-                    <td className="text-center py-4 px-6"><X className="w-5 h-5 text-red-400 mx-auto" /></td>
                     <td className="text-center py-4 px-6"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
                     <td className="text-center py-4 px-6"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
                   </tr>
                   <tr className="border-b border-gray-800">
-                    <td className="py-4 px-6">Marketplace Access</td>
+                    <td className="py-4 px-6">Affiliate Dashboard</td>
+                    <td className="text-center py-4 px-6"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
+                    <td className="text-center py-4 px-6"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
+                    <td className="text-center py-4 px-6"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
+                  </tr>
+                  <tr className="border-b border-gray-800">
+                    <td className="py-4 px-6">Audit Logs</td>
                     <td className="text-center py-4 px-6"><X className="w-5 h-5 text-red-400 mx-auto" /></td>
                     <td className="text-center py-4 px-6"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
-                    <td className="text-center py-4 px-6"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
+                    <td className="text-center py-4 px-6">Advanced</td>
                   </tr>
                   <tr>
                     <td className="py-4 px-6">Support Level</td>
-                    <td className="text-center py-4 px-6">Community</td>
+                    <td className="text-center py-4 px-6">Email</td>
                     <td className="text-center py-4 px-6">Priority</td>
-                    <td className="text-center py-4 px-6">Dedicated</td>
+                    <td className="text-center py-4 px-6">Dedicated + SLA</td>
                   </tr>
                 </tbody>
               </table>

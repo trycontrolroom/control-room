@@ -36,7 +36,12 @@ import {
   DollarSign,
   Activity,
   Plus,
-  FileText
+  FileText,
+  Bot,
+  Trash2,
+  Edit,
+  BarChart3,
+  X
 } from 'lucide-react'
 import { DashboardLayout } from '@/components/dashboard-layout'
 import { CustomMetricModal } from '@/components/custom-metric-modal'
@@ -78,6 +83,10 @@ export default function StatsPage() {
   const [showMetricModal, setShowMetricModal] = useState(false)
   const [customMetrics, setCustomMetrics] = useState<any[]>([])
   const [creatingMetric, setCreatingMetric] = useState(false)
+  const [showAiHelper, setShowAiHelper] = useState(false)
+  const [aiHelperInput, setAiHelperInput] = useState('')
+  const [aiHelperLoading, setAiHelperLoading] = useState(false)
+  const [deletingMetricId, setDeletingMetricId] = useState<string | null>(null)
 
   // compute summary
   const summary = (() => {
@@ -152,8 +161,7 @@ export default function StatsPage() {
 
   async function fetchCustomMetrics() {
     try {
-      const wsId = session?.user?.workspaceId
-      const res = await fetch(`/api/custom-metrics?workspaceId=${wsId}`)
+      const res = await fetch('/api/custom-metrics')
       if (res.ok) setCustomMetrics(await res.json())
     } catch (e) {
       console.error('fetchCustomMetrics error', e)
@@ -163,8 +171,7 @@ export default function StatsPage() {
   async function handleCreateCustomMetric(m: any) {
     setCreatingMetric(true)
     try {
-      const wsId = session?.user?.workspaceId
-      const res = await fetch(`/api/custom-metrics?workspaceId=${wsId}`, {
+      const res = await fetch('/api/custom-metrics', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(m)
@@ -182,6 +189,64 @@ export default function StatsPage() {
       console.error('handleCreateCustomMetric error', e)
     } finally {
       setCreatingMetric(false)
+    }
+  }
+
+  async function handleDeleteCustomMetric(metricId: string) {
+    setDeletingMetricId(metricId)
+    try {
+      const res = await fetch(`/api/custom-metrics/${metricId}`, {
+        method: 'DELETE'
+      })
+      if (res.ok) {
+        setCustomMetrics(prev => prev.filter(m => m.id !== metricId))
+        const index = metricTypes.findIndex(m => m.value === `custom_${metricId}`)
+        if (index > -1) {
+          metricTypes.splice(index, 1)
+        }
+        if (selectedMetric === `custom_${metricId}`) {
+          setSelectedMetric('uptime')
+        }
+      }
+    } catch (e) {
+      console.error('handleDeleteCustomMetric error', e)
+    } finally {
+      setDeletingMetricId(null)
+    }
+  }
+
+  async function handleAiHelperCreateMetric() {
+    if (!aiHelperInput.trim()) return
+    
+    setAiHelperLoading(true)
+    try {
+      const res = await fetch('/api/ai-helper/execute', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'create_metric',
+          input: aiHelperInput,
+          workspaceId: session?.user?.workspaceId
+        })
+      })
+      
+      if (res.ok) {
+        const result = await res.json()
+        if (result.success && result.metric) {
+          setCustomMetrics(prev => [...prev, result.metric])
+          metricTypes.push({
+            value: `custom_${result.metric.id}`,
+            label: result.metric.name,
+            color: result.metric.color || '#3b82f6'
+          })
+          setAiHelperInput('')
+          setShowAiHelper(false)
+        }
+      }
+    } catch (e) {
+      console.error('handleAiHelperCreateMetric error', e)
+    } finally {
+      setAiHelperLoading(false)
     }
   }
 
@@ -257,15 +322,26 @@ export default function StatsPage() {
             </SelectContent>
           </Select>
 
-          {/* 👇 now disabled by workspaceRole */}
-          <Button
-            onClick={() => setShowMetricModal(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white ml-4"
-            disabled={session?.user?.workspaceRole === 'VIEWER'}
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Custom Metric
-          </Button>
+          {/* Custom Metric Actions */}
+          <div className="flex gap-2 ml-4">
+            <Button
+              onClick={() => setShowMetricModal(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+              disabled={session?.user?.workspaceRole === 'VIEWER'}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Custom Metric
+            </Button>
+            
+            <Button
+              onClick={() => setShowAiHelper(true)}
+              className="bg-purple-600 hover:bg-purple-700 text-white"
+              disabled={session?.user?.workspaceRole === 'VIEWER'}
+            >
+              <Bot className="w-4 h-4 mr-2" />
+              AI Create
+            </Button>
+          </div>
         </div>
 
         {/* Summary Cards */}
@@ -393,8 +469,140 @@ export default function StatsPage() {
           </CardContent>
         </Card>
 
-        {/* Additional Insights & Quick Actions */}
-        {/* …keep your existing “Additional Insights” and “Quick Actions” here… */}
+        {/* Custom Metrics Management */}
+        {customMetrics.length > 0 && (
+          <Card className="glass-panel border-purple-500/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <BarChart3 className="w-5 h-5 mr-2 text-purple-400" />
+                Custom Metrics
+              </CardTitle>
+              <CardDescription className="text-gray-400">
+                Manage your workspace custom metrics
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {customMetrics.map(metric => (
+                  <div
+                    key={metric.id}
+                    className="bg-gray-800/30 border border-gray-600 rounded-lg p-4 hover:border-gray-500 transition-colors"
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center space-x-2">
+                        <div
+                          className="w-3 h-3 rounded-full"
+                          style={{ backgroundColor: metric.color || '#3b82f6' }}
+                        />
+                        <h4 className="font-medium text-white">{metric.name}</h4>
+                      </div>
+                      {session?.user?.workspaceRole !== 'VIEWER' && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteCustomMetric(metric.id)}
+                          disabled={deletingMetricId === metric.id}
+                          className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                        >
+                          {deletingMetricId === metric.id ? (
+                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-400" />
+                          ) : (
+                            <Trash2 className="w-3 h-3" />
+                          )}
+                        </Button>
+                      )}
+                    </div>
+                    
+                    <div className="space-y-1 text-sm text-gray-400">
+                      <p><span className="text-gray-300">Unit:</span> {metric.unit || 'Number'}</p>
+                      {metric.formula && (
+                        <p><span className="text-gray-300">Formula:</span> {metric.formula}</p>
+                      )}
+                      {metric.grouping && (
+                        <p><span className="text-gray-300">Group:</span> {metric.grouping}</p>
+                      )}
+                    </div>
+                    
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSelectedMetric(`custom_${metric.id}`)}
+                      className="w-full mt-3 text-xs"
+                    >
+                      View Chart
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* AI Helper Modal */}
+        {showAiHelper && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <Card className="glass-panel border-purple-500/20 w-full max-w-lg">
+              <CardHeader className="flex items-center justify-between pb-4">
+                <div className="flex items-center space-x-2 text-white text-xl">
+                  <Bot className="w-5 h-5 text-purple-400" />
+                  <span>AI Metric Creator</span>
+                </div>
+                <Button variant="ghost" size="sm" onClick={() => setShowAiHelper(false)}>
+                  <X className="w-4 h-4 text-gray-400 hover:text-white" />
+                </Button>
+              </CardHeader>
+              
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="bg-purple-500/10 border border-purple-500/20 rounded-lg p-4">
+                    <h4 className="font-semibold text-purple-300 mb-2">Examples:</h4>
+                    <ul className="text-sm text-gray-300 space-y-1">
+                      <li>• "Create a metric tracking average latency called SLA Latency"</li>
+                      <li>• "Add a success rate metric in percentage for performance group"</li>
+                      <li>• "Make a cost metric showing daily spend in dollars"</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label htmlFor="aiInput" className="text-gray-300 text-sm font-medium">
+                      Describe the metric you want to create:
+                    </label>
+                    <textarea
+                      id="aiInput"
+                      value={aiHelperInput}
+                      onChange={(e) => setAiHelperInput(e.target.value)}
+                      placeholder="e.g., Create a metric tracking average response time in milliseconds for the performance group"
+                      className="w-full h-24 bg-gray-800/50 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                  
+                  <div className="flex space-x-3">
+                    <Button
+                      onClick={handleAiHelperCreateMetric}
+                      disabled={!aiHelperInput.trim() || aiHelperLoading}
+                      className="command-button flex-1"
+                    >
+                      {aiHelperLoading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                          Creating...
+                        </>
+                      ) : (
+                        <>
+                          <Bot className="w-4 h-4 mr-2" />
+                          Create Metric
+                        </>
+                      )}
+                    </Button>
+                    <Button variant="outline" onClick={() => setShowAiHelper(false)}>
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         <CustomMetricModal
           isOpen={showMetricModal}
