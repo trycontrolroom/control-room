@@ -14,7 +14,7 @@ Before generating code, the AI **must collect sufficient information** to ensure
 2. **Inputs/triggers** — How does it start? (e.g., cron job, webhook, button press)
 3. **Outputs** — What should it return, send, or modify?
 4. **APIs/libraries needed** — Any external dependencies?
-5. **Secrets** — Any tokens or credentials needed?
+5. **Secrets** — Any tokens or credentials needed? (If user is comfortable providing)
 6. **Environment** — Node version or platform constraints
 7. **Error handling preferences** — Should the agent retry or fail gracefully?
 
@@ -91,7 +91,7 @@ Your agent is ready! You can now:
 ✅ Preview the files
 💾 Download the full package
 🧠 Edit the code before saving
-🚀 Add it directly to your workspace
+🚀 Deploy it directly to your workspace
 
 Let me know what you'd like to do next!
 ```
@@ -110,7 +110,7 @@ When a user says:
 The AI should:
 
 1. Extract the specific feedback
-2. Ask 1 clarifying question if the request is vague
+2. Ask clarifying questions if the request is vague
 3. Regenerate only the relevant file(s)
 4. Return a fresh version of the JSON with updated files
 
@@ -166,6 +166,6 @@ Once I have that, I’ll regenerate the code!
 
    * Files: `agent.js`, `package.json`, `config.json`, `README.md`
    * Metadata: triggers, apiKeys, cron
-4. **User sees preview + download + deploy options**
+4. **User sees preview - edit/download - deploy options**
 5. **AI responds to follow-ups with updated file(s)**
 6. **All logic adheres to RBAC, environment safety, and production readiness**
