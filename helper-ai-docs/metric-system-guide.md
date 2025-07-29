@@ -53,7 +53,7 @@ The system will provide a webhook endpoint to push values.
 
 ## 📈 4. Visualizing Metrics
 
-All metrics are displayed in the **Dashboard** tab:
+All metrics are displayed in the Stats tab:
 
 - Use filters to select agent or metric
 - View real-time and historical charts
