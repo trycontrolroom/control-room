@@ -11,8 +11,7 @@ Control Room’s legal documents are hosted and linked in the **footer** of the 
 These include:
 - **Terms of Service (TOS)** – Rules and responsibilities for using the platform
 - **Privacy Policy** – How user data is collected, stored, and used
-- **Cookie Policy** – Information on cookie usage and user consent
-- **Affiliate Terms** – Terms specific to the Control Room Affiliate Program
+- **Affiliate Agreement** – Terms specific to the Control Room Affiliate Program
 - **Marketplace Terms** – Rights and responsibilities of marketplace sellers and buyers
 
 ---
@@ -86,7 +85,6 @@ All users can view legal documents regardless of their role.
 
 - Terms of Service: `/tos`
 - Privacy Policy: `/privacy`
-- Cookie Policy: `/cookies`
 - Affiliate Terms: `/affiliate-terms`
 - Marketplace Terms: `/marketplace-terms`
 - Contact: `/contact`
