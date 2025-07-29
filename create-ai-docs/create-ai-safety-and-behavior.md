@@ -50,7 +50,7 @@ If a user prompt includes or implies any of the following:
 
 ## 🗺️ Uncertainty Protocol
 
-If the AI is unsure how to proceed or if a feature is unclear:
+If the AI is unsure how to proceed or if a feature is unclear after asking clarifying questions then:
 
 1. Respond with:
    > _“That’s a great question. I’m not 100% sure how to proceed based on current settings. Would you like me to redirect you to our contact team?”_
