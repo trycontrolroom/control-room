@@ -93,7 +93,7 @@ export default function SignupPage() {
           <Link href="/" className="inline-flex items-center space-x-2">
             <Shield className="w-10 h-10 text-blue-400" />
             <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              Control Room
+              Control Room <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full ml-2">BETA</span>
             </span>
           </Link>
         </div>

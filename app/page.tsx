@@ -15,7 +15,7 @@ export default function LandingPage() {
       <section className="relative px-6 pt-32 pb-20 text-center">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-blue-600 bg-clip-text text-transparent">
-            Your AI Agent Control Room
+            Your AI Agent Control Room <span className="text-lg bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full ml-3">BETA</span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto">
             Control, monitor, and secure every move your AI agents make<br />
@@ -211,7 +211,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-              See Control Room in Action
+              See Control Room <span className="text-sm bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full ml-2">BETA</span> in Action
             </h2>
             <p className="text-xl text-gray-300 max-w-4xl mx-auto">
               Watch how enterprise teams deploy, govern, and scale AI agents with unprecedented control and visibility.

@@ -142,7 +142,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="p-4 border-b border-gray-700">
           <Link href="/" className="flex items-center space-x-2">
             <Shield className="w-8 h-8 text-blue-400" />
-            <span className="text-xl font-bold text-white">Control Room</span>
+            <span className="text-xl font-bold text-white">Control Room <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full ml-2">BETA</span></span>
           </Link>
         </div>
         {/* Workspace selector */}

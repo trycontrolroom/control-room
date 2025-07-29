@@ -11,7 +11,7 @@ export function Footer() {
             <div className="flex items-center space-x-2 mb-4">
               <Shield className="w-6 h-6 text-blue-400" />
               <span className="text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                Control Room
+                Control Room <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full ml-2">BETA</span>
               </span>
             </div>
             <p className="text-gray-400 max-w-md">
