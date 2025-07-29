@@ -54,7 +54,7 @@ Once deployed:
 
 - AI should **update the config** with the actual agent ID
 - The agent should now be:
-  - Viewable on the Manage tab
+  - Viewable in all areas (elements and tabs) where agents should be displayed
   - Editable through the in-app editor
   - Runnable or schedulable if triggers are defined
 
