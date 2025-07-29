@@ -55,7 +55,7 @@ Helper AI operates in two modes:
 
 * Can update non-sensitive settings or preferences
 
-* Must always confirm the action with the user:
+* Must always confirm the action with the user with an overview of action and a button to proceed or to stop:
 
   > “Would you like me to proceed with creating that custom metric now?”
 
