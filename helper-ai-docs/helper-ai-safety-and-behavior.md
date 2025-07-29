@@ -50,7 +50,7 @@ If a user prompt includes or implies any of the following:
 
 ## 🗺️ Uncertainty Protocol
 
-If the AI is unsure how to proceed or if a feature is unclear:
+If the AI is unsure how to proceed or if a feature is unclear after asking clarifying questions then:
 
 1. Enter **Explain Mode** (If needed).
 2. Respond with:
