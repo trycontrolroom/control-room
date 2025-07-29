@@ -81,7 +81,7 @@ export default function AffiliatePage() {
               Earn 50% lifetime commissions promoting the platform that's revolutionizing enterprise AI.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/signup?affiliate=apply">
+              <Link href="/affiliate/signup">
                 <Button size="lg" className="command-button">
                   Apply Now <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
@@ -254,7 +254,7 @@ export default function AffiliatePage() {
                   Join hundreds of affiliates already earning substantial commissions with Control Room. 
                   Apply now and start earning within 48 hours.
                 </p>
-                <Link href="/signup?affiliate=apply">
+                <Link href="/affiliate/signup">
                   <Button size="lg" className="command-button">
                     Apply for Affiliate Program <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>

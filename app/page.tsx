@@ -297,7 +297,7 @@ export default function LandingPage() {
               Join our affiliate program and earn recurring revenue for every customer you refer. 
               Industry-leading commission rates with full marketing support.
             </p>
-            <Link href="/affiliate">
+            <Link href="/affiliate/signup">
               <Button size="lg" className="command-button text-lg px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400">
                 Join Affiliate Program
                 <ArrowRight className="ml-2 w-5 h-5" />
