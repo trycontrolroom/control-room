@@ -21,7 +21,7 @@ These may include:
 
 ## 🧠 When to Offer Extensions
 
-- When a user says “Can this also notify Slack?” or “Can it save the data somewhere?”
+- When a user says something like “Can this also notify Slack?” or “Can it save the data somewhere?”
 - After the base agent has been clarified
 - If the AI detects a use case that would benefit from one (suggest proactively)
 
