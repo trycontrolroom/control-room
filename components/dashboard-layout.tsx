@@ -23,7 +23,8 @@ import {
   X,
   ArrowRight,
   DollarSign,
-  Menu
+  Menu,
+  ChevronRight
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { AIHelper } from '@/components/ai-helper'
@@ -56,6 +57,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const isDeveloper = session?.user?.email === 'admin@control-room.ai'
   const [isAffiliate, setIsAffiliate] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [helperAIOpen, setHelperAIOpen] = useState(false)
 
   useEffect(() => {
     if (!session?.user?.id) return
@@ -138,11 +140,29 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="min-h-screen flex">
       {/* Sidebar */}
-      <aside className={`${sidebarCollapsed ? 'w-0' : 'w-64'} bg-gray-900 text-gray-300 flex flex-col transition-all duration-300 overflow-hidden`}>
+      <aside className={`${
+        helperAIOpen ? 'w-16' : (sidebarCollapsed ? 'w-0' : 'w-64')
+      } bg-gray-900 text-gray-300 flex flex-col transition-all duration-300 overflow-hidden relative`}>
+        {/* Arrow button when Helper AI is open */}
+        {helperAIOpen && (
+          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setHelperAIOpen(false)
+                setSidebarCollapsed(false)
+              }}
+              className="h-12 w-6 rounded-l-none border-gray-600 hover:bg-gray-700 bg-gray-800"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+          </div>
+        )}
         <div className="p-4 border-b border-gray-700">
           <Link href="/" className="flex items-center space-x-2">
             <Shield className="w-8 h-8 text-blue-400" />
-            <span className="text-xl font-bold text-white">Control Room</span>
+            <span className="text-xl font-bold text-white">Control Room <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full ml-2">BETA</span></span>
           </Link>
         </div>
         {/* Workspace selector */}
@@ -300,10 +320,19 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </Link>
         </div>
       </aside>
+      {/* Helper AI Space - only visible when Helper AI is open */}
+      {helperAIOpen && (
+        <div className="w-64 bg-gray-800 flex flex-col transition-all duration-300">
+          {/* This space will be filled by the Helper AI component */}
+        </div>
+      )}
+      
       {/* Main */}
-      <main className="flex-1 bg-gray-800 flex flex-col">
-        {/* Top bar - only show when sidebar is collapsed */}
-        {sidebarCollapsed && (
+      <main className={`flex-1 bg-gray-800 flex flex-col transition-all duration-300 ${
+        helperAIOpen ? 'ml-0' : ''
+      }`}>
+        {/* Top bar - only show when sidebar is collapsed and Helper AI is not open */}
+        {sidebarCollapsed && !helperAIOpen && (
           <div className="bg-gray-900 border-b border-gray-700 p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
@@ -374,7 +403,18 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       )}
       
       {/* AI Helper */}
-      <AIHelper onSidebarToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
+      <AIHelper 
+        onSidebarToggle={() => {
+          if (helperAIOpen) {
+            setHelperAIOpen(false)
+            setSidebarCollapsed(false)
+          } else {
+            setHelperAIOpen(true)
+            setSidebarCollapsed(true)
+          }
+        }}
+        isInSidebarSpace={helperAIOpen}
+      />
     </div>
   )
 }

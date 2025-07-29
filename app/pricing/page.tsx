@@ -170,7 +170,7 @@ export default function PricingPage() {
                         </Button>
                       </Link>
                     ) : (
-                      <Link href={`/signup?plan=${plan.stripePrice}&trial=true`}>
+                      <Link href={`/checkout?type=plan&plan=${plan.stripePrice}&trial=true`}>
                         <Button 
                           variant={plan.ctaVariant}
                           className={`w-full ${plan.popular ? 'command-button' : ''}`}

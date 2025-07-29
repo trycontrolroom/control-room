@@ -42,7 +42,8 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/login')
+      const currentUrl = window.location.href
+      router.push(`/signup?returnUrl=${encodeURIComponent(currentUrl)}`)
       return
     }
 
@@ -94,19 +95,38 @@ export default function CheckoutPage() {
 
   const getPlanData = (plan: string): CheckoutItem => {
     const plans = {
-      pro: {
+      price_beginner_monthly: {
         type: 'plan' as const,
-        id: 'pro',
-        name: 'Pro Plan',
-        description: 'Advanced monitoring and policy automation for growing teams',
-        price: 99,
+        id: 'price_beginner_monthly',
+        name: 'Beginner Plan',
+        description: 'Perfect for small teams getting started',
+        price: 39,
         features: [
-          'Up to 10 agents',
-          'Custom metrics builder',
-          'Visual policy builder',
-          'Real-time notifications',
-          'Marketplace access',
-          'Email & Slack alerts',
+          'Up to 3 agents',
+          'Up to 2 active policies',
+          'Up to 5 custom metrics',
+          'Real-time metrics enabled',
+          'Agent code editor (read/write)',
+          'RBAC + multi-workspace',
+          'Affiliate dashboard access',
+          'Email support'
+        ]
+      },
+      price_unlimited_monthly: {
+        type: 'plan' as const,
+        id: 'price_unlimited_monthly',
+        name: 'Unlimited Plan',
+        description: 'For growing teams with advanced needs',
+        price: 149,
+        features: [
+          'Unlimited agents',
+          'Unlimited policies',
+          'Unlimited custom metrics',
+          'Unlimited AI Helper usage',
+          'Full code editor access',
+          'Full real-time metrics',
+          'Affiliate dashboard',
+          'Priority processing',
           'Priority support'
         ]
       },
@@ -114,24 +134,23 @@ export default function CheckoutPage() {
         type: 'plan' as const,
         id: 'enterprise',
         name: 'Enterprise Plan',
-        description: 'Unlimited agents and premium features for large organizations',
-        price: 499,
+        description: 'For large organizations with complex requirements',
+        price: 0,
         features: [
-          'Unlimited agents',
-          'Advanced analytics',
+          'Everything in Unlimited',
+          'Dedicated support & SLA',
+          'Advanced audit exports',
+          'SSO readiness',
+          'Invoiced billing',
           'Custom integrations',
-          'Dedicated support',
-          'Concierge setup',
-          'SLA guarantees',
-          'Custom policies',
           'White-label options',
-          'Advanced security',
-          'Audit logs'
+          'Concierge setup',
+          'Advanced security'
         ]
       }
     }
 
-    return plans[plan as keyof typeof plans] || plans.pro
+    return plans[plan as keyof typeof plans] || plans.price_beginner_monthly
   }
 
   const handleCheckout = async () => {
@@ -255,9 +274,9 @@ export default function CheckoutPage() {
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-bold text-white">
-                        ${item.price}
+                        {item.price === 0 ? 'Custom' : `$${item.price}`}
                       </div>
-                      {item.type === 'plan' && (
+                      {item.type === 'plan' && item.price > 0 && (
                         <div className="text-sm text-gray-400">/month</div>
                       )}
                     </div>
@@ -297,7 +316,7 @@ export default function CheckoutPage() {
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-gray-400">Subtotal</span>
-                      <span className="text-white">${item.price}</span>
+                      <span className="text-white">{item.price === 0 ? 'Custom' : `$${item.price}`}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-400">Tax</span>
@@ -306,7 +325,7 @@ export default function CheckoutPage() {
                     <Separator className="bg-gray-700" />
                     <div className="flex justify-between text-lg font-semibold">
                       <span className="text-white">Total</span>
-                      <span className="text-white">${item.price}</span>
+                      <span className="text-white">{item.price === 0 ? 'Custom' : `$${item.price}`}</span>
                     </div>
                   </div>
 
@@ -322,24 +341,35 @@ export default function CheckoutPage() {
                   </div>
 
                   {/* Checkout Button */}
-                  <Button
-                    onClick={handleCheckout}
-                    disabled={processing}
-                    className="w-full command-button"
-                    size="lg"
-                  >
-                    {processing ? (
-                      <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <CreditCard className="w-4 h-4 mr-2" />
-                        Complete Purchase
-                      </>
-                    )}
-                  </Button>
+                  {item.price === 0 ? (
+                    <Link href="/contact">
+                      <Button
+                        className="w-full command-button"
+                        size="lg"
+                      >
+                        Contact Sales
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Button
+                      onClick={handleCheckout}
+                      disabled={processing}
+                      className="w-full command-button"
+                      size="lg"
+                    >
+                      {processing ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <CreditCard className="w-4 h-4 mr-2" />
+                          Complete Purchase
+                        </>
+                      )}
+                    </Button>
+                  )}
 
                   <p className="text-xs text-gray-500 text-center">
                     By completing this purchase, you agree to our{' '}

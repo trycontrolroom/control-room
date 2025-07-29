@@ -40,9 +40,10 @@ interface AISuggestion {
 
 interface AIHelperProps {
   onSidebarToggle?: () => void
+  isInSidebarSpace?: boolean
 }
 
-export function AIHelper({ onSidebarToggle }: AIHelperProps) {
+export function AIHelper({ onSidebarToggle, isInSidebarSpace = false }: AIHelperProps) {
   const { data: session } = useSession()
   const [isOpen, setIsOpen] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
@@ -235,7 +236,7 @@ Switch modes using the toggle above. What would you like to know about?`,
 
   function toggleOpen() {
     setIsOpen(!isOpen)
-    if (!isOpen && onSidebarToggle) {
+    if (onSidebarToggle) {
       onSidebarToggle()
     }
   }
@@ -272,10 +273,16 @@ Switch modes using the toggle above. What would you like to know about?`,
 
       {/* AI Helper Panel */}
       {isOpen && (
-        <div className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ${
-          isMinimized ? 'w-80 h-16' : 'w-96 h-[600px]'
-        }`}>
-          <Card className="glass-panel border-purple-500/20 h-full flex flex-col">
+        <div className={`${
+          isInSidebarSpace 
+            ? 'fixed left-16 top-0 w-64 h-full z-40' 
+            : `fixed bottom-6 right-6 z-50 ${isMinimized ? 'w-80 h-16' : 'w-96 h-[600px]'}`
+        } transition-all duration-300`}>
+          <Card className={`${
+            isInSidebarSpace 
+              ? 'glass-panel border-purple-500/20 h-full flex flex-col rounded-none border-l-0' 
+              : 'glass-panel border-purple-500/20 h-full flex flex-col'
+          }`}>
             {/* Header */}
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
@@ -294,14 +301,16 @@ Switch modes using the toggle above. What would you like to know about?`,
                   </Badge>
                 </CardTitle>
                 <div className="flex items-center space-x-1">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => setIsMinimized(!isMinimized)}
-                    className="h-8 w-8 p-0"
-                  >
-                    {isMinimized ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
-                  </Button>
+                  {!isInSidebarSpace && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setIsMinimized(!isMinimized)}
+                      className="h-8 w-8 p-0"
+                    >
+                      {isMinimized ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
+                    </Button>
+                  )}
                   <Button
                     size="sm"
                     variant="outline"
@@ -335,7 +344,7 @@ Switch modes using the toggle above. What would you like to know about?`,
               )}
             </CardHeader>
 
-            {!isMinimized && (
+            {(!isMinimized || isInSidebarSpace) && (
               <CardContent className="flex-1 flex flex-col min-h-0">
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-2">

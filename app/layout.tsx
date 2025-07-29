@@ -7,7 +7,7 @@ import { Providers } from '@/components/providers'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Control Room - AI Agent Governance & Monitoring',
+  title: 'Control Room (Beta) - AI Agent Governance & Monitoring',
   description: 'Take command of your AI agents with real-time monitoring, policy automation, and marketplace integration.',
   keywords: 'AI agents, monitoring, governance, automation, control room',
 }
