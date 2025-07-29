@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Bot, Loader2, MessageSquare, Play, Save, Send, User, X } from 'lucide-react'
+import { Bot, Download, Loader2, MessageSquare, Play, Save, Send, User, X } from 'lucide-react'
 import { DashboardLayout } from '@/components/dashboard-layout'
 import { CodeEditor } from '@/components/code-editor'
 
@@ -61,7 +61,7 @@ useEffect(() => {
     setMessages([{
       id: '1',
       role: 'assistant',
-      content: 'Welcome to the AI Agent Builder! Describe the agent you want to build, and I\'ll help you create it step by step.',
+      content: 'Welcome to Create AI! I\'m here to help you build custom AI agents for Control Room.\n\nI can generate complete, production-ready agents with all required files (agent.js, package.json, config.json, README.md).\n\nTo get started, describe the agent you want to build - what should it do, when should it run, and what services should it integrate with?',
       timestamp: new Date()
     }])
   }
@@ -142,6 +142,17 @@ useEffect(() => {
   async function saveAgent() {
     if (!generatedAgent && !editAgentId) return
     
+    if (agentFiles.length === 0) {
+      const errorMessage: ChatMessage = {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: 'No agent files to save. Please generate an agent first.',
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, errorMessage])
+      return
+    }
+    
     setIsSaving(true)
     try {
       const endpoint = editAgentId ? `/api/agents/${editAgentId}/files` : '/api/agents'
@@ -162,12 +173,35 @@ useEffect(() => {
       if (response.ok) {
         setHasUnsavedChanges(false)
         const data = await response.json()
+        const successMessage: ChatMessage = {
+          id: Date.now().toString(),
+          role: 'assistant',
+          content: 'Agent saved successfully!',
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, successMessage])
         if (!editAgentId) {
           router.push(`/dashboard/create?edit=${data.agentId}`)
         }
+      } else {
+        const errorData = await response.json()
+        const errorMessage: ChatMessage = {
+          id: Date.now().toString(),
+          role: 'assistant',
+          content: `Save failed: ${errorData.error || 'Unknown error'}`,
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, errorMessage])
       }
     } catch (err) {
       console.error('Failed to save agent:', err)
+      const errorMessage: ChatMessage = {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: 'Save failed due to a network error. Please try again.',
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, errorMessage])
     } finally {
       setIsSaving(false)
     }
@@ -175,6 +209,33 @@ useEffect(() => {
 
   async function deployAgent() {
     if (!generatedAgent && !editAgentId) return
+    
+    if (agentFiles.length === 0) {
+      const errorMessage: ChatMessage = {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: 'No agent files to deploy. Please generate an agent first.',
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, errorMessage])
+      return
+    }
+
+    const requiredFiles = ['agent.js', 'package.json', 'config.json', 'README.md']
+    const missingFiles = requiredFiles.filter(file => 
+      !agentFiles.some(f => f.path === file)
+    )
+
+    if (missingFiles.length > 0) {
+      const errorMessage: ChatMessage = {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: `Missing required files for deployment: ${missingFiles.join(', ')}. Please regenerate the agent with all required files.`,
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, errorMessage])
+      return
+    }
     
     setIsDeploying(true)
     try {
@@ -192,10 +253,33 @@ useEffect(() => {
       })
 
       if (response.ok) {
-        router.push('/dashboard')
+        const successMessage: ChatMessage = {
+          id: Date.now().toString(),
+          role: 'assistant',
+          content: 'Agent deployed successfully! Redirecting to dashboard...',
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, successMessage])
+        setTimeout(() => router.push('/dashboard'), 2000)
+      } else {
+        const errorData = await response.json()
+        const errorMessage: ChatMessage = {
+          id: Date.now().toString(),
+          role: 'assistant',
+          content: `Deployment failed: ${errorData.error || 'Unknown error'}`,
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, errorMessage])
       }
     } catch (err) {
       console.error('Failed to deploy agent:', err)
+      const errorMessage: ChatMessage = {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: 'Deployment failed due to a network error. Please try again.',
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, errorMessage])
     } finally {
       setIsDeploying(false)
     }
@@ -209,6 +293,25 @@ useEffect(() => {
       setAgentFiles([])
     }
     setHasUnsavedChanges(false)
+  }
+
+  function downloadAgent() {
+    if (!generatedAgent && agentFiles.length === 0) return
+
+    const files = agentFiles.length > 0 ? agentFiles : generatedAgent?.files || []
+    const agentName = generatedAgent?.name || 'agent'
+    
+    files.forEach(file => {
+      const blob = new Blob([file.content], { type: 'text/plain' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = file.path
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    })
   }
 
   if (status === 'loading') {
@@ -236,28 +339,36 @@ useEffect(() => {
               {editAgentId ? 'Modify your AI agent code and configuration' : 'Build a new AI agent with guided assistance'}
             </p>
           </div>
-          {(generatedAgent || editAgentId) && canModify && (
+          {(generatedAgent || editAgentId) && (
             <div className="flex space-x-3">
-              <Button variant="outline" onClick={discardChanges} disabled={isSaving || isDeploying}>
-                <X className="w-4 h-4 mr-2" />
-                Discard
+              <Button variant="outline" onClick={downloadAgent} disabled={isSaving || isDeploying}>
+                <Download className="w-4 h-4 mr-2" />
+                Download
               </Button>
-              <Button onClick={saveAgent} disabled={isSaving || isDeploying}>
-                {isSaving ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                ) : (
-                  <Save className="w-4 h-4 mr-2" />
-                )}
-                Save
-              </Button>
-              <Button onClick={deployAgent} disabled={isSaving || isDeploying} className="command-button">
-                {isDeploying ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                ) : (
-                  <Play className="w-4 h-4 mr-2" />
-                )}
-                Instant Deploy
-              </Button>
+              {canModify && (
+                <>
+                  <Button variant="outline" onClick={discardChanges} disabled={isSaving || isDeploying}>
+                    <X className="w-4 h-4 mr-2" />
+                    Discard
+                  </Button>
+                  <Button onClick={saveAgent} disabled={isSaving || isDeploying}>
+                    {isSaving ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Save className="w-4 h-4 mr-2" />
+                    )}
+                    Save
+                  </Button>
+                  <Button onClick={deployAgent} disabled={isSaving || isDeploying} className="command-button">
+                    {isDeploying ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Play className="w-4 h-4 mr-2" />
+                    )}
+                    Instant Deploy
+                  </Button>
+                </>
+              )}
             </div>
           )}
         </div>
