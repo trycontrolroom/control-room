@@ -8,7 +8,7 @@ This document equips the Helper AI with full knowledge of how the Control Room M
 
 - The Control Room Marketplace allows users to **buy, sell, and manage AI agents** built for various tasks.
 - Users can monetize agents they’ve built, or find plug-and-play agents made by others.
-- Available to all signed-in users, accessible via the top nav: `/marketplace`.
+- Available to all signed-in users, accessible via the top nav and dashboard sidebar: `/marketplace`.
 
 ---
 
@@ -30,7 +30,7 @@ This document equips the Helper AI with full knowledge of how the Control Room M
 - Feature Tags
 - GitHub (or hosted) repo link (optional)
 - Documentation (if available)
-- Thumbnail image
+- Thumbnail image (optional)
 
 ---
 
