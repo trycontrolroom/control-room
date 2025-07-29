@@ -18,6 +18,7 @@ export default function SignupPage() {
     password: '',
     confirmPassword: ''
   })
+  const [agreementsAccepted, setAgreementsAccepted] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
 
@@ -35,6 +36,12 @@ export default function SignupPage() {
 
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match')
+      setIsLoading(false)
+      return
+    }
+
+    if (!agreementsAccepted) {
+      setError('You must agree to the Terms of Service and Privacy Policy')
       setIsLoading(false)
       return
     }
@@ -213,9 +220,31 @@ export default function SignupPage() {
                 </div>
               )}
 
+              <div className="space-y-3">
+                <label className="flex items-start space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={agreementsAccepted}
+                    onChange={(e) => setAgreementsAccepted(e.target.checked)}
+                    required
+                    className="mt-1 rounded border-gray-600 bg-gray-800 text-blue-500 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-300">
+                    I agree to the{' '}
+                    <Link href="/terms" target="_blank" className="text-blue-400 hover:text-blue-300">
+                      Terms of Service
+                    </Link>{' '}
+                    and{' '}
+                    <Link href="/privacy" target="_blank" className="text-blue-400 hover:text-blue-300">
+                      Privacy Policy
+                    </Link>
+                  </span>
+                </label>
+              </div>
+
               <Button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || !agreementsAccepted}
                 className="w-full command-button"
                 size="lg"
               >
