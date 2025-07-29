@@ -85,7 +85,7 @@ After validation passes, AI should respond with:
 ✅ Your agent passed all final checks and is ready!
 
 You can now:
-- 🔍 Preview the files
+- 🔍 Preview and edit the files
 - 💾 Download the complete bundle
 - 🚀 Deploy it directly to your workspace
 ```
