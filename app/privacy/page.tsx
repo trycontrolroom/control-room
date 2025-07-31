@@ -31,8 +31,8 @@ export default function PrivacyPolicyPage() {
               <div className="text-gray-300 space-y-6">
                 <div>
                   <p className="text-sm text-gray-400 mb-4">
-                    <strong>Effective Date:</strong> July 28, 2025<br />
-                    <strong>Last Updated:</strong> July 28, 2025
+                    <strong>Effective Date:</strong> July 30, 2025<br />
+                    <strong>Last Updated:</strong> July 30, 2025
                   </p>
                   <p>
                     Control Room Inc. ("Control Room", "we", "us", "our") is committed to protecting your privacy, security, and data sovereignty. This Privacy Policy ("Policy") outlines how we collect, use, store, process, disclose, and protect your personal data and related activity on our platform (the "Platform")—including the website, AI assistants, marketplace, integrations, affiliate dashboard, APIs, telemetry, and enterprise services.
