@@ -128,7 +128,7 @@ export default function AffiliateSignupPage() {
           <div className="flex items-center justify-center mb-4">
             <Shield className="w-10 h-10 text-blue-400" />
             <span className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent ml-3">
-              Control Room <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full ml-2">BETA</span>
+              Control Room
             </span>
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">Join Our Affiliate Program</h1>
