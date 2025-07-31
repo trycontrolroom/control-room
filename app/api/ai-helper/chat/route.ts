@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { cuid } from '@paralleldrive/cuid2'
+import { createId } from '@paralleldrive/cuid2'
 import OpenAI from 'openai'
 
 const openai = new OpenAI({
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
 
     await prisma.aIChatMessage.create({
       data: {
-        id: cuid(),
+        id: createId(),
         sessionId: sessionId,
         role: 'user',
         content: message
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       take: 10
     })
 
-    const openaiMessages = [
+    const openaiMessages: Array<{role: 'system' | 'user' | 'assistant', content: string}> = [
       { role: 'system', content: systemPrompt },
       ...recentMessages.reverse().slice(-9).map(msg => ({
         role: msg.role as 'user' | 'assistant',
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
 
     await prisma.aIChatMessage.create({
       data: {
-        id: cuid(),
+        id: createId(),
         sessionId: sessionId,
         role: 'assistant',
         content: response
@@ -184,7 +184,7 @@ Always ask for clarification if you need more details to create something proper
 
 function parseActionSuggestion(response: string, userMessage: string, workspaceData: any) {
   try {
-    const suggestionMatch = response.match(/SUGGESTION:\s*({.*?})/s)
+    const suggestionMatch = response.match(/SUGGESTION:\s*({.*?})/)
     if (suggestionMatch) {
       const suggestion = JSON.parse(suggestionMatch[1])
       

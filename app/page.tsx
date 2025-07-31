@@ -12,19 +12,19 @@ export default function LandingPage() {
       <Navigation />
       
       {/* 1. Hero Section */}
-      <section className="relative px-6 pt-32 pb-20 text-center">
+      <section className="relative px-6 pt-32 pb-24 text-center">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-blue-600 bg-clip-text text-transparent">
-            Your AI Agent Control Room <span className="text-lg bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full ml-3">BETA</span>
+          <h1 className="text-4xl md:text-6xl font-bold mb-10 bg-gradient-to-r from-blue-400 via-purple-500 to-blue-600 bg-clip-text text-transparent">
+            Your AI Agent Control Room
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto">
+          <p className="text-xl md:text-2xl text-gray-300 mb-20 max-w-4xl mx-auto">
             Control, monitor, and secure every move your AI agents make<br />
             from one central dashboard.
           </p>
           
           {/* Agent Cards Preview */}
-          <div className="glass-panel rounded-xl p-8 mb-12 max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="glass-panel rounded-xl p-10 mb-16 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="agent-card rounded-lg p-6 pulse-glow">
                 <div className="flex items-center justify-between mb-4">
                   <h4 className="text-xl font-semibold text-white">Agent Alpha</h4>
@@ -110,7 +110,7 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-16">
             <Link href="/pricing">
               <Button size="lg" className="command-button text-lg px-8 py-4">
-                Start Free Trial
+                Get Started
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
@@ -211,7 +211,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-              See Control Room <span className="text-sm bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full ml-2">BETA</span> in Action
+              See Control Room in Action
             </h2>
             <p className="text-xl text-gray-300 max-w-4xl mx-auto">
               Watch how enterprise teams deploy, govern, and scale AI agents with unprecedented control and visibility.
@@ -375,13 +375,13 @@ export default function LandingPage() {
             </h2>
             <p className="text-xl text-gray-300 mb-10 max-w-3xl mx-auto">
               Join thousands of organizations already using Control Room to deploy, govern, and scale AI agents with confidence. 
-              Start your free trial today and experience the next generation of AI operations.
+              Get started today and experience the next generation of AI operations.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/pricing">
                 <Button size="lg" className="command-button text-xl px-10 py-5">
-                  Start Free Trial
+                  Get Started
                   <ArrowRight className="ml-2 w-6 h-6" />
                 </Button>
               </Link>
@@ -393,7 +393,7 @@ export default function LandingPage() {
             </div>
             
             <div className="mt-8 text-sm text-gray-400">
-              No credit card required • 14-day free trial • Cancel anytime
+              Cancel anytime • Full feature access • 24/7 support
             </div>
           </div>
         </div>

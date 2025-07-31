@@ -31,8 +31,8 @@ export default function TermsOfServicePage() {
               <div className="text-gray-300 space-y-6">
                 <div>
                   <p className="text-sm text-gray-400 mb-4">
-                    <strong>Effective Date:</strong> July 28, 2025<br />
-                    <strong>Last Updated:</strong> July 28, 2025
+                    <strong>Effective Date:</strong> July 30, 2025<br />
+                    <strong>Last Updated:</strong> July 30, 2025
                   </p>
                   <p>
                     These Terms of Service ("Terms") constitute a legally binding agreement between you ("User", "you") and Control Room Inc. ("Control Room", "we", "us", or "our"), governing your access to and use of the Control Room platform, including our software, services, AI tools, marketplace, APIs, website, affiliate program, and all associated content (the "Platform").

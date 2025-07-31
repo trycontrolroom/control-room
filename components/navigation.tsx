@@ -17,8 +17,9 @@ export function Navigation() {
           {/* logo */}
           <Link href="/" className="flex items-center space-x-2">
             <Shield className="w-8 h-8 text-blue-400" />
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              Control Room <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full ml-2">BETA</span>
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent relative">
+              Control Room
+              <span className="absolute -top-1 -right-6 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">BETA</span>
             </span>
           </Link>
 

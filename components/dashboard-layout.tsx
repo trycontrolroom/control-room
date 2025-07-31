@@ -141,32 +141,38 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     <div className="min-h-screen flex">
       {/* Sidebar */}
       <aside className={`${
-        helperAIOpen ? 'w-16' : (sidebarCollapsed ? 'w-0' : 'w-64')
+        helperAIOpen ? 'w-8' : (sidebarCollapsed ? 'w-0' : 'w-64')
       } bg-gray-900 text-gray-300 flex flex-col transition-all duration-300 overflow-hidden relative`}>
-        {/* Arrow button when Helper AI is open */}
+        {/* Arrow button when Helper AI is open - visible sliver */}
         {helperAIOpen && (
-          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10">
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-900 border-r border-gray-700">
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => {
                 setHelperAIOpen(false)
                 setSidebarCollapsed(false)
               }}
-              className="h-12 w-6 rounded-l-none border-gray-600 hover:bg-gray-700 bg-gray-800"
+              className="h-8 w-6 p-0 hover:bg-gray-700"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-4 h-4 text-gray-400" />
             </Button>
           </div>
         )}
-        <div className="p-4 border-b border-gray-700">
-          <Link href="/" className="flex items-center space-x-2">
-            <Shield className="w-8 h-8 text-blue-400" />
-            <span className="text-xl font-bold text-white">Control Room <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full ml-2">BETA</span></span>
-          </Link>
-        </div>
+        {!helperAIOpen && (
+          <div className="p-4 border-b border-gray-700">
+            <Link href="/" className="flex items-center space-x-2">
+              <Shield className="w-8 h-8 text-blue-400" />
+              <span className="text-xl font-bold text-white relative">
+                Control Room
+                <span className="absolute -top-1 -right-6 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">BETA</span>
+              </span>
+            </Link>
+          </div>
+        )}
         {/* Workspace selector */}
-        <div className="p-4 border-b border-gray-700 relative">
+        {!helperAIOpen && (
+          <div className="p-4 border-b border-gray-700 relative">
           <button
             onClick={() => setShowDropdown(!showDropdown)}
             className="w-full flex items-center justify-between p-2 bg-gray-800 rounded"
@@ -202,9 +208,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               )}
             </div>
           )}
-        </div>
+          </div>
+        )}
         {/* Nav links */}
-        <nav className="flex-1 p-4 space-y-2">
+        {!helperAIOpen && (
+          <nav className="flex-1 p-4 space-y-2">
           {/* Main section */}
           <Link
             href="/dashboard"
@@ -270,10 +278,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <Shield className="w-5 h-5 mr-2" /> Developer Panel
             </Link>
           )}
-        </nav>
+          </nav>
+        )}
         
         {/* Marketplace and Affiliate Dashboard above profile */}
-        <div className="px-4 pb-4 space-y-2">
+        {!helperAIOpen && (
+          <div className="px-4 pb-4 space-y-2">
           {isAffiliate && (
             <Link
               href="/dashboard/affiliate"
@@ -296,9 +306,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             <ShoppingCart className="w-5 h-5 mr-2" />
             Marketplace
           </Link>
-        </div>
+          </div>
+        )}
         {/* Profile and Settings */}
-        <div className="p-4 border-t border-gray-700">
+        {!helperAIOpen && (
+          <div className="p-4 border-t border-gray-700">
           <div className="flex items-center mb-3">
             <User className="w-8 h-8 rounded-full bg-gray-700 p-1 mr-2 text-white" />
             <div className="flex-1">
@@ -318,18 +330,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             <Settings className="w-4 h-4 mr-2" />
             Settings
           </Link>
-        </div>
+          </div>
+        )}
       </aside>
-      {/* Helper AI Space - only visible when Helper AI is open */}
-      {helperAIOpen && (
-        <div className="w-64 bg-gray-800 flex flex-col transition-all duration-300">
-          {/* This space will be filled by the Helper AI component */}
-        </div>
-      )}
-      
       {/* Main */}
       <main className={`flex-1 bg-gray-800 flex flex-col transition-all duration-300 ${
-        helperAIOpen ? 'ml-0' : ''
+        helperAIOpen ? 'mr-64' : ''
       }`}>
         {/* Top bar - only show when sidebar is collapsed and Helper AI is not open */}
         {sidebarCollapsed && !helperAIOpen && (
@@ -405,13 +411,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* AI Helper */}
       <AIHelper 
         onSidebarToggle={() => {
-          if (helperAIOpen) {
-            setHelperAIOpen(false)
-            setSidebarCollapsed(false)
-          } else {
-            setHelperAIOpen(true)
-            setSidebarCollapsed(true)
-          }
+          setHelperAIOpen(!helperAIOpen)
         }}
         isInSidebarSpace={helperAIOpen}
       />

@@ -275,7 +275,7 @@ Switch modes using the toggle above. What would you like to know about?`,
       {isOpen && (
         <div className={`${
           isInSidebarSpace 
-            ? 'fixed left-16 top-0 w-64 h-full z-40' 
+            ? 'fixed right-0 top-0 w-64 h-full z-40' 
             : `fixed bottom-6 right-6 z-50 ${isMinimized ? 'w-80 h-16' : 'w-96 h-[600px]'}`
         } transition-all duration-300`}>
           <Card className={`${
