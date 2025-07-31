@@ -57,7 +57,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const isDeveloper = session?.user?.email === 'admin@control-room.ai'
   const [isAffiliate, setIsAffiliate] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [helperAIOpen, setHelperAIOpen] = useState(false)
 
   useEffect(() => {
     if (!session?.user?.id) return
@@ -141,37 +140,21 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     <div className="min-h-screen flex">
       {/* Sidebar */}
       <aside className={`${
-        helperAIOpen ? 'w-8' : (sidebarCollapsed ? 'w-0' : 'w-64')
+        sidebarCollapsed ? 'w-0' : 'w-64'
       } bg-gray-900 text-gray-300 flex flex-col transition-all duration-300 overflow-hidden relative`}>
-        {/* Arrow button when Helper AI is open - visible sliver */}
-        {helperAIOpen && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-900 border-r border-gray-700">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setHelperAIOpen(false)
-                setSidebarCollapsed(false)
-              }}
-              className="h-8 w-6 p-0 hover:bg-gray-700"
-            >
-              <ChevronRight className="w-4 h-4 text-gray-400" />
-            </Button>
-          </div>
-        )}
-        {!helperAIOpen && (
+        {!sidebarCollapsed && (
           <div className="p-4 border-b border-gray-700">
             <Link href="/" className="flex items-center space-x-2">
               <Shield className="w-8 h-8 text-blue-400" />
               <span className="text-xl font-bold text-white relative">
                 Control Room
-                <span className="absolute -top-1 -right-6 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">BETA</span>
+                <span className="absolute -top-2 -right-12 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">BETA</span>
               </span>
             </Link>
           </div>
         )}
         {/* Workspace selector */}
-        {!helperAIOpen && (
+        {!sidebarCollapsed && (
           <div className="p-4 border-b border-gray-700 relative">
           <button
             onClick={() => setShowDropdown(!showDropdown)}
@@ -211,7 +194,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         )}
         {/* Nav links */}
-        {!helperAIOpen && (
+        {!sidebarCollapsed && (
           <nav className="flex-1 p-4 space-y-2">
           {/* Main section */}
           <Link
@@ -282,7 +265,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         )}
         
         {/* Marketplace and Affiliate Dashboard above profile */}
-        {!helperAIOpen && (
+        {!sidebarCollapsed && (
           <div className="px-4 pb-4 space-y-2">
           {isAffiliate && (
             <Link
@@ -309,7 +292,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         )}
         {/* Profile and Settings */}
-        {!helperAIOpen && (
+        {!sidebarCollapsed && (
           <div className="p-4 border-t border-gray-700">
           <div className="flex items-center mb-3">
             <User className="w-8 h-8 rounded-full bg-gray-700 p-1 mr-2 text-white" />
@@ -334,11 +317,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         )}
       </aside>
       {/* Main */}
-      <main className={`flex-1 bg-gray-800 flex flex-col transition-all duration-300 ${
-        helperAIOpen ? 'mr-64' : ''
-      }`}>
-        {/* Top bar - only show when sidebar is collapsed and Helper AI is not open */}
-        {sidebarCollapsed && !helperAIOpen && (
+      <main className="flex-1 bg-gray-800 flex flex-col transition-all duration-300">
+        {/* Top bar - only show when sidebar is collapsed */}
+        {sidebarCollapsed && (
           <div className="bg-gray-900 border-b border-gray-700 p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
@@ -409,12 +390,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       )}
       
       {/* AI Helper */}
-      <AIHelper 
-        onSidebarToggle={() => {
-          setHelperAIOpen(!helperAIOpen)
-        }}
-        isInSidebarSpace={helperAIOpen}
-      />
+      <AIHelper />
     </div>
   )
 }
