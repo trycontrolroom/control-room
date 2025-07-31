@@ -12,18 +12,18 @@ export default function LandingPage() {
       <Navigation />
       
       {/* 1. Hero Section */}
-      <section className="relative px-6 pt-32 pb-24 text-center">
+      <section className="relative px-6 pt-32 pb-20 text-center">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold mb-10 bg-gradient-to-r from-blue-400 via-purple-500 to-blue-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-blue-600 bg-clip-text text-transparent">
             Your AI Agent Control Room
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-20 max-w-4xl mx-auto">
+          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto">
             Control, monitor, and secure every move your AI agents make<br />
             from one central dashboard.
           </p>
           
           {/* Agent Cards Preview */}
-          <div className="glass-panel rounded-xl p-10 mb-16 max-w-5xl mx-auto">
+          <div className="glass-panel rounded-xl p-8 mb-12 max-w-5xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="agent-card rounded-lg p-6 pulse-glow">
                 <div className="flex items-center justify-between mb-4">

@@ -19,7 +19,7 @@ export function Navigation() {
             <Shield className="w-8 h-8 text-blue-400" />
             <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent relative">
               Control Room
-              <span className="absolute -top-1 -right-6 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">BETA</span>
+              <span className="absolute -top-2 -right-12 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">BETA</span>
             </span>
           </Link>
 

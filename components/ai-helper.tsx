@@ -38,12 +38,9 @@ interface AISuggestion {
   data: any
 }
 
-interface AIHelperProps {
-  onSidebarToggle?: () => void
-  isInSidebarSpace?: boolean
-}
+interface AIHelperProps {}
 
-export function AIHelper({ onSidebarToggle, isInSidebarSpace = false }: AIHelperProps) {
+export function AIHelper({}: AIHelperProps) {
   const { data: session } = useSession()
   const [isOpen, setIsOpen] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
@@ -54,6 +51,9 @@ export function AIHelper({ onSidebarToggle, isInSidebarSpace = false }: AIHelper
   const [pendingSuggestion, setPendingSuggestion] = useState<AISuggestion | null>(null)
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [sessionId, setSessionId] = useState<string | null>(null)
+  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -236,10 +236,45 @@ Switch modes using the toggle above. What would you like to know about?`,
 
   function toggleOpen() {
     setIsOpen(!isOpen)
-    if (onSidebarToggle) {
-      onSidebarToggle()
-    }
   }
+
+  function handleMouseDown(e: React.MouseEvent) {
+    setIsDragging(true)
+    setDragOffset({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y
+    })
+  }
+
+  function handleMouseMove(e: MouseEvent) {
+    if (!isDragging) return
+    
+    const newX = e.clientX - dragOffset.x
+    const newY = e.clientY - dragOffset.y
+    
+    const maxX = window.innerWidth - 400 // popup width
+    const maxY = window.innerHeight - 600 // popup height
+    
+    setPosition({
+      x: Math.max(0, Math.min(newX, maxX)),
+      y: Math.max(0, Math.min(newY, maxY))
+    })
+  }
+
+  function handleMouseUp() {
+    setIsDragging(false)
+  }
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mouseup', handleMouseUp)
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
+      }
+    }
+  }, [isDragging, dragOffset])
 
   function getSuggestionIcon(type: string) {
     switch (type) {
@@ -273,18 +308,16 @@ Switch modes using the toggle above. What would you like to know about?`,
 
       {/* AI Helper Panel */}
       {isOpen && (
-        <div className={`${
-          isInSidebarSpace 
-            ? 'fixed right-0 top-0 w-64 h-full z-40' 
-            : `fixed bottom-6 right-6 z-50 ${isMinimized ? 'w-80 h-16' : 'w-96 h-[600px]'}`
-        } transition-all duration-300`}>
-          <Card className={`${
-            isInSidebarSpace 
-              ? 'glass-panel border-purple-500/20 h-full flex flex-col rounded-none border-l-0' 
-              : 'glass-panel border-purple-500/20 h-full flex flex-col'
-          }`}>
+        <div 
+          className={`fixed z-50 ${isMinimized ? 'w-80 h-16' : 'w-96 h-[600px]'} transition-all duration-300`}
+          style={{
+            left: position.x || (window.innerWidth - 400 - 24),
+            top: position.y || (window.innerHeight - 600 - 24)
+          }}
+        >
+          <Card className="glass-panel border-purple-500/20 h-full flex flex-col">
             {/* Header */}
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-3 cursor-move" onMouseDown={handleMouseDown}>
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center text-lg">
                   <Bot className="w-5 h-5 mr-2 text-purple-400" />
@@ -301,16 +334,14 @@ Switch modes using the toggle above. What would you like to know about?`,
                   </Badge>
                 </CardTitle>
                 <div className="flex items-center space-x-1">
-                  {!isInSidebarSpace && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => setIsMinimized(!isMinimized)}
-                      className="h-8 w-8 p-0"
-                    >
-                      {isMinimized ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
-                    </Button>
-                  )}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setIsMinimized(!isMinimized)}
+                    className="h-8 w-8 p-0"
+                  >
+                    {isMinimized ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
+                  </Button>
                   <Button
                     size="sm"
                     variant="outline"
@@ -344,7 +375,7 @@ Switch modes using the toggle above. What would you like to know about?`,
               )}
             </CardHeader>
 
-            {(!isMinimized || isInSidebarSpace) && (
+            {!isMinimized && (
               <CardContent className="flex-1 flex flex-col min-h-0">
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-2">
