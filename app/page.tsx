@@ -11,33 +11,97 @@ export default function LandingPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-950 to-black text-gray-100">
       <Navigation />
       
-      {/* 1. Hero Section */}
-      <section className="relative px-6 pt-32 pb-20 text-center">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-blue-600 bg-clip-text text-transparent">
-            Build, Control, and Monitor Your AI Agents
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto">
-            Describe the agent you need — our AI builds it. Then set guardrails, control actions, and track results — all from your Control Room.
-          </p>
+      {/* Hero Section */}
+<section 
+  className="relative min-h-screen flex items-center justify-center px-6"
+  style={{ 
+    background: `
+      radial-gradient(circle at 50% 30%, #1e293b 0%, #0f172a 50%, #000000 100%)
+    `
+  }}
+>
+  {/* Single floating element */}
+  <div
+    className="absolute top-1/3 left-1/2 w-32 h-32 opacity-10 blur-xl"
+    style={{
+      background: `radial-gradient(circle, #3b82f6 0%, transparent 70%)`,
+      transform: `translate(-50%, -50%) translateY(${Math.sin(Date.now() * 0.001) * 20}px)`,
+    }}
+  />
+
+  {/* Main Content */}
+  <div className="relative z-10 max-w-5xl mx-auto text-center">
+    
+    {/* Premium 3D Container */}
+    <div className="relative">
+      {/* Enhanced multi-layer grey glow for 3D effect - better proportioned */}
+      <div className="absolute -inset-8 md:-inset-10 lg:-inset-12 bg-gradient-to-r from-slate-400/20 via-slate-300/15 to-slate-400/20 blur-3xl opacity-60 rounded-3xl" />
+      <div className="absolute -inset-6 md:-inset-8 lg:-inset-10 bg-gradient-to-br from-slate-500/15 via-slate-400/10 to-slate-500/15 blur-2xl opacity-70 rounded-2xl" />
+      <div className="absolute -inset-3 md:-inset-4 lg:-inset-6 bg-gradient-to-t from-slate-400/15 to-slate-300/10 blur-xl opacity-50 rounded-xl" />
+      
+      {/* Beautiful 3D container - better proportioned */}
+      <div 
+        className="relative backdrop-blur-2xl rounded-2xl px-12 py-16 md:px-16 md:py-20 lg:px-20 lg:py-24 overflow-hidden"
+        style={{
+          background: `
+            linear-gradient(135deg, 
+              rgba(30, 41, 59, 0.9) 0%, 
+              rgba(51, 65, 85, 0.8) 25%,
+              rgba(30, 41, 59, 0.9) 50%,
+              rgba(15, 23, 42, 0.95) 75%,
+              rgba(0, 0, 0, 0.9) 100%
+            )
+          `,
+          border: '1px solid rgba(148, 163, 184, 0.2)',
+          boxShadow: `
+            0 0 0 1px rgba(148, 163, 184, 0.15),
+            0 8px 32px rgba(0, 0, 0, 0.9),
+            0 32px 64px rgba(100, 116, 139, 0.15),
+            0 0 128px rgba(148, 163, 184, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.5)
+          `
+        }}
+      >
+        {/* Enhanced inner highlights */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/8 via-transparent to-transparent pointer-events-none rounded-2xl" />
+        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-slate-500/5 to-white/5 pointer-events-none rounded-2xl" />
+        
+        {/* Main Headline - better proportioned */}
+        <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-thin text-white mb-6 md:mb-8 tracking-wide">
+          Control Room
+        </h1>
+
+        {/* Updated subheading - better sized */}
+        <p className="text-lg md:text-xl lg:text-2xl text-slate-400 mb-12 md:mb-16 font-light max-w-3xl mx-auto">
+          Create, manage, and monitor AI agents with plain English
+        </p>
+
+        {/* Two CTAs - better proportioned */}
+        <div className="flex flex-col sm:flex-row gap-4 md:gap-5 justify-center">
+          <Link href="/pricing">
+            <button className="group border border-slate-700 px-6 py-3 md:px-10 md:py-4 lg:px-12 lg:py-4 text-base md:text-lg lg:text-xl text-white hover:border-blue-500 transition-colors duration-300">
+              <div className="flex items-center justify-center gap-2 md:gap-3">
+                <span className="font-light">Get Started</span>
+                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </button>
+          </Link>
           
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/pricing">
-              <Button size="lg" className="command-button text-lg px-8 py-4">
-                Start Now
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </Link>
-            <Link href="#demo">
-              <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-blue-500/50 hover:bg-blue-500/10">
-                <Play className="mr-2 w-5 h-5" />
-                View Demo
-              </Button>
-            </Link>
-          </div>
+          <Link href="#demo">
+            <button className="group border border-slate-800 px-6 py-3 md:px-10 md:py-4 lg:px-12 lg:py-4 text-base md:text-lg lg:text-xl text-slate-400 hover:border-slate-600 hover:text-white transition-all duration-300">
+              <div className="flex items-center justify-center gap-2 md:gap-3">
+                <Play className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
+                <span className="font-light">Watch Demo</span>
+              </div>
+            </button>
+          </Link>
         </div>
-      </section>
+      </div>
+    </div>
+
+  </div>
+</section>
 
       {/* 2. How It Works (3 Steps) */}
       <section className="px-6 py-20 bg-gradient-to-b from-transparent to-purple-950/10">
@@ -154,7 +218,6 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
 
       {/* 4. Demo Video */}
       <section id="demo" className="px-6 py-20 bg-gradient-to-b from-transparent to-blue-950/10">
