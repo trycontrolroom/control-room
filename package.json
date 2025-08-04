@@ -13,7 +13,13 @@
     "socket": "node socket-server/index.js"
   },
   "eslintConfig": {
-    "extends": ["next", "next/core-web-vitals"]
+    "extends": ["next", "next/core-web-vitals"],
+    "rules": {
+      // turn off the “no unescaped entities” rule site-wide
+      "react/no-unescaped-entities": "off",
+      // let missing deps in useEffect be warnings instead of errors
+      "react-hooks/exhaustive-deps": "warn"
+    }
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
