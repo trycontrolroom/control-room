@@ -15,9 +15,7 @@
   "eslintConfig": {
     "extends": ["next", "next/core-web-vitals"],
     "rules": {
-      // turn off the “no unescaped entities” rule site-wide
       "react/no-unescaped-entities": "off",
-      // let missing deps in useEffect be warnings instead of errors
       "react-hooks/exhaustive-deps": "warn"
     }
   },
