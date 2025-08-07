@@ -11,140 +11,322 @@ export default function LandingPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-950 to-black text-gray-100">
       <Navigation />
       
-      {/* Hero Section */}
-<section 
-  className="relative min-h-screen flex items-center justify-center px-6"
-  style={{ 
+      {/* Combined Hero + How It Works Section */}
+<section className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-20" 
+  style={{
     background: `
-      radial-gradient(circle at 50% 30%, #1e293b 0%, #0f172a 50%, #000000 100%)
+      radial-gradient(ellipse at center, 
+        rgba(15, 23, 42, 1) 0%, 
+        rgba(2, 6, 23, 1) 60%,
+        rgba(0, 0, 0, 1) 100%
+      )
     `
   }}
 >
-  {/* Single floating element */}
-  <div
-    className="absolute top-1/3 left-1/2 w-32 h-32 opacity-10 blur-xl"
-    style={{
-      background: `radial-gradient(circle, #3b82f6 0%, transparent 70%)`,
-      transform: `translate(-50%, -50%) translateY(${Math.sin(Date.now() * 0.001) * 20}px)`,
-    }}
-  />
+  
+  {/* Floating background elements */}
+  <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl animate-pulse" />
+    <div className="absolute bottom-1/4 right-1/4 w-128 h-128 bg-cyan-400/10 rounded-full blur-3xl animate-pulse delay-1000" />
+    <div className="absolute top-1/3 right-1/3 w-64 h-64 bg-indigo-500/8 rounded-full blur-3xl animate-pulse delay-500" />
+    <div className="absolute bottom-1/2 left-1/3 w-80 h-80 bg-blue-400/5 rounded-full blur-3xl animate-pulse delay-2000" />
+  </div>
 
-  {/* Main Content */}
-  <div className="relative z-10 max-w-5xl mx-auto text-center">
+  {/* Main Hero Container */}
+  <div className="relative z-10 w-full max-w-6xl mx-auto mb-12">
     
-    {/* Premium 3D Container */}
-    <div className="relative">
-      {/* Enhanced multi-layer grey glow for 3D effect - better proportioned */}
-      <div className="absolute -inset-8 md:-inset-10 lg:-inset-12 bg-gradient-to-r from-slate-400/20 via-slate-300/15 to-slate-400/20 blur-3xl opacity-60 rounded-3xl" />
-      <div className="absolute -inset-6 md:-inset-8 lg:-inset-10 bg-gradient-to-br from-slate-500/15 via-slate-400/10 to-slate-500/15 blur-2xl opacity-70 rounded-2xl" />
-      <div className="absolute -inset-3 md:-inset-4 lg:-inset-6 bg-gradient-to-t from-slate-400/15 to-slate-300/10 blur-xl opacity-50 rounded-xl" />
+    {/* Premium Glass Container - Fixed brightness and glow */}
+    <div 
+      className="relative backdrop-blur-xl rounded-3xl px-16 py-16 mx-auto overflow-hidden"
+      style={{
+        maxWidth: '65rem',
+        background: `
+          linear-gradient(135deg, 
+            rgba(15, 23, 42, 0.6) 0%, 
+            rgba(30, 41, 59, 0.5) 25%,
+            rgba(51, 65, 85, 0.4) 50%,
+            rgba(30, 41, 59, 0.5) 75%,
+            rgba(15, 23, 42, 0.6) 100%
+          )
+        `,
+        border: '1px solid rgba(59, 130, 246, 0.3)',
+        boxShadow: `
+          0 0 0 1px rgba(59, 130, 246, 0.15),
+          0 0 15px rgba(59, 130, 246, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.03)
+        `
+      }}
+    >
+      {/* Very subtle border-focused glare effects */}
+      <div className="absolute inset-0 rounded-3xl" style={{
+        background: `
+          linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.03) 0%, 
+            transparent 25%,
+            transparent 75%,
+            rgba(255, 255, 255, 0.02) 100%
+          )
+        `
+      }} />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
       
-      {/* Beautiful 3D container - better proportioned */}
+      {/* Main Headline */}
+      <h1 
+        className="text-5xl md:text-6xl lg:text-7xl font-thin text-white mb-8 tracking-wide text-center leading-tight" 
+        style={{ 
+          fontFamily: 'system-ui, -apple-system, sans-serif', 
+          letterSpacing: '0.02em'
+        }}
+      >
+        Control Room
+      </h1>
+
+      {/* Subheading */}
+      <p 
+        className="text-lg md:text-xl lg:text-xl text-slate-300 mb-10 font-light max-w-2xl mx-auto text-center leading-relaxed" 
+        style={{ 
+          fontFamily: 'system-ui, -apple-system, sans-serif', 
+          letterSpacing: '0.01em' 
+        }}
+      >
+        Create, manage, and monitor AI agents with plain English
+      </p>
+
+      {/* CTAs */}
+      <div className="flex flex-col sm:flex-row gap-5 justify-center">
+        <Link href="/pricing">
+          <button 
+            className="group px-8 py-4 text-base text-white rounded-xl transition-all duration-300 backdrop-blur-sm font-medium hover:scale-[1.02] hover:-translate-y-0.5"
+            style={{
+              background: `
+                linear-gradient(135deg, 
+                  rgba(59, 130, 246, 0.9) 0%, 
+                  rgba(30, 64, 175, 0.8) 100%
+                )
+              `,
+              border: '1px solid rgba(59, 130, 246, 0.7)',
+              boxShadow: `
+                0 6px 20px rgba(59, 130, 246, 0.5),
+                0 3px 10px rgba(59, 130, 246, 0.4),
+                0 0 0 1px rgba(59, 130, 246, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2)
+              `,
+              fontFamily: 'system-ui, -apple-system, sans-serif'
+            }}
+          >
+            <div className="flex items-center justify-center gap-2">
+              <span>Get Started</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </button>
+        </Link>
+        
+        <Link href="#demo">
+          <button 
+            className="group px-8 py-4 text-base text-slate-300 hover:text-white rounded-xl transition-all duration-300 backdrop-blur-sm font-medium hover:scale-[1.02] hover:-translate-y-0.5"
+            style={{
+              background: `
+                linear-gradient(135deg, 
+                  rgba(30, 41, 59, 0.8) 0%, 
+                  rgba(51, 65, 85, 0.7) 100%
+                )
+              `,
+              border: '1px solid rgba(59, 130, 246, 0.4)',
+              boxShadow: `
+                0 4px 16px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(59, 130, 246, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08)
+              `,
+              fontFamily: 'system-ui, -apple-system, sans-serif'
+            }}
+          >
+            <div className="flex items-center justify-center gap-2">
+              <Play className="w-4 h-4" />
+              <span>Watch Demo</span>
+            </div>
+          </button>
+        </Link>
+      </div>
+    </div>
+  </div>
+
+  {/* Three Feature Cards */}
+  <div className="relative z-10 w-full mx-auto" style={{ maxWidth: '65rem' }}>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      {/* Deploy Card - Fixed to match others */}
       <div 
-        className="relative backdrop-blur-2xl rounded-2xl px-12 py-16 md:px-16 md:py-20 lg:px-20 lg:py-24 overflow-hidden"
+        className="relative backdrop-blur-xl rounded-2xl p-8 group hover:scale-[1.02] transition-all duration-300"
         style={{
           background: `
             linear-gradient(135deg, 
-              rgba(30, 41, 59, 0.9) 0%, 
-              rgba(51, 65, 85, 0.8) 25%,
-              rgba(30, 41, 59, 0.9) 50%,
-              rgba(15, 23, 42, 0.95) 75%,
-              rgba(0, 0, 0, 0.9) 100%
+              rgba(15, 23, 42, 0.6) 0%, 
+              rgba(30, 41, 59, 0.5) 50%,
+              rgba(15, 23, 42, 0.6) 100%
             )
           `,
-          border: '1px solid rgba(148, 163, 184, 0.2)',
+          border: '1px solid rgba(59, 130, 246, 0.25)',
           boxShadow: `
-            0 0 0 1px rgba(148, 163, 184, 0.15),
-            0 8px 32px rgba(0, 0, 0, 0.9),
-            0 32px 64px rgba(100, 116, 139, 0.15),
-            0 0 128px rgba(148, 163, 184, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.5)
+            0 0 0 1px rgba(59, 130, 246, 0.12),
+            0 0 12px rgba(59, 130, 246, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.03)
           `
         }}
       >
-        {/* Enhanced inner highlights */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/8 via-transparent to-transparent pointer-events-none rounded-2xl" />
-        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-slate-500/5 to-white/5 pointer-events-none rounded-2xl" />
+        {/* Very subtle border-focused glare */}
+        <div className="absolute inset-0 rounded-2xl" style={{
+          background: `
+            linear-gradient(135deg, 
+              rgba(255, 255, 255, 0.02) 0%, 
+              transparent 25%,
+              transparent 75%,
+              rgba(255, 255, 255, 0.01) 100%
+            )
+          `
+        }} />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/6 to-transparent" />
         
-        {/* Main Headline - better proportioned */}
-        <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-thin text-white mb-6 md:mb-8 tracking-wide">
-          Control Room
-        </h1>
-
-        {/* Updated subheading - better sized */}
-        <p className="text-lg md:text-xl lg:text-2xl text-slate-400 mb-12 md:mb-16 font-light max-w-3xl mx-auto">
-          Create, manage, and monitor AI agents with plain English
-        </p>
-
-        {/* Two CTAs - better proportioned */}
-        <div className="flex flex-col sm:flex-row gap-4 md:gap-5 justify-center">
-          <Link href="/pricing">
-            <button className="group border border-slate-700 px-6 py-3 md:px-10 md:py-4 lg:px-12 lg:py-4 text-base md:text-lg lg:text-xl text-white hover:border-blue-500 transition-colors duration-300">
-              <div className="flex items-center justify-center gap-2 md:gap-3">
-                <span className="font-light">Get Started</span>
-                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </button>
-          </Link>
-          
-          <Link href="#demo">
-            <button className="group border border-slate-800 px-6 py-3 md:px-10 md:py-4 lg:px-12 lg:py-4 text-base md:text-lg lg:text-xl text-slate-400 hover:border-slate-600 hover:text-white transition-all duration-300">
-              <div className="flex items-center justify-center gap-2 md:gap-3">
-                <Play className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
-                <span className="font-light">Watch Demo</span>
-              </div>
-            </button>
-          </Link>
+        <div className="relative z-10 flex flex-col items-center text-center">
+          <div 
+            className="w-14 h-14 mb-5 rounded-xl flex items-center justify-center"
+            style={{
+              background: `
+                linear-gradient(135deg, 
+                  rgba(59, 130, 246, 0.2) 0%, 
+                  rgba(30, 64, 175, 0.15) 100%
+                )
+              `,
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              boxShadow: '0 2px 8px rgba(59, 130, 246, 0.2)'
+            }}
+          >
+            <svg className="w-6 h-6 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold mb-3 text-white" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>Deploy</h3>
+          <p className="text-slate-300 leading-relaxed text-sm" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+            Quickly launch agents with Create AI or import existing ones.
+          </p>
         </div>
       </div>
-    </div>
 
+      {/* Configure Card */}
+      <div 
+        className="relative backdrop-blur-xl rounded-2xl p-8 group hover:scale-[1.02] transition-all duration-300"
+        style={{
+          background: `
+            linear-gradient(135deg, 
+              rgba(15, 23, 42, 0.6) 0%, 
+              rgba(30, 41, 59, 0.5) 50%,
+              rgba(15, 23, 42, 0.6) 100%
+            )
+          `,
+          border: '1px solid rgba(59, 130, 246, 0.25)',
+          boxShadow: `
+            0 0 0 1px rgba(59, 130, 246, 0.12),
+            0 0 12px rgba(59, 130, 246, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.03)
+          `
+        }}
+      >
+        <div className="absolute inset-0 rounded-2xl" style={{
+          background: `
+            linear-gradient(135deg, 
+              rgba(255, 255, 255, 0.02) 0%, 
+              transparent 25%,
+              transparent 75%,
+              rgba(255, 255, 255, 0.01) 100%
+            )
+          `
+        }} />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/6 to-transparent" />
+        
+        <div className="relative z-10 flex flex-col items-center text-center">
+          <div 
+            className="w-14 h-14 mb-5 rounded-xl flex items-center justify-center"
+            style={{
+              background: `
+                linear-gradient(135deg, 
+                  rgba(59, 130, 246, 0.2) 0%, 
+                  rgba(30, 64, 175, 0.15) 100%
+                )
+              `,
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              boxShadow: '0 2px 8px rgba(59, 130, 246, 0.2)'
+            }}
+          >
+            <svg className="w-6 h-6 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold mb-3 text-white" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>Configure</h3>
+          <p className="text-slate-300 leading-relaxed text-sm" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+            Define guardrails with our Policy Builder and choose your metrics.
+          </p>
+        </div>
+      </div>
+
+      {/* Command Card */}
+      <div 
+        className="relative backdrop-blur-xl rounded-2xl p-8 group hover:scale-[1.02] transition-all duration-300"
+        style={{
+          background: `
+            linear-gradient(135deg, 
+              rgba(15, 23, 42, 0.6) 0%, 
+              rgba(30, 41, 59, 0.5) 50%,
+              rgba(15, 23, 42, 0.6) 100%
+            )
+          `,
+          border: '1px solid rgba(59, 130, 246, 0.25)',
+          boxShadow: `
+            0 0 0 1px rgba(59, 130, 246, 0.12),
+            0 0 12px rgba(59, 130, 246, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.03)
+          `
+        }}
+      >
+        <div className="absolute inset-0 rounded-2xl" style={{
+          background: `
+            linear-gradient(135deg, 
+              rgba(255, 255, 255, 0.02) 0%, 
+              transparent 25%,
+              transparent 75%,
+              rgba(255, 255, 255, 0.01) 100%
+            )
+          `
+        }} />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/6 to-transparent" />
+        
+        <div className="relative z-10 flex flex-col items-center text-center">
+          <div 
+            className="w-14 h-14 mb-5 rounded-xl flex items-center justify-center"
+            style={{
+              background: `
+                linear-gradient(135deg, 
+                  rgba(59, 130, 246, 0.2) 0%, 
+                  rgba(30, 64, 175, 0.15) 100%
+                )
+              `,
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              boxShadow: '0 2px 8px rgba(59, 130, 246, 0.2)'
+            }}
+          >
+            <svg className="w-6 h-6 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold mb-3 text-white" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>Command</h3>
+          <p className="text-slate-300 leading-relaxed text-sm" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+            Monitor live stats, schedule tasks, and fine-tune behavior.
+          </p>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
-
-      {/* 2. How It Works (3 Steps) */}
-      <section className="px-6 py-20 bg-gradient-to-b from-transparent to-purple-950/10">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              How It Works
-            </h2>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="text-center">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center border border-blue-500/30">
-                <Zap className="w-8 h-8 text-blue-400" />
-              </div>
-              <h3 className="text-2xl font-semibold mb-4 text-white">Deploy</h3>
-              <p className="text-gray-300 text-lg">
-                Create new agents with Create AI or import your own.
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center border border-purple-500/30">
-                <Shield className="w-8 h-8 text-purple-400" />
-              </div>
-              <h3 className="text-2xl font-semibold mb-4 text-white">Set Up</h3>
-              <p className="text-gray-300 text-lg">
-                Add guardrails (policies) and metrics.
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center border border-green-500/30">
-                <BarChart3 className="w-8 h-8 text-green-400" />
-              </div>
-              <h3 className="text-2xl font-semibold mb-4 text-white">Manage</h3>
-              <p className="text-gray-300 text-lg">
-                Schedule tasks, track stats, and refine easily.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* 3. What You Can Do (Feature Tiles) */}
       <section className="px-6 py-20">
