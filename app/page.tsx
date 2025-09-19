@@ -49,19 +49,17 @@ const FEATURE_DETAILS: Record<string, string> = {
 export default function IntelPage() {
   const KEY = 'intelSplashSeen';
 
-  // Initialize from sessionStorage to avoid any initial flash of the splash.
-  const [showSplash, setShowSplash] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return true; // SSR guard
-    return !sessionStorage.getItem(KEY); // true if not seen this tab
-  });
-  const [isIntelVisible, setIsIntelVisible] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false;
-    return !!sessionStorage.getItem(KEY);
-  });
+  // Initialize with SSR-safe defaults to prevent hydration mismatch
+  const [showSplash, setShowSplash] = useState<boolean>(true);
+  const [isIntelVisible, setIsIntelVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    // If already seen this session, skip timers entirely.
-    if (!showSplash) return;
+    const hasSeenSplash = sessionStorage.getItem(KEY);
+    if (hasSeenSplash) {
+      setShowSplash(false);
+      setIsIntelVisible(true);
+      return;
+    }
 
     // Mark as seen immediately so subsequent visits in this tab skip the splash.
     sessionStorage.setItem(KEY, 'true');
@@ -71,7 +69,7 @@ export default function IntelPage() {
     const t2 = setTimeout(() => setIsIntelVisible(true), 3800); // fade in content
 
     return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, [showSplash]);
+  }, []);
 
   // Updated default greeting
   const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([
@@ -336,6 +334,10 @@ async function askHelperAI(prompt: string): Promise<string> {
         const data = await res.json();
         const text = data.answer ?? data.text ?? data.message ?? '';
         if (text && typeof text === 'string') return text;
+      } else if (res.status === 401) {
+        return `Looks like I can't help with that one — but our team can. You can contact us or explore the Intel Hub for the answers you need.
+
+[Contact](/contact) [Hub](/intel)`;
       }
     } catch {}
   }
@@ -376,7 +378,23 @@ function HelperPanel({
         <div className="thread" ref={threadRef}>
           {messages.map((m, i) => (
             <div key={i} className={`msg ${m.role}`}>
-              <div className="bubble">{m.content}</div>
+              <div className="bubble">
+                {m.content.includes('[Contact](/contact)') ? (
+                  <div>
+                    {m.content.split('[Contact](/contact)')[0]}
+                    <div className="flex gap-2 mt-3">
+                      <a href="/contact" className="inline-flex items-center px-3 py-1.5 text-sm bg-blue-500/20 text-blue-400 border border-blue-500/50 rounded-lg hover:bg-blue-500/30 transition-colors">
+                        Contact
+                      </a>
+                      <a href="/intel" className="inline-flex items-center px-3 py-1.5 text-sm bg-purple-500/20 text-purple-400 border border-purple-500/50 rounded-lg hover:bg-purple-500/30 transition-colors">
+                        Hub
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  m.content
+                )}
+              </div>
             </div>
           ))}
           {busy && (

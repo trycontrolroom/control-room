@@ -664,7 +664,7 @@ export default function SellAgentPage() {
                 <Button 
                   onClick={() => setShowAgreement(false)}
                   variant="outline"
-                  className="border-gray-600 hover:bg-gray-700/50"
+                  className="flex-1 border-gray-600 hover:bg-gray-700/50"
                 >
                   Cancel
                 </Button>
