@@ -432,7 +432,7 @@ export default function SettingsPage() {
                       id="name"
                       value={userProfile?.name || ''}
                       onChange={(e) => setUserProfile(prev => prev ? { ...prev, name: e.target.value } : null)}
-                      className="bg-gray-800/50 border-gray-600 text-white"
+                      className="form-input-enhanced"
                     />
                   </div>
                   
@@ -477,7 +477,7 @@ export default function SettingsPage() {
                       type={showApiKey ? 'text' : 'password'}
                       value={userProfile?.apiKey || 'No API key generated'}
                       disabled
-                      className="bg-gray-800/50 border-gray-600 text-white flex-1"
+                      className="form-input-enhanced flex-1"
                     />
                     <Button
                       variant="outline"
@@ -525,7 +525,7 @@ export default function SettingsPage() {
                       type="password"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      className="bg-gray-800/50 border-gray-600 text-white"
+                      className="form-input-enhanced"
                     />
                   </div>
                   
@@ -536,7 +536,7 @@ export default function SettingsPage() {
                       type="password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="bg-gray-800/50 border-gray-600 text-white"
+                      className="form-input-enhanced"
                     />
                   </div>
                 </div>
@@ -592,7 +592,7 @@ export default function SettingsPage() {
                     value={workspaceData?.name || ''}
                     onChange={(e) => setWorkspaceData(prev => prev ? { ...prev, name: e.target.value } : null)}
                     disabled={!isManager}
-                    className="bg-gray-800/50 border-gray-600 text-white"
+                    className="form-input-enhanced"
                   />
                 </div>
                 
@@ -603,7 +603,7 @@ export default function SettingsPage() {
                     value={workspaceData?.description || ''}
                     onChange={(e) => setWorkspaceData(prev => prev ? { ...prev, description: e.target.value } : null)}
                     disabled={!isManager}
-                    className="bg-gray-800/50 border-gray-600 text-white"
+                    className="form-input-enhanced"
                     rows={3}
                   />
                 </div>
@@ -624,7 +624,7 @@ export default function SettingsPage() {
                           type={showWorkspaceApiKey ? 'text' : 'password'}
                           value={workspaceData?.apiKey || 'No API key generated'}
                           disabled
-                          className="bg-gray-800/50 border-gray-600 text-white flex-1"
+                          className="form-input-enhanced flex-1"
                         />
                         <Button
                           variant="outline"
@@ -677,10 +677,10 @@ export default function SettingsPage() {
                       placeholder="Email address"
                       value={inviteEmail}
                       onChange={(e) => setInviteEmail(e.target.value)}
-                      className="bg-gray-800/50 border-gray-600 text-white"
+                      className="form-input-enhanced"
                     />
                     <Select value={inviteRole} onValueChange={setInviteRole}>
-                      <SelectTrigger className="bg-gray-800/50 border-gray-600">
+                      <SelectTrigger className="form-input-enhanced">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-gray-800 border-gray-600">
@@ -914,7 +914,7 @@ export default function SettingsPage() {
                       value={notifications.emailAddress || session?.user?.email || ''}
                       onChange={(e) => handleUpdateNotifications({ emailAddress: e.target.value })}
                       placeholder="your@email.com"
-                      className="bg-gray-800/50 border-gray-600 text-white"
+                      className="form-input-enhanced"
                     />
                   </div>
                 </>
@@ -955,7 +955,7 @@ export default function SettingsPage() {
                 <div className="space-y-2">
                   <Label className="text-gray-300">Operation Mode</Label>
                   <Select value={aiHelperMode} onValueChange={setAiHelperMode}>
-                    <SelectTrigger className="bg-gray-800/50 border-gray-600">
+                    <SelectTrigger className="form-input-enhanced">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-gray-800 border-gray-600">
@@ -1095,7 +1095,7 @@ export default function SettingsPage() {
                   <Input
                     value={affiliateData.referralLink || ''}
                     disabled
-                    className="bg-gray-800/50 border-gray-600 text-white flex-1"
+                    className="form-input-enhanced flex-1"
                   />
                   <Button
                     variant="outline"

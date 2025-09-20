@@ -151,7 +151,7 @@ export default function SignupPage() {
                     placeholder="Agent Commander"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="pl-10 bg-gray-800/50 border-gray-600 text-white"
+                    className="pl-10 form-input-enhanced"
                     required
                   />
                 </div>
@@ -170,7 +170,7 @@ export default function SignupPage() {
                     placeholder="agent@control-room.ai"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="pl-10 bg-gray-800/50 border-gray-600 text-white"
+                    className="pl-10 form-input-enhanced"
                     required
                   />
                 </div>
@@ -189,7 +189,7 @@ export default function SignupPage() {
                     placeholder="••••••••"
                     value={formData.password}
                     onChange={handleInputChange}
-                    className="pl-10 bg-gray-800/50 border-gray-600 text-white"
+                    className="pl-10 form-input-enhanced"
                     required
                   />
                 </div>
@@ -208,7 +208,7 @@ export default function SignupPage() {
                     placeholder="••••••••"
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
-                    className="pl-10 bg-gray-800/50 border-gray-600 text-white"
+                    className="pl-10 form-input-enhanced"
                     required
                   />
                 </div>

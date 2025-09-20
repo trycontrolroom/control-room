@@ -285,7 +285,7 @@ export default function DeveloperPage() {
                 value={siteSettings.announcement}
                 onChange={(e) => handleSiteSettingChange('announcement', e.target.value)}
                 placeholder="Enter platform-wide announcement..."
-                className="bg-gray-800/50 border-gray-600 text-white"
+                className="form-input-enhanced"
               />
               <p className="text-xs text-gray-500">
                 This message will be displayed to all users across all workspaces

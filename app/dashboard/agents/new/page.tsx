@@ -152,7 +152,7 @@ export default function NewAgentPage() {
                   value={agentData.name}
                   onChange={e => setAgentData(s => ({ ...s, name: e.target.value }))}
                   placeholder="My AI Assistant"
-                  className="bg-gray-800/50 border-gray-600 text-white"
+                  className="form-input-enhanced"
                   required
                 />
               </div>
@@ -163,7 +163,7 @@ export default function NewAgentPage() {
                   value={agentData.description}
                   onChange={e => setAgentData(s => ({ ...s, description: e.target.value }))}
                   placeholder="What this agent does..."
-                  className="bg-gray-800/50 border-gray-600 text-white"
+                  className="form-input-enhanced"
                   required
                 />
               </div>
@@ -174,7 +174,7 @@ export default function NewAgentPage() {
                   value={agentData.instructions}
                   onChange={e => setAgentData(s => ({ ...s, instructions: e.target.value }))}
                   placeholder="Usage notes..."
-                  className="bg-gray-800/50 border-gray-600 text-white"
+                  className="form-input-enhanced"
                 />
               </div>
               <div className="space-y-2">
@@ -184,7 +184,7 @@ export default function NewAgentPage() {
                   value={agentData.tags}
                   onChange={e => setAgentData(s => ({ ...s, tags: e.target.value }))}
                   placeholder="support, automation"
-                  className="bg-gray-800/50 border-gray-600 text-white"
+                  className="form-input-enhanced"
                 />
                 <p className="text-xs text-gray-500">Separate tags with commas</p>
               </div>
@@ -227,7 +227,7 @@ export default function NewAgentPage() {
                     type="file"
                     accept=".py,.js,.json,.yaml,.zip"
                     onChange={e => setFile(e.target.files?.[0] || null)}
-                    className="bg-gray-800/50 border-gray-600 text-white"
+                    className="form-input-enhanced"
                   />
                 </div>
               )}
@@ -240,7 +240,7 @@ export default function NewAgentPage() {
                     value={agentData.repoUrl}
                     onChange={e => setAgentData(s => ({ ...s, repoUrl: e.target.value }))}
                     placeholder="https://github.com/user/agent-repo"
-                    className="bg-gray-800/50 border-gray-600 text-white"
+                    className="form-input-enhanced"
                   />
                 </div>
               )}
@@ -254,7 +254,7 @@ export default function NewAgentPage() {
                       value={agentData.apiEndpoint}
                       onChange={e => setAgentData(s => ({ ...s, apiEndpoint: e.target.value }))}
                       placeholder="https://api.example.com/agent"
-                      className="bg-gray-800/50 border-gray-600 text-white"
+                      className="form-input-enhanced"
                     />
                   </div>
                   <div className="space-y-2">
@@ -265,7 +265,7 @@ export default function NewAgentPage() {
                       value={agentData.apiKey}
                       onChange={e => setAgentData(s => ({ ...s, apiKey: e.target.value }))}
                       placeholder="sk-..."
-                      className="bg-gray-800/50 border-gray-600 text-white"
+                      className="form-input-enhanced"
                     />
                   </div>
                 </>

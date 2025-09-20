@@ -109,7 +109,7 @@ export default function LoginPage() {
                     placeholder="agent@control-room.ai"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-gray-800/50 border-gray-600 text-white"
+                    className="pl-10 form-input-enhanced"
                     required
                   />
                 </div>
@@ -127,7 +127,7 @@ export default function LoginPage() {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 bg-gray-800/50 border-gray-600 text-white"
+                    className="pl-10 form-input-enhanced"
                     required
                   />
                 </div>

@@ -502,14 +502,14 @@ export default function DashboardPage() {
                             placeholder="Task name"
                             value={newTaskName}
                             onChange={(e) => setNewTaskName(e.target.value)}
-                            className="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white placeholder-gray-400"
+                            className="form-input-enhanced px-3 py-2"
                           />
                           <input
                             type="text"
                             placeholder="Description (optional)"
                             value={newTaskDescription}
                             onChange={(e) => setNewTaskDescription(e.target.value)}
-                            className="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white placeholder-gray-400"
+                            className="form-input-enhanced px-3 py-2"
                           />
                         </div>
                         <Button onClick={createTask} disabled={!newTaskName.trim()} className="command-button">
@@ -544,14 +544,14 @@ export default function DashboardPage() {
                                 type="text"
                                 value={editingTask.name}
                                 onChange={(e) => setEditingTask({ ...editingTask, name: e.target.value })}
-                                className="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white w-full"
+                                className="form-input-enhanced px-3 py-2 w-full"
                               />
                               <input
                                 type="text"
                                 value={editingTask.description || ''}
                                 onChange={(e) => setEditingTask({ ...editingTask, description: e.target.value })}
                                 placeholder="Description"
-                                className="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white w-full"
+                                className="form-input-enhanced px-3 py-2 w-full"
                               />
                               <div className="flex space-x-2">
                                 <Button size="sm" onClick={() => updateTask(task.id, { name: editingTask.name, description: editingTask.description })}>

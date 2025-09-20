@@ -52,8 +52,10 @@ export default function IntelPage() {
   // Initialize with SSR-safe defaults to prevent hydration mismatch
   const [showSplash, setShowSplash] = useState<boolean>(true);
   const [isIntelVisible, setIsIntelVisible] = useState<boolean>(false);
+  const [isClient, setIsClient] = useState<boolean>(false);
 
   useEffect(() => {
+    setIsClient(true);
     const hasSeenSplash = sessionStorage.getItem(KEY);
     if (hasSeenSplash) {
       setShowSplash(false);
@@ -88,7 +90,7 @@ export default function IntelPage() {
 
   return (
     <div className="page">
-      {showSplash && <SplashScreen />}
+      {isClient && showSplash && <SplashScreen />}
 
       <div className="bg-gradient" />
       <div className="bg-vignette" />
@@ -97,7 +99,7 @@ export default function IntelPage() {
       <Navigation />
 
       <main className="container">
-        {!showSplash && (
+        {isClient && !showSplash && (
           <Intel
             isVisible={isIntelVisible}
             handleFeatureClick={handleFeatureClick}
