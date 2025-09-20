@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { cuid } from '@paralleldrive/cuid2'
+import { createId } from '@paralleldrive/cuid2'
 
 export async function POST(
   request: NextRequest,
@@ -30,7 +30,7 @@ export async function POST(
 
     await prisma.$transaction(async (tx) => {
       if (agentIdParam === 'new') {
-        agentId = cuid()
+        agentId = createId()
         
         await tx.agent.create({
           data: {

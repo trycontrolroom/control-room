@@ -48,15 +48,17 @@ export default function HubPage() {
    ============================================================ */
 function SplashScreen() {
     const [isFadingOut, setIsFadingOut] = useState(false);
+    const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
+        setIsClient(true);
         const timer = setTimeout(() => setIsFadingOut(true), 3000);
         return () => clearTimeout(timer);
     }, []);
     
     return (
         <div className={`splash-screen ${isFadingOut ? 'fade-out' : ''}`}>
-            <h1>The Hub</h1>
+            {isClient && <h1>The Hub</h1>}
             <p>The learning center for everything Control Room.</p>
             <style jsx>{`
                 .splash-screen {

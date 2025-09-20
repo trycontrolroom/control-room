@@ -80,11 +80,11 @@ export default function IntelPage() {
 
   const handleFeatureClick = (featureTitle: string) => {
     const question = `Tell me more about the ${featureTitle}.`;
-    setMessages(prev => [...prev, { role: 'user', content: question }]);
+    setMessages((prev) => [...prev, { role: 'user' as const, content: question }]);
     setTimeout(() => {
       const specific = FEATURE_DETAILS[featureTitle];
       const content = specific ? specific : explainFallback(question);
-      setMessages(prev => [...prev, { role: 'assistant', content }]);
+      setMessages((prev) => [...prev, { role: 'assistant' as const, content }]);
     }, 400);
   };
 
@@ -362,11 +362,11 @@ function HelperPanel({
     e.preventDefault();
     const text = input.trim();
     if (!text || busy) return;
-    setMessages(m => [...m, { role: 'user', content: text }]);
+    setMessages(m => [...m, { role: 'user' as const, content: text }]);
     setInput(''); setBusy(true);
     try {
       const answer = await askHelperAI(text);
-      setMessages(m => [...m, { role: 'assistant', content: answer }]);
+      setMessages(m => [...m, { role: 'assistant' as const, content: answer }]);
     } finally { setBusy(false); }
   }
 

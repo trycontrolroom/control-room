@@ -44,29 +44,29 @@ export async function POST(request: NextRequest) {
     const affiliate = await prisma.affiliate.create({
       data: {
         userId: session.user.id,
-        fullName: data.fullName,
-        email: data.email,
-        phoneNumber: data.phoneNumber,
-        address: data.address,
-        city: data.city,
-        state: data.state,
-        zipCode: data.zipCode,
-        country: data.country,
-        paymentMethod: data.paymentMethod,
-        paypalEmail: data.paypalEmail || null,
-        bankAccountNumber: data.bankAccountNumber || null,
-        routingNumber: data.routingNumber || null,
-        experience: data.experience,
-        audience: data.audience,
-        marketingChannels: data.marketingChannels,
-        website: data.website || null,
-        socialMedia: data.socialMedia || null,
-        agreementAccepted: data.agreementAccepted,
-        agreementAcceptedAt: new Date(data.agreementAcceptedAt),
-        status: 'PENDING',
-        referralCode: generateReferralCode(),
-        createdAt: new Date(),
-        updatedAt: new Date()
+        code: generateReferralCode(),
+        payoutInfo: {
+          fullName: data.fullName,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          address: data.address,
+          city: data.city,
+          state: data.state,
+          zipCode: data.zipCode,
+          country: data.country,
+          paymentMethod: data.paymentMethod,
+          paypalEmail: data.paypalEmail || null,
+          bankAccountNumber: data.bankAccountNumber || null,
+          routingNumber: data.routingNumber || null,
+          experience: data.experience,
+          audience: data.audience,
+          marketingChannels: data.marketingChannels,
+          website: data.website || null,
+          socialMedia: data.socialMedia || null,
+          agreementAccepted: data.agreementAccepted,
+          agreementAcceptedAt: new Date(data.agreementAcceptedAt).toISOString(),
+          status: 'PENDING'
+        }
       }
     })
 
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ 
       success: true, 
       affiliateId: affiliate.id,
-      referralCode: affiliate.referralCode
+      referralCode: affiliate.code
     })
 
   } catch (error) {

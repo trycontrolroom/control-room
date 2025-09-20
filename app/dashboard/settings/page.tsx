@@ -1337,9 +1337,7 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-    
-    <style jsx>{`
+      <style jsx>{`
       .settings-card {
         background: linear-gradient(180deg, rgba(14,20,36,.85), rgba(10,14,26,.98));
         border-radius: 24px;
@@ -1435,5 +1433,6 @@ export default function SettingsPage() {
         height: 1rem;
       }
     `}</style>
+    </DashboardLayout>
   )
 }

@@ -145,9 +145,11 @@ export async function POST(request: NextRequest) {
       data: {
         userId: session.user.id,
         action: 'MEMBER_ADDED',
-        resourceType: 'WORKSPACE_MEMBER',
-        resourceId: newMember.id,
-        details: `Added ${targetUser.email} to workspace with role ${role}`,
+        details: {
+          resourceType: 'WORKSPACE_MEMBER',
+          resourceId: newMember.id,
+          description: `Added ${targetUser.email} to workspace with role ${role}`
+        },
         workspaceId: workspaceId
       }
     })
@@ -226,9 +228,11 @@ export async function DELETE(request: NextRequest) {
       data: {
         userId: session.user.id,
         action: 'MEMBER_REMOVED',
-        resourceType: 'WORKSPACE_MEMBER',
-        resourceId: memberId,
-        details: `Removed ${member.user.email} from workspace`,
+        details: {
+          resourceType: 'WORKSPACE_MEMBER',
+          resourceId: memberId,
+          description: `Removed ${member.user.email} from workspace`
+        },
         workspaceId: workspaceId
       }
     })

@@ -14,7 +14,8 @@ export async function PATCH(request: NextRequest) {
     const { theme, language, timezone, notifications } = body
 
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email }
+      where: { email: session.user.email },
+      include: { workspaceMembers: true }
     })
 
     if (!user) {
@@ -27,6 +28,7 @@ export async function PATCH(request: NextRequest) {
         preferences: {
           upsert: {
             create: {
+              workspaceId: user.workspaceMembers[0]?.workspaceId || '',
               theme: theme || 'dark',
               language: language || 'en',
               timezone: timezone || 'UTC',

@@ -21,6 +21,9 @@ export async function GET(request: NextRequest) {
       }
     })
 
+    if (!workspace) {
+      return NextResponse.json({ error: 'No workspace found' }, { status: 404 })
+    }
 
     const customMetrics = await prisma.customMetric.findMany({
       where: {

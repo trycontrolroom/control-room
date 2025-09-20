@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { cuid } from '@paralleldrive/cuid2'
+import { createId } from '@paralleldrive/cuid2'
 
 export async function POST(request: NextRequest) {
   try {
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
 
     const affiliate = await prisma.affiliate.create({
       data: {
-        id: cuid(),
+        id: createId(),
         userId: session.user.id,
         code: affiliateCode,
         isApproved: false, // Requires manual approval
