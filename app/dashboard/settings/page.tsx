@@ -410,13 +410,13 @@ export default function SettingsPage() {
     switch (activeSection) {
       case 'account':
         return (
-          <Card className="glass-panel border-blue-500/20">
+          <Card className="settings-card blue">
             <CardHeader>
-              <div className="flex items-center space-x-2">
-                <User className="w-5 h-5 text-blue-400" />
-                <CardTitle className="text-white">Account & Security</CardTitle>
+              <div className="card-header-content">
+                <User className="card-icon blue" />
+                <CardTitle className="card-title">Account & Security</CardTitle>
               </div>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="card-description">
                 Manage your profile, security settings, and authentication
               </CardDescription>
             </CardHeader>
@@ -570,13 +570,13 @@ export default function SettingsPage() {
 
       case 'workspace':
         return (
-          <Card className="glass-panel border-purple-500/20">
+          <Card className="settings-card purple">
             <CardHeader>
-              <div className="flex items-center space-x-2">
-                <Building className="w-5 h-5 text-purple-400" />
-                <CardTitle className="text-white">Workspace Management</CardTitle>
+              <div className="card-header-content">
+                <Building className="card-icon purple" />
+                <CardTitle className="card-title">Workspace Management</CardTitle>
               </div>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="card-description">
                 Manage workspace settings, members, and permissions
               </CardDescription>
             </CardHeader>
@@ -1338,5 +1338,102 @@ export default function SettingsPage() {
         </div>
       </div>
     </DashboardLayout>
+    
+    <style jsx>{`
+      .settings-card {
+        background: linear-gradient(180deg, rgba(14,20,36,.85), rgba(10,14,26,.98));
+        border-radius: 24px;
+        box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+        backdrop-filter: blur(24px);
+      }
+
+      .settings-card.blue {
+        border: 1px solid rgba(79, 106, 255, 0.2);
+      }
+
+      .settings-card.purple {
+        border: 1px solid rgba(147, 51, 234, 0.2);
+      }
+
+      .settings-card.green {
+        border: 1px solid rgba(34, 197, 94, 0.2);
+      }
+
+      .settings-card.cyan {
+        border: 1px solid rgba(6, 182, 212, 0.2);
+      }
+
+      .settings-card.orange {
+        border: 1px solid rgba(251, 146, 60, 0.2);
+      }
+
+      .card-header-content {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .card-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+
+      .card-icon.blue {
+        color: #4F6AFF;
+      }
+
+      .card-icon.purple {
+        color: #9333ea;
+      }
+
+      .card-icon.green {
+        color: #22c55e;
+      }
+
+      .card-icon.cyan {
+        color: #06b6d4;
+      }
+
+      .card-icon.orange {
+        color: #fb923c;
+      }
+
+      .card-title {
+        color: #FFFFFF;
+      }
+
+      .card-description {
+        color: #8a96ad;
+      }
+
+      .action-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        height: 2.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        padding: 0 1rem;
+        transition: all 0.2s ease;
+        text-decoration: none;
+      }
+
+      .action-button.primary {
+        background: linear-gradient(135deg, #8A7FFF, #4F6AFF);
+        border: none;
+        color: #FFFFFF;
+        box-shadow: 0 8px 20px rgba(79,106,255,.25);
+      }
+
+      .action-button.primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 30px rgba(79,106,255,.35);
+      }
+
+      .button-icon {
+        width: 1rem;
+        height: 1rem;
+      }
+    `}</style>
   )
 }

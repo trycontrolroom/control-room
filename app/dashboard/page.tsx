@@ -232,9 +232,28 @@ export default function DashboardPage() {
   if (status === 'loading' || loading) {
     return (
       <DashboardLayout>
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
         </div>
+        <style jsx>{`
+          .loading-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 16rem;
+          }
+          .loading-spinner {
+            width: 2rem;
+            height: 2rem;
+            border: 2px solid transparent;
+            border-top: 2px solid #4F6AFF;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+          }
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
       </DashboardLayout>
     )
   }
@@ -258,8 +277,8 @@ export default function DashboardPage() {
 
             {/* always‐visible Add Agent button */}
             <Link href="/dashboard/agents/new">
-              <Button className="command-button">
-                <Plus className="w-4 h-4 mr-2" />
+              <Button className="add-agent-button">
+                <Plus className="button-icon" />
                 Add Agent
               </Button>
             </Link>
@@ -267,48 +286,48 @@ export default function DashboardPage() {
         </div>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card className="glass-panel border-blue-500/20">
-            <CardHeader className="flex items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-gray-300">Total Agents</CardTitle>
-              <Activity className="h-4 w-4 text-blue-400" />
+        <div className="stats-grid">
+          <Card className="stat-card blue">
+            <CardHeader className="stat-header">
+              <CardTitle className="stat-title">Total Agents</CardTitle>
+              <Activity className="stat-icon" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">{agents.length}</div>
+              <div className="stat-value">{agents.length}</div>
             </CardContent>
           </Card>
 
-          <Card className="glass-panel border-green-500/20">
-            <CardHeader className="flex items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-gray-300">Active</CardTitle>
-              <Play className="h-4 w-4 text-green-400" />
+          <Card className="stat-card green">
+            <CardHeader className="stat-header">
+              <CardTitle className="stat-title">Active</CardTitle>
+              <Play className="stat-icon" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">
+              <div className="stat-value">
                 {agents.filter(a => a.status === 'ACTIVE').length}
               </div>
             </CardContent>
           </Card>
 
-          <Card className="glass-panel border-red-500/20">
-            <CardHeader className="flex items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-gray-300">Errors</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-red-400" />
+          <Card className="stat-card red">
+            <CardHeader className="stat-header">
+              <CardTitle className="stat-title">Errors</CardTitle>
+              <AlertTriangle className="stat-icon" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">
+              <div className="stat-value">
                 {agents.reduce((sum, a) => sum + a.errorCount, 0)}
               </div>
             </CardContent>
           </Card>
 
-          <Card className="glass-panel border-yellow-500/20">
-            <CardHeader className="flex items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-gray-300">Total Cost</CardTitle>
-              <DollarSign className="h-4 w-4 text-yellow-400" />
+          <Card className="stat-card yellow">
+            <CardHeader className="stat-header">
+              <CardTitle className="stat-title">Total Cost</CardTitle>
+              <DollarSign className="stat-icon" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">
+              <div className="stat-value">
                 ${agents.reduce((sum, a) => sum + a.cost, 0).toFixed(2)}
               </div>
             </CardContent>
@@ -316,65 +335,64 @@ export default function DashboardPage() {
         </div>
 
         {/* Agents Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="agents-grid">
           {agents.map(agent => (
-            <Card key={agent.id} className="agent-card data-stream cursor-pointer hover:border-blue-500/50 transition-colors" onClick={() => openAgentDetail(agent)}>
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg font-semibold text-white">{agent.name}</CardTitle>
+            <Card key={agent.id} className="agent-card" onClick={() => openAgentDetail(agent)}>
+              <CardHeader className="agent-header">
+                <div className="agent-header-content">
+                  <CardTitle className="agent-name">{agent.name}</CardTitle>
                   <Badge className={getStatusColor(agent.status)}>{agent.status}</Badge>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <div className="text-gray-400">Uptime</div>
-                    <div className="metric-value text-green-400">{agent.uptime.toFixed(1)}%</div>
+              <CardContent className="agent-content">
+                <div className="agent-metrics">
+                  <div className="metric">
+                    <div className="metric-label">Uptime</div>
+                    <div className="metric-value green">{agent.uptime.toFixed(1)}%</div>
                   </div>
-                  <div>
-                    <div className="text-gray-400">Errors</div>
-                    <div className="metric-value text-red-400">{agent.errorCount}</div>
+                  <div className="metric">
+                    <div className="metric-label">Errors</div>
+                    <div className="metric-value red">{agent.errorCount}</div>
                   </div>
-                  <div>
-                    <div className="text-gray-400">Cost</div>
-                    <div className="metric-value text-yellow-400">${agent.cost.toFixed(2)}</div>
+                  <div className="metric">
+                    <div className="metric-label">Cost</div>
+                    <div className="metric-value yellow">${agent.cost.toFixed(2)}</div>
                   </div>
-                  <div>
-                    <div className="text-gray-400">Last Seen</div>
-                    <div className="metric-value text-gray-300">
+                  <div className="metric">
+                    <div className="metric-label">Last Seen</div>
+                    <div className="metric-value gray">
                       {new Date(agent.lastSeen).toLocaleTimeString()}
                     </div>
                   </div>
                 </div>
 
-                {/* Actions */}
-                <div className="flex items-center justify-between pt-2 border-t border-gray-700">
-                  <div className="flex space-x-2">
+                <div className="agent-actions">
+                  <div className="action-group">
                     <Link href={`/dashboard/stats?agent=${agent.id}`} onClick={(e) => e.stopPropagation()}>
-                      <Button size="sm" variant="outline" className="border-blue-500/50 hover:bg-blue-500/10">
-                        <BarChart3 className="w-4 h-4" />
+                      <Button size="sm" variant="outline" className="action-button blue">
+                        <BarChart3 className="action-icon" />
                       </Button>
                     </Link>
                     <Link href={`/dashboard/agents/${agent.id}/logs`} onClick={(e) => e.stopPropagation()}>
-                      <Button size="sm" variant="outline" className="border-gray-500/50 hover:bg-gray-500/10">
-                        <FileText className="w-4 h-4" />
+                      <Button size="sm" variant="outline" className="action-button gray">
+                        <FileText className="action-icon" />
                       </Button>
                     </Link>
                   </div>
-                  <div className="flex space-x-2">
+                  <div className="action-group">
                     {canModify && (
                       <>
                         {agent.status === 'ACTIVE' ? (
-                          <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); handleAgentAction(agent.id, 'pause'); }} className="border-yellow-500/50 hover:bg-yellow-500/10">
-                            <Pause className="w-4 h-4" />
+                          <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); handleAgentAction(agent.id, 'pause'); }} className="action-button yellow">
+                            <Pause className="action-icon" />
                           </Button>
                         ) : (
-                          <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); handleAgentAction(agent.id, 'resume'); }} className="border-green-500/50 hover:bg-green-500/10">
-                            <Play className="w-4 h-4" />
+                          <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); handleAgentAction(agent.id, 'resume'); }} className="action-button green">
+                            <Play className="action-icon" />
                           </Button>
                         )}
-                        <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); handleAgentAction(agent.id, 'delete'); }} className="border-red-500/50 hover:bg-red-500/10">
-                          <Trash2 className="w-4 h-4" />
+                        <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); handleAgentAction(agent.id, 'delete'); }} className="action-button red">
+                          <Trash2 className="action-icon" />
                         </Button>
                       </>
                     )}
@@ -387,14 +405,14 @@ export default function DashboardPage() {
 
         {/* Empty State */}
         {agents.length === 0 && (
-          <Card className="glass-panel border-gray-500/20">
-            <CardContent className="text-center py-12">
-              <Activity className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">No Agents Deployed</h3>
-              <p className="text-gray-400 mb-6">Get started by deploying your first AI agent to the command center.</p>
+          <Card className="empty-state-card">
+            <CardContent className="empty-state-content">
+              <Activity className="empty-icon" />
+              <h3 className="empty-title">No Agents Deployed</h3>
+              <p className="empty-message">Get started by deploying your first AI agent to the command center.</p>
               <Link href="/dashboard/agents/new">
-                <Button className="command-button">
-                  <Plus className="w-4 h-4 mr-2" />
+                <Button className="deploy-button">
+                  <Plus className="button-icon" />
                   Deploy First Agent
                 </Button>
               </Link>
@@ -605,6 +623,329 @@ export default function DashboardPage() {
           </div>
         </div>
       )}
+      <style jsx>{`
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      @media (min-width: 768px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .stats-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      .stat-card {
+        background: linear-gradient(180deg, rgba(14,20,36,.85), rgba(10,14,26,.98));
+        border-radius: 24px;
+        box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+        backdrop-filter: blur(24px);
+      }
+
+      .stat-card.blue {
+        border: 1px solid rgba(79, 106, 255, 0.2);
+      }
+
+      .stat-card.green {
+        border: 1px solid rgba(34, 197, 94, 0.2);
+      }
+
+      .stat-card.red {
+        border: 1px solid rgba(239, 68, 68, 0.2);
+      }
+
+      .stat-card.yellow {
+        border: 1px solid rgba(251, 191, 36, 0.2);
+      }
+
+      .stat-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 0.5rem;
+      }
+
+      .stat-title {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #d1d5db;
+      }
+
+      .stat-icon {
+        width: 1rem;
+        height: 1rem;
+        color: #4F6AFF;
+      }
+
+      .stat-card.green .stat-icon {
+        color: #22c55e;
+      }
+
+      .stat-card.red .stat-icon {
+        color: #ef4444;
+      }
+
+      .stat-card.yellow .stat-icon {
+        color: #fbbf24;
+      }
+
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #FFFFFF;
+      }
+
+      .add-agent-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        height: 3rem;
+        background: linear-gradient(135deg, #8A7FFF, #4F6AFF);
+        border: none;
+        border-radius: 14px;
+        color: #FFFFFF;
+        font-size: 1rem;
+        font-weight: 600;
+        padding: 0 1.5rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 12px 30px rgba(79,106,255,.32);
+        text-decoration: none;
+      }
+
+      .add-agent-button:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 16px 40px rgba(79,106,255,.4);
+      }
+
+      .button-icon {
+        width: 1rem;
+        height: 1rem;
+      }
+
+      .agents-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      @media (min-width: 768px) {
+        .agents-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .agents-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .agent-card {
+        background: linear-gradient(180deg, rgba(14,20,36,.85), rgba(10,14,26,.98));
+        border: 1px solid rgba(79, 106, 255, 0.2);
+        border-radius: 24px;
+        box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+        backdrop-filter: blur(24px);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .agent-card:hover {
+        border-color: rgba(79, 106, 255, 0.5);
+        transform: translateY(-2px);
+      }
+
+      .agent-header {
+        padding-bottom: 0.75rem;
+      }
+
+      .agent-header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .agent-name {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #FFFFFF;
+      }
+
+      .agent-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .agent-metrics {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        font-size: 0.875rem;
+      }
+
+      .metric {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .metric-label {
+        color: #8a96ad;
+      }
+
+      .metric-value {
+        font-weight: 600;
+      }
+
+      .metric-value.green {
+        color: #22c55e;
+      }
+
+      .metric-value.red {
+        color: #ef4444;
+      }
+
+      .metric-value.yellow {
+        color: #fbbf24;
+      }
+
+      .metric-value.gray {
+        color: #d1d5db;
+      }
+
+      .agent-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 0.5rem;
+        border-top: 1px solid rgba(107, 114, 128, 0.3);
+      }
+
+      .action-group {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: rgba(8,12,22,.95);
+        border-radius: 8px;
+        padding: 0.5rem;
+        transition: all 0.2s ease;
+      }
+
+      .action-button.blue {
+        border: 1px solid rgba(79, 106, 255, 0.5);
+        color: #4F6AFF;
+      }
+
+      .action-button.blue:hover {
+        background: rgba(79, 106, 255, 0.1);
+      }
+
+      .action-button.gray {
+        border: 1px solid rgba(107, 114, 128, 0.5);
+        color: #6b7280;
+      }
+
+      .action-button.gray:hover {
+        background: rgba(107, 114, 128, 0.1);
+      }
+
+      .action-button.yellow {
+        border: 1px solid rgba(251, 191, 36, 0.5);
+        color: #fbbf24;
+      }
+
+      .action-button.yellow:hover {
+        background: rgba(251, 191, 36, 0.1);
+      }
+
+      .action-button.green {
+        border: 1px solid rgba(34, 197, 94, 0.5);
+        color: #22c55e;
+      }
+
+      .action-button.green:hover {
+        background: rgba(34, 197, 94, 0.1);
+      }
+
+      .action-button.red {
+        border: 1px solid rgba(239, 68, 68, 0.5);
+        color: #ef4444;
+      }
+
+      .action-button.red:hover {
+        background: rgba(239, 68, 68, 0.1);
+      }
+
+      .action-icon {
+        width: 1rem;
+        height: 1rem;
+      }
+
+      .empty-state-card {
+        background: linear-gradient(180deg, rgba(14,20,36,.85), rgba(10,14,26,.98));
+        border: 1px solid rgba(107, 114, 128, 0.2);
+        border-radius: 24px;
+        box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+        backdrop-filter: blur(24px);
+      }
+
+      .empty-state-content {
+        text-align: center;
+        padding: 3rem;
+      }
+
+      .empty-icon {
+        width: 3rem;
+        height: 3rem;
+        color: #8a96ad;
+        margin: 0 auto 1rem;
+      }
+
+      .empty-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #FFFFFF;
+        margin-bottom: 0.5rem;
+      }
+
+      .empty-message {
+        color: #8a96ad;
+        margin-bottom: 1.5rem;
+      }
+
+      .deploy-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        height: 3rem;
+        background: linear-gradient(135deg, #8A7FFF, #4F6AFF);
+        border: none;
+        border-radius: 14px;
+        color: #FFFFFF;
+        font-size: 1rem;
+        font-weight: 600;
+        padding: 0 1.5rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 12px 30px rgba(79,106,255,.32);
+        text-decoration: none;
+      }
+
+      .deploy-button:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 16px 40px rgba(79,106,255,.4);
+      }
+    `}</style>
     </DashboardLayout>
   )
 }
