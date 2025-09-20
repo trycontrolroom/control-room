@@ -282,7 +282,7 @@ export default function StatsPage() {
           <div className="flex items-center space-x-2">
             <Calendar className="w-4 h-4 text-gray-400" />
             <Select value={timeRange} onValueChange={setTimeRange}>
-              <SelectTrigger className="w-40 bg-gray-800/50 border-gray-600">
+              <SelectTrigger className="w-40 form-input-enhanced">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -296,7 +296,7 @@ export default function StatsPage() {
           </div>
 
           <Select value={selectedAgent} onValueChange={setSelectedAgent}>
-            <SelectTrigger className="w-48 bg-gray-800/50 border-gray-600">
+            <SelectTrigger className="w-48 form-input-enhanced">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -310,7 +310,7 @@ export default function StatsPage() {
           </Select>
 
           <Select value={selectedMetric} onValueChange={setSelectedMetric}>
-            <SelectTrigger className="w-48 bg-gray-800/50 border-gray-600">
+            <SelectTrigger className="w-48 form-input-enhanced">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -486,7 +486,7 @@ export default function StatsPage() {
                 {customMetrics.map(metric => (
                   <div
                     key={metric.id}
-                    className="bg-gray-800/30 border border-gray-600 rounded-lg p-4 hover:border-gray-500 transition-colors"
+                    className="glass-panel-blue p-4 hover:border-gray-500 transition-colors"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center space-x-2">
@@ -572,7 +572,7 @@ export default function StatsPage() {
                       value={aiHelperInput}
                       onChange={(e) => setAiHelperInput(e.target.value)}
                       placeholder="e.g., Create a metric tracking average response time in milliseconds for the performance group"
-                      className="w-full h-24 bg-gray-800/50 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full h-24 form-input-enhanced px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
                   

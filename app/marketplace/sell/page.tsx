@@ -306,7 +306,7 @@ export default function SellAgentPage() {
                       value={formData.name}
                       onChange={(e) => updateFormData('name', e.target.value)}
                       placeholder="e.g., Customer Support Assistant"
-                      className="bg-gray-800/50 border-gray-600 text-white"
+                      className="form-input-enhanced"
                       required
                     />
                     {errors.name && (
@@ -323,7 +323,7 @@ export default function SellAgentPage() {
                       value={formData.description}
                       onChange={(e) => updateFormData('description', e.target.value)}
                       placeholder="Describe what your agent does and how it helps users..."
-                      className="bg-gray-800/50 border-gray-600 text-white min-h-[100px]"
+                      className="form-input-enhanced min-h-[100px]"
                       required
                     />
                     {errors.description && (
@@ -337,7 +337,7 @@ export default function SellAgentPage() {
                         Category *
                       </Label>
                       <Select value={formData.category} onValueChange={(value) => updateFormData('category', value)}>
-                        <SelectTrigger className="bg-gray-800/50 border-gray-600 text-white">
+                        <SelectTrigger className="form-input-enhanced text-white">
                           <SelectValue placeholder="Select category" />
                         </SelectTrigger>
                         <SelectContent className="bg-gray-800 border-gray-600">
@@ -367,7 +367,7 @@ export default function SellAgentPage() {
                           value={formData.price}
                           onChange={(e) => updateFormData('price', parseFloat(e.target.value) || 0)}
                           placeholder="0.00"
-                          className="bg-gray-800/50 border-gray-600 text-white pl-10"
+                          className="form-input-enhanced pl-10"
                         />
                       </div>
                       <p className="text-xs text-gray-500">Set to $0 for free agents</p>
@@ -485,7 +485,7 @@ export default function SellAgentPage() {
                     value={formData.instructions}
                     onChange={(e) => updateFormData('instructions', e.target.value)}
                     placeholder="1. Configure your API keys in the settings panel...&#10;2. Set up the required webhooks...&#10;3. Test the agent with sample data..."
-                    className="bg-gray-800/50 border-gray-600 text-white min-h-[150px]"
+                    className="form-input-enhanced min-h-[150px]"
                     required
                   />
                   {errors.instructions && (
@@ -511,7 +511,7 @@ export default function SellAgentPage() {
                       value={currentTag}
                       onChange={(e) => setCurrentTag(e.target.value)}
                       placeholder="Enter a tag"
-                      className="bg-gray-800/50 border-gray-600 text-white"
+                      className="form-input-enhanced"
                       onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                     />
                     <Button 
@@ -664,7 +664,7 @@ export default function SellAgentPage() {
                 <Button 
                   onClick={() => setShowAgreement(false)}
                   variant="outline"
-                  className="flex-1 border-gray-600 hover:bg-gray-700/50"
+                  className="border-gray-600 hover:bg-gray-700/50"
                 >
                   Cancel
                 </Button>

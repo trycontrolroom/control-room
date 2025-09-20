@@ -294,7 +294,7 @@ export default function AdminPage() {
                           value={u.role}
                           onValueChange={val => handleWorkspaceRoleChange(u.membershipId, val)}
                         >
-                          <SelectTrigger className="w-32 bg-gray-800/50 border-gray-600">
+                          <SelectTrigger className="w-32 form-input-enhanced">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>

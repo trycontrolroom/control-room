@@ -524,7 +524,7 @@ export default function PoliciesPage() {
                         }))
                       }
                       placeholder="High Error Rate Policy"
-                      className="bg-gray-800/50 border-gray-600 text-white focus:border-blue-500"
+                      className="form-input-enhanced focus:border-blue-500"
                     />
                   </div>
 
@@ -551,7 +551,7 @@ export default function PoliciesPage() {
                         }))
                       }
                       placeholder="Pause agent when errors exceed threshold"
-                      className="bg-gray-800/50 border-gray-600 text-white focus:border-blue-500"
+                      className="form-input-enhanced focus:border-blue-500"
                     />
                   </div>
 
@@ -635,7 +635,7 @@ export default function PoliciesPage() {
                         setNewPolicy((p) => ({ ...p, triggerType: v }))
                       }
                     >
-                      <SelectTrigger className="bg-gray-800/50 border-gray-600 focus:border-blue-500">
+                      <SelectTrigger className="form-input-enhanced focus:border-blue-500">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-gray-800 border-gray-600">
@@ -697,7 +697,7 @@ export default function PoliciesPage() {
                         }))
                       }
                       placeholder="10"
-                      className="bg-gray-800/50 border-gray-600 text-white focus:border-blue-500"
+                      className="form-input-enhanced focus:border-blue-500"
                     />
                   </div>
 
@@ -718,7 +718,7 @@ export default function PoliciesPage() {
                         setNewPolicy((p) => ({ ...p, timeWindow: v }))
                       }
                     >
-                      <SelectTrigger className="bg-gray-800/50 border-gray-600 focus:border-blue-500">
+                      <SelectTrigger className="form-input-enhanced focus:border-blue-500">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-gray-800 border-gray-600">
@@ -791,7 +791,7 @@ export default function PoliciesPage() {
                             }))
                           }
                           placeholder="30"
-                          className="bg-gray-800/50 border-gray-600 text-white focus:border-blue-500 flex-1"
+                          className="form-input-enhanced focus:border-blue-500 flex-1"
                         />
                         <Select
                           value={newPolicy.customTimeUnit}
@@ -802,7 +802,7 @@ export default function PoliciesPage() {
                             }))
                           }
                         >
-                          <SelectTrigger className="bg-gray-800/50 border-gray-600 w-32">
+                          <SelectTrigger className="form-input-enhanced w-32">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent className="bg-gray-800 border-gray-600">
@@ -850,7 +850,7 @@ export default function PoliciesPage() {
                         setNewPolicy((p) => ({ ...p, actionType: v }))
                       }
                     >
-                      <SelectTrigger className="bg-gray-800/50 border-gray-600 focus:border-blue-500">
+                      <SelectTrigger className="form-input-enhanced focus:border-blue-500">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-gray-800 border-gray-600">
@@ -898,7 +898,7 @@ export default function PoliciesPage() {
                         setNewPolicy((p) => ({ ...p, priority: v }))
                       }
                     >
-                      <SelectTrigger className="bg-gray-800/50 border-gray-600 focus:border-blue-500">
+                      <SelectTrigger className="form-input-enhanced focus:border-blue-500">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-gray-800 border-gray-600">

@@ -106,7 +106,7 @@ export default function ContactPage() {
                       placeholder="Your full name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="bg-gray-800/50 border-gray-600 text-white"
+                      className="form-input-enhanced"
                       required
                     />
                   </div>
@@ -122,7 +122,7 @@ export default function ContactPage() {
                       placeholder="your.email@company.com"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="bg-gray-800/50 border-gray-600 text-white"
+                      className="form-input-enhanced"
                       required
                     />
                   </div>
@@ -137,7 +137,7 @@ export default function ContactPage() {
                       placeholder="Please provide as much detail as possible about your issue, including any error messages, steps to reproduce, and what you expected to happen..."
                       value={formData.issue}
                       onChange={handleInputChange}
-                      className="bg-gray-800/50 border-gray-600 text-white min-h-[120px]"
+                      className="form-input-enhanced min-h-[120px]"
                       required
                     />
                   </div>

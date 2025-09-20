@@ -262,14 +262,14 @@ export default function MarketplacePage() {
                       placeholder="Search agents..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 bg-gray-800/50 border-gray-600 text-white"
+                      className="pl-10 form-input-enhanced"
                     />
                   </div>
                 </div>
 
                 {/* Category Filter */}
                 <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                  <SelectTrigger className="w-48 bg-gray-800/50 border-gray-600">
+                  <SelectTrigger className="w-48 form-input-enhanced">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -283,7 +283,7 @@ export default function MarketplacePage() {
 
                 {/* Price Filter */}
                 <Select value={priceFilter} onValueChange={setPriceFilter}>
-                  <SelectTrigger className="w-32 bg-gray-800/50 border-gray-600">
+                  <SelectTrigger className="w-32 form-input-enhanced">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -295,7 +295,7 @@ export default function MarketplacePage() {
 
                 {/* Sort */}
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-48 bg-gray-800/50 border-gray-600">
+                  <SelectTrigger className="w-48 form-input-enhanced">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

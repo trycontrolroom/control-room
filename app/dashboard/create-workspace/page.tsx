@@ -111,7 +111,7 @@ export default function CreateWorkspacePage() {
                   value={formData.name}
                   onChange={(e) => updateField('name', e.target.value)}
                   placeholder="My Company, Personal Projects..."
-                  className="bg-gray-800 border-gray-600 text-white placeholder-gray-400"
+                  className="form-input-enhanced placeholder-gray-400"
                   disabled={isLoading}
                 />
               </div>
@@ -125,7 +125,7 @@ export default function CreateWorkspacePage() {
                   value={formData.description}
                   onChange={(e) => updateField('description', e.target.value)}
                   placeholder="What will you use this workspace for?"
-                  className="bg-gray-800 border-gray-600 text-white placeholder-gray-400 min-h-[80px]"
+                  className="form-input-enhanced placeholder-gray-400 min-h-[80px]"
                   disabled={isLoading}
                 />
               </div>

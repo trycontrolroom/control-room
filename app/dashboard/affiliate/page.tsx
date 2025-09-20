@@ -221,7 +221,7 @@ export default function AffiliateDashboard() {
             <Input
               value={stats.referralLink}
               readOnly
-              className="bg-gray-800 border-gray-600 text-white"
+              className="form-input-enhanced"
             />
             <Button
               onClick={copyReferralLink}
@@ -265,7 +265,7 @@ export default function AffiliateDashboard() {
                 value={payoutMethod}
                 onChange={(e) => setPayoutMethod(e.target.value)}
                 placeholder="e.g., PayPal, Bank Transfer, Stripe"
-                className="bg-gray-800 border-gray-600 text-white"
+                className="form-input-enhanced"
               />
             </div>
             <div>
@@ -277,7 +277,7 @@ export default function AffiliateDashboard() {
                 value={payoutDetails}
                 onChange={(e) => setPayoutDetails(e.target.value)}
                 placeholder="e.g., email@example.com, account number"
-                className="bg-gray-800 border-gray-600 text-white"
+                className="form-input-enhanced"
               />
             </div>
           </div>

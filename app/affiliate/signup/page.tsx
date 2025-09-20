@@ -187,7 +187,7 @@ export default function AffiliateSignupPage() {
                       value={formData.fullName}
                       onChange={(e) => handleChange('fullName', e.target.value)}
                       placeholder="John Doe"
-                      className="bg-gray-800 border-gray-600 text-white"
+                      className="form-input-enhanced"
                       required
                     />
                   </div>
@@ -199,7 +199,7 @@ export default function AffiliateSignupPage() {
                       value={formData.email}
                       onChange={(e) => handleChange('email', e.target.value)}
                       placeholder="john@example.com"
-                      className="bg-gray-800 border-gray-600 text-white"
+                      className="form-input-enhanced"
                       required
                     />
                   </div>
@@ -211,7 +211,7 @@ export default function AffiliateSignupPage() {
                       value={formData.phoneNumber}
                       onChange={(e) => handleChange('phoneNumber', e.target.value)}
                       placeholder="+1 (555) 123-4567"
-                      className="bg-gray-800 border-gray-600 text-white"
+                      className="form-input-enhanced"
                       required
                     />
                   </div>
@@ -229,7 +229,7 @@ export default function AffiliateSignupPage() {
                       value={formData.address}
                       onChange={(e) => handleChange('address', e.target.value)}
                       placeholder="123 Main Street"
-                      className="bg-gray-800 border-gray-600 text-white"
+                      className="form-input-enhanced"
                       required
                     />
                   </div>
@@ -241,7 +241,7 @@ export default function AffiliateSignupPage() {
                         value={formData.city}
                         onChange={(e) => handleChange('city', e.target.value)}
                         placeholder="New York"
-                        className="bg-gray-800 border-gray-600 text-white"
+                        className="form-input-enhanced"
                         required
                       />
                     </div>
@@ -252,7 +252,7 @@ export default function AffiliateSignupPage() {
                         value={formData.state}
                         onChange={(e) => handleChange('state', e.target.value)}
                         placeholder="NY"
-                        className="bg-gray-800 border-gray-600 text-white"
+                        className="form-input-enhanced"
                         required
                       />
                     </div>
@@ -263,7 +263,7 @@ export default function AffiliateSignupPage() {
                         value={formData.zipCode}
                         onChange={(e) => handleChange('zipCode', e.target.value)}
                         placeholder="10001"
-                        className="bg-gray-800 border-gray-600 text-white"
+                        className="form-input-enhanced"
                         required
                       />
                     </div>
@@ -274,7 +274,7 @@ export default function AffiliateSignupPage() {
                       id="country"
                       value={formData.country}
                       onChange={(e) => handleChange('country', e.target.value)}
-                      className="w-full bg-gray-800 border border-gray-600 text-white rounded px-3 py-2"
+                      className="w-full form-input-enhanced rounded px-3 py-2"
                       required
                     >
                       <option value="United States">United States</option>
@@ -330,7 +330,7 @@ export default function AffiliateSignupPage() {
                         value={formData.paypalEmail}
                         onChange={(e) => handleChange('paypalEmail', e.target.value)}
                         placeholder="paypal@example.com"
-                        className="bg-gray-800 border-gray-600 text-white"
+                        className="form-input-enhanced"
                         required
                       />
                     </div>
@@ -345,7 +345,7 @@ export default function AffiliateSignupPage() {
                           value={formData.bankAccountNumber}
                           onChange={(e) => handleChange('bankAccountNumber', e.target.value)}
                           placeholder="Account number"
-                          className="bg-gray-800 border-gray-600 text-white"
+                          className="form-input-enhanced"
                           required
                         />
                       </div>
@@ -356,7 +356,7 @@ export default function AffiliateSignupPage() {
                           value={formData.routingNumber}
                           onChange={(e) => handleChange('routingNumber', e.target.value)}
                           placeholder="Routing number"
-                          className="bg-gray-800 border-gray-600 text-white"
+                          className="form-input-enhanced"
                           required
                         />
                       </div>
@@ -378,7 +378,7 @@ export default function AffiliateSignupPage() {
                       value={formData.experience}
                       onChange={(e) => handleChange('experience', e.target.value)}
                       placeholder="Describe your experience promoting AI tools, SaaS products, or similar technologies..."
-                      className="bg-gray-800 border-gray-600 text-white"
+                      className="form-input-enhanced"
                       required
                     />
                   </div>
@@ -392,7 +392,7 @@ export default function AffiliateSignupPage() {
                       value={formData.audience}
                       onChange={(e) => handleChange('audience', e.target.value)}
                       placeholder="Describe your audience (developers, AI consultants, agencies, etc.) and approximate size..."
-                      className="bg-gray-800 border-gray-600 text-white"
+                      className="form-input-enhanced"
                       required
                     />
                   </div>
@@ -406,7 +406,7 @@ export default function AffiliateSignupPage() {
                       value={formData.marketingChannels}
                       onChange={(e) => handleChange('marketingChannels', e.target.value)}
                       placeholder="How do you plan to promote Control Room? (social media, blog, email, conferences, etc.)"
-                      className="bg-gray-800 border-gray-600 text-white"
+                      className="form-input-enhanced"
                       required
                     />
                   </div>
@@ -422,7 +422,7 @@ export default function AffiliateSignupPage() {
                         value={formData.website}
                         onChange={(e) => handleChange('website', e.target.value)}
                         placeholder="https://yourwebsite.com"
-                        className="bg-gray-800 border-gray-600 text-white"
+                        className="form-input-enhanced"
                       />
                     </div>
 
@@ -435,7 +435,7 @@ export default function AffiliateSignupPage() {
                         value={formData.socialMedia}
                         onChange={(e) => handleChange('socialMedia', e.target.value)}
                         placeholder="@username or profile links"
-                        className="bg-gray-800 border-gray-600 text-white"
+                        className="form-input-enhanced"
                       />
                     </div>
                   </div>

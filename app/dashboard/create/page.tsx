@@ -434,7 +434,7 @@ useEffect(() => {
                     onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                     placeholder="Describe your agent..."
                     disabled={isGenerating}
-                    className="flex-1 bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white placeholder-gray-400"
+                    className="flex-1 form-input-enhanced"
                   />
                   <Button onClick={sendMessage} disabled={!inputMessage.trim() || isGenerating || !canModify}>                   
                     <Send className="w-4 h-4" />
