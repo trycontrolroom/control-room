@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import { signIn, getSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Shield, Mail, Lock, Chrome } from 'lucide-react'
@@ -52,89 +51,73 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen command-center-bg flex items-center justify-center px-6">
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center space-x-2">
-            <Shield className="w-10 h-10 text-blue-400" />
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              Control Room
-            </span>
-          </Link>
-        </div>
+    <div className="page">
+      <div className="bg-gradient" />
+      <div className="bg-vignette" />
+      <div className="bg-aurora" />
+      
+      <div className="auth-container">
+        <div className="auth-card">
+          <header className="auth-header">
+            <Link href="/" className="logo-link">
+              <Shield className="logo-icon" />
+              <span className="logo-text">Control Room</span>
+            </Link>
+            <h1 className="auth-title">Access Command Center</h1>
+            <p className="auth-subtitle">Sign in to monitor and control your AI agents</p>
+          </header>
 
-        <Card className="glass-panel border-blue-500/20">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold text-white">
-              Access Command Center
-            </CardTitle>
-            <CardDescription className="text-gray-300">
-              Sign in to monitor and control your AI agents
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent className="space-y-6">
-            {/* Google Sign In */}
+          <div className="auth-content">
             <Button
               onClick={handleGoogleLogin}
               disabled={isLoading}
-              className="w-full command-button"
-              size="lg"
+              className="google-button"
             >
-              <Chrome className="w-5 h-5 mr-2" />
+              <Chrome className="button-icon" />
               Continue with Google
             </Button>
 
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-gray-600" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-gray-900 px-2 text-gray-400">Or continue with email</span>
-              </div>
+            <div className="divider">
+              <span className="divider-line" />
+              <span className="divider-text">Or continue with email</span>
+              <span className="divider-line" />
             </div>
 
-            {/* Email/Password Form */}
-            <form onSubmit={handleEmailLogin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-300">
-                  Email
-                </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <form onSubmit={handleEmailLogin} className="auth-form">
+              <div className="input-group">
+                <Label htmlFor="email" className="input-label">Email</Label>
+                <div className="input-wrapper">
+                  <Mail className="input-icon" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="agent@control-room.ai"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 form-input-enhanced"
+                    className="auth-input"
                     required
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-gray-300">
-                  Password
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <div className="input-group">
+                <Label htmlFor="password" className="input-label">Password</Label>
+                <div className="input-wrapper">
+                  <Lock className="input-icon" />
                   <Input
                     id="password"
                     type="password"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 form-input-enhanced"
+                    className="auth-input"
                     required
                   />
                 </div>
               </div>
 
               {error && (
-                <div className="text-red-400 text-sm text-center">
+                <div className="error-message">
                   {error}
                 </div>
               )}
@@ -142,33 +125,317 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full command-button"
-                size="lg"
+                className="submit-button"
               >
                 {isLoading ? 'Accessing...' : 'Sign In'}
               </Button>
             </form>
 
-            <div className="text-center text-sm text-gray-400">
+            <div className="auth-footer">
               Don't have an account?{' '}
-              <Link href="/signup" className="text-blue-400 hover:text-blue-300">
+              <Link href="/signup" className="auth-link">
                 Create one here
               </Link>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <div className="text-center mt-6 text-xs text-gray-500">
+        <div className="legal-text">
           By signing in, you agree to our{' '}
-          <Link href="/terms" className="text-blue-400 hover:text-blue-300">
+          <Link href="/terms" className="legal-link">
             Terms of Service
           </Link>{' '}
           and{' '}
-          <Link href="/privacy" className="text-blue-400 hover:text-blue-300">
+          <Link href="/privacy" className="legal-link">
             Privacy Policy
           </Link>
         </div>
       </div>
+
+      <style jsx>{`
+        .page {
+          display: flex;
+          flex-direction: column;
+          height: 100vh;
+          overflow: hidden;
+          font-family: 'Inter', sans-serif;
+        }
+
+        .bg-gradient {
+          position: fixed;
+          inset: 0;
+          background: 
+            radial-gradient(1200px 600px at 50% -10%, rgba(110,104,220,.12), transparent 60%),
+            radial-gradient(900px 520px at 72% 120%, rgba(60,80,220,.08), transparent 60%);
+          pointer-events: none;
+          z-index: -3;
+        }
+
+        .bg-vignette {
+          position: fixed;
+          inset: -1px;
+          background: radial-gradient(160% 110% at 50% 0%, transparent 50%, rgba(0,0,0,.35) 90%);
+          pointer-events: none;
+          z-index: -2;
+        }
+
+        .bg-aurora {
+          position: fixed;
+          inset: 0;
+          background: 
+            radial-gradient(50% 40% at 20% 20%, rgba(130,120,255,.07), transparent 60%),
+            radial-gradient(40% 35% at 80% 85%, rgba(80,120,255,.06), transparent 60%);
+          filter: blur(40px);
+          pointer-events: none;
+          z-index: -1;
+          animation: drift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes drift {
+          from { transform: rotate(-10deg) scale(1.1); }
+          to { transform: rotate(10deg) scale(1.2); }
+        }
+
+        .auth-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: 100vh;
+          padding: 2rem;
+        }
+
+        .auth-card {
+          width: 100%;
+          max-width: 420px;
+          background: linear-gradient(180deg, rgba(14,20,36,.85), rgba(10,14,26,.98));
+          border: 1px solid rgba(175,190,255,.16);
+          border-radius: 24px;
+          box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+          backdrop-filter: blur(24px);
+          overflow: hidden;
+        }
+
+        .auth-header {
+          text-align: center;
+          padding: 2.5rem 2rem 1.5rem;
+        }
+
+        .logo-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-bottom: 2rem;
+          text-decoration: none;
+        }
+
+        .logo-icon {
+          width: 2.5rem;
+          height: 2.5rem;
+          color: #4F6AFF;
+        }
+
+        .logo-text {
+          font-size: 1.75rem;
+          font-weight: 800;
+          background: linear-gradient(180deg, #FFFFFF 70%, #D4C3FF);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .auth-title {
+          font-size: 2rem;
+          font-weight: 800;
+          color: #FFFFFF;
+          margin-bottom: 0.5rem;
+          letter-spacing: -0.025em;
+        }
+
+        .auth-subtitle {
+          color: #8a96ad;
+          font-size: 1rem;
+          margin: 0;
+        }
+
+        .auth-content {
+          padding: 0 2rem 2.5rem;
+        }
+
+        .google-button {
+          width: 100%;
+          height: 3.5rem;
+          background: linear-gradient(135deg, rgba(138, 127, 255, 0.1), rgba(79, 106, 255, 0.1));
+          border: 1px solid rgba(138, 127, 255, 0.3);
+          border-radius: 14px;
+          color: #8A7FFF;
+          font-size: 1rem;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          transition: all 0.2s ease;
+          margin-bottom: 1.5rem;
+        }
+
+        .google-button:hover:not(:disabled) {
+          background: linear-gradient(135deg, rgba(138, 127, 255, 0.2), rgba(79, 106, 255, 0.2));
+          border-color: rgba(138, 127, 255, 0.5);
+          transform: translateY(-1px);
+        }
+
+        .google-button:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .button-icon {
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+
+        .divider {
+          display: flex;
+          align-items: center;
+          margin: 1.5rem 0;
+        }
+
+        .divider-line {
+          flex: 1;
+          height: 1px;
+          background: rgba(175,190,255,.12);
+        }
+
+        .divider-text {
+          padding: 0 1rem;
+          font-size: 0.875rem;
+          color: #8a96ad;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        .auth-form {
+          display: flex;
+          flex-direction: column;
+          gap: 1.25rem;
+        }
+
+        .input-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .input-label {
+          color: #a3b3ff;
+          font-size: 0.875rem;
+          font-weight: 500;
+        }
+
+        .input-wrapper {
+          position: relative;
+        }
+
+        .input-icon {
+          position: absolute;
+          left: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 1rem;
+          height: 1rem;
+          color: #8a96ad;
+        }
+
+        .auth-input {
+          width: 100%;
+          height: 3.5rem;
+          background: rgba(8,12,22,.95);
+          border: 1px solid rgba(175,190,255,.18);
+          border-radius: 14px;
+          padding: 0 1rem 0 2.75rem;
+          color: #eaf0ff;
+          font-size: 1rem;
+          transition: all 0.18s ease;
+        }
+
+        .auth-input:focus {
+          outline: none;
+          border-color: rgba(200,214,255,.44);
+          box-shadow: 0 0 0 4px rgba(79,106,255,.10);
+        }
+
+        .auth-input::placeholder {
+          color: #8a96ad;
+        }
+
+        .error-message {
+          color: #ef4444;
+          font-size: 0.875rem;
+          text-align: center;
+          padding: 0.75rem;
+          background: rgba(239, 68, 68, 0.1);
+          border: 1px solid rgba(239, 68, 68, 0.2);
+          border-radius: 8px;
+        }
+
+        .submit-button {
+          width: 100%;
+          height: 3.5rem;
+          background: linear-gradient(135deg, #8A7FFF, #4F6AFF);
+          border: none;
+          border-radius: 14px;
+          color: #FFFFFF;
+          font-size: 1rem;
+          font-weight: 600;
+          transition: all 0.2s ease;
+          box-shadow: 0 12px 30px rgba(79,106,255,.32);
+        }
+
+        .submit-button:hover:not(:disabled) {
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 16px 40px rgba(79,106,255,.4);
+        }
+
+        .submit-button:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .auth-footer {
+          text-align: center;
+          margin-top: 1.5rem;
+          color: #8a96ad;
+          font-size: 0.875rem;
+        }
+
+        .auth-link {
+          color: #4F6AFF;
+          text-decoration: none;
+          transition: color 0.2s ease;
+        }
+
+        .auth-link:hover {
+          color: #8A7FFF;
+        }
+
+        .legal-text {
+          text-align: center;
+          margin-top: 1.5rem;
+          color: #6b7280;
+          font-size: 0.75rem;
+          max-width: 420px;
+        }
+
+        .legal-link {
+          color: #4F6AFF;
+          text-decoration: none;
+          transition: color 0.2s ease;
+        }
+
+        .legal-link:hover {
+          color: #8A7FFF;
+        }
+      `}</style>
     </div>
   )
 }
