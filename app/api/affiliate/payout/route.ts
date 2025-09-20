@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       where: { userId: session.user.id },
       data: {
         payoutInfo: {
-          ...affiliate.payoutInfo,
+          ...(affiliate.payoutInfo as Record<string, any> || {}),
           method,
           details,
           updatedAt: new Date().toISOString()

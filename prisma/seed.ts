@@ -29,11 +29,11 @@ async function main() {
   })
 
   const aegisWorkspace = await prisma.workspace.upsert({
-    where: { name: 'Aegis HQ' },
+    where: { id: 'aegis-hq-workspace' },
     update: {},
     create: {
+      id: 'aegis-hq-workspace',
       name: 'Aegis HQ',
-      description: 'Primary operations workspace',
       members: {
         create: {
           userId: admin.id,
@@ -44,11 +44,11 @@ async function main() {
   })
 
   const betaWorkspace = await prisma.workspace.upsert({
-    where: { name: 'Beta Ops' },
+    where: { id: 'beta-ops-workspace' },
     update: {},
     create: {
+      id: 'beta-ops-workspace',
       name: 'Beta Ops',
-      description: 'Beta testing and operations workspace',
       members: {
         create: [
           {

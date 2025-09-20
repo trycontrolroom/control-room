@@ -71,9 +71,11 @@ export async function PUT(request: NextRequest) {
       data: {
         userId: session.user.id,
         action: 'SITE_SETTINGS_UPDATED',
-        resourceType: 'SITE_SETTINGS',
-        resourceId: updatedSettings.id,
-        details: 'Global site settings updated',
+        details: {
+          resourceType: 'SITE_SETTINGS',
+          resourceId: updatedSettings.id,
+          description: 'Global site settings updated'
+        },
         workspaceId: null
       }
     })

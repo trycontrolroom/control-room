@@ -359,11 +359,11 @@ useEffect(() => {
                     )}
                     Save
                   </Button>
-                  <Button onClick={deployAgent} disabled={isSaving || isDeploying} className="command-button">
+                  <Button onClick={deployAgent} disabled={isSaving || isDeploying} className="deploy-button">
                     {isDeploying ? (
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <Loader2 className="button-icon animate-spin" />
                     ) : (
-                      <Play className="w-4 h-4 mr-2" />
+                      <Play className="button-icon" />
                     )}
                     Instant Deploy
                   </Button>
@@ -375,10 +375,10 @@ useEffect(() => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-200px)]">
           {!editAgentId && (
-            <Card className="glass-panel border-blue-500/20 flex flex-col">
+            <Card className="create-chat-card flex flex-col">
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <MessageSquare className="w-5 h-5 mr-2" />
+                <CardTitle className="chat-title">
+                  <MessageSquare className="chat-icon" />
                   AI Assistant
                 </CardTitle>
               </CardHeader>
@@ -458,6 +458,53 @@ useEffect(() => {
           />
         </div>
       </div>
+      
+      <style jsx>{`
+        .create-chat-card {
+          background: linear-gradient(180deg, rgba(14,20,36,.85), rgba(10,14,26,.98));
+          border: 1px solid rgba(79, 106, 255, 0.2);
+          border-radius: 24px;
+          box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+          backdrop-filter: blur(24px);
+        }
+
+        .chat-title {
+          display: flex;
+          align-items: center;
+          color: #FFFFFF;
+        }
+
+        .chat-icon {
+          width: 1.25rem;
+          height: 1.25rem;
+          margin-right: 0.5rem;
+        }
+
+        .deploy-button {
+          background: linear-gradient(135deg, #8A7FFF, #4F6AFF);
+          border: none;
+          color: #FFFFFF;
+          box-shadow: 0 8px 20px rgba(79,106,255,.25);
+          border-radius: 12px;
+          font-weight: 600;
+          padding: 0 1rem;
+          height: 2.5rem;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          transition: all 0.2s ease;
+        }
+
+        .deploy-button:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 12px 30px rgba(79,106,255,.35);
+        }
+
+        .button-icon {
+          width: 1rem;
+          height: 1rem;
+        }
+      `}</style>
     </DashboardLayout>
   )
 }

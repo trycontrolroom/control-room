@@ -346,12 +346,12 @@ export default function StatsPage() {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card className="glass-panel border-blue-500/20">
-            <CardHeader className="flex items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-gray-300">
+          <Card className="stats-card blue">
+            <CardHeader className="stats-card-header">
+              <CardTitle className="stats-card-title">
                 Current {currentMetric.label}
               </CardTitle>
-              <Activity className="h-4 w-4 text-blue-400" />
+              <Activity className="stats-card-icon blue" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
@@ -378,9 +378,9 @@ export default function StatsPage() {
             </CardContent>
           </Card>
 
-          <Card className="glass-panel border-gray-500/20">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-300">
+          <Card className="stats-card gray">
+            <CardHeader className="stats-card-header-simple">
+              <CardTitle className="stats-card-title">
                 Data Points
               </CardTitle>
             </CardHeader>
@@ -389,9 +389,9 @@ export default function StatsPage() {
             </CardContent>
           </Card>
 
-          <Card className="glass-panel border-gray-500/20">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-300">
+          <Card className="stats-card gray">
+            <CardHeader className="stats-card-header-simple">
+              <CardTitle className="stats-card-title">
                 Time Range
               </CardTitle>
             </CardHeader>
@@ -400,9 +400,9 @@ export default function StatsPage() {
             </CardContent>
           </Card>
 
-          <Card className="glass-panel border-gray-500/20">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-300">
+          <Card className="stats-card gray">
+            <CardHeader className="stats-card-header-simple">
+              <CardTitle className="stats-card-title">
                 Agents Shown
               </CardTitle>
             </CardHeader>
@@ -413,10 +413,10 @@ export default function StatsPage() {
         </div>
 
         {/* Main Chart */}
-        <Card className="glass-panel border-blue-500/20">
+        <Card className="stats-chart-card">
           <CardHeader>
-            <CardTitle className="text-white">{currentMetric.label} Over Time</CardTitle>
-            <CardDescription className="text-gray-400">
+            <CardTitle className="chart-title">{currentMetric.label} Over Time</CardTitle>
+            <CardDescription className="chart-description">
               {selectedAgent === 'all'
                 ? 'All agents'
                 : agents.find(a => a.id === selectedAgent)?.name}{' '}
@@ -610,6 +610,65 @@ export default function StatsPage() {
           onSubmit={handleCreateCustomMetric}
         />
       </div>
+      
+      <style jsx>{`
+        .stats-card {
+          background: linear-gradient(180deg, rgba(14,20,36,.85), rgba(10,14,26,.98));
+          border-radius: 24px;
+          box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+          backdrop-filter: blur(24px);
+        }
+
+        .stats-card.blue {
+          border: 1px solid rgba(79, 106, 255, 0.2);
+        }
+
+        .stats-card.gray {
+          border: 1px solid rgba(107, 114, 128, 0.2);
+        }
+
+        .stats-card-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding-bottom: 0.5rem;
+        }
+
+        .stats-card-header-simple {
+          padding-bottom: 0.5rem;
+        }
+
+        .stats-card-title {
+          font-size: 0.875rem;
+          font-weight: 500;
+          color: #8a96ad;
+        }
+
+        .stats-card-icon {
+          height: 1rem;
+          width: 1rem;
+        }
+
+        .stats-card-icon.blue {
+          color: #4F6AFF;
+        }
+
+        .stats-chart-card {
+          background: linear-gradient(180deg, rgba(14,20,36,.85), rgba(10,14,26,.98));
+          border: 1px solid rgba(79, 106, 255, 0.2);
+          border-radius: 24px;
+          box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+          backdrop-filter: blur(24px);
+        }
+
+        .chart-title {
+          color: #FFFFFF;
+        }
+
+        .chart-description {
+          color: #8a96ad;
+        }
+      `}</style>
     </DashboardLayout>
   )
 }

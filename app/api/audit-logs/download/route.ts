@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
       const userName = log.user?.name || 'System'
       const userEmail = log.user?.email || 'system@control-room.ai'
       const action = log.action
-      const resource = log.resourceType
+      const resource = (log.details as any)?.resourceType || 'Unknown'
       const details = log.details || ''
       const ipAddress = log.ipAddress || ''
       

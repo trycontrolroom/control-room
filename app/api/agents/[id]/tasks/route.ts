@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { cuid } from '@paralleldrive/cuid2'
+import { createId } from '@paralleldrive/cuid2'
 
 export async function GET(
   request: NextRequest,
@@ -74,7 +74,7 @@ export async function POST(
 
     const task = await prisma.agentTask.create({
       data: {
-        id: cuid(),
+        id: createId(),
         agentId,
         name: name.trim(),
         description: description?.trim() || null,

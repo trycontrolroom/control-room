@@ -32,9 +32,11 @@ export async function PATCH(
       data: {
         userId: session.user.id,
         action: `MARKETPLACE_SUBMISSION_${status}`,
-        resourceType: 'MARKETPLACE_SUBMISSION',
-        resourceId: submissionId,
-        details: `Marketplace submission ${status.toLowerCase()}`,
+        details: {
+          resourceType: 'MARKETPLACE_SUBMISSION',
+          resourceId: submissionId,
+          description: `Marketplace submission ${status.toLowerCase()}`
+        },
         workspaceId: updatedSubmission.workspaceId
       }
     })

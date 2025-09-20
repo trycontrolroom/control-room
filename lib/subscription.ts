@@ -96,7 +96,8 @@ export async function checkSubscriptionLimit(
           helperExecutionsToday: 0
         }
       })
-      return { allowed: true, limit: limits[type] || undefined, current: 0, plan: user.subscriptionPlan }
+      const limit = type === 'aiHelper' ? limits.aiHelperDaily : limits[type as keyof Omit<PlanLimits, 'features' | 'aiHelperDaily'>]
+      return { allowed: true, limit: limit || undefined, current: 0, plan: user.subscriptionPlan }
     }
 
     const today = new Date()
